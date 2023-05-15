@@ -1,0 +1,36 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
+
+set -ex
+
+cat <<-EOF > /usr/lib/os-release
+NAME="systemdOS"
+PRETTY_NAME="systemdOS"
+ID=systemdOS
+BUILD_ID=build1
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://archlinux.org/"
+DOCUMENTATION_URL="https://wiki.archlinux.org/"
+SUPPORT_URL="https://bbs.archlinux.org/"
+BUG_REPORT_URL="https://bugs.archlinux.org/"
+PRIVACY_POLICY_URL="https://terms.archlinux.org/docs/privacy-policy/"
+LOGO=archlinux-logo
+IMAGE_VERSION=$(cat /usr/lib/image_version)
+EOF
+
+export SYSTEMD_ESP_PATH=/efi
+bootctl install
+echo 'timeout 30' >> /efi/loader/loader.conf
+cp /usr/share/edk2-shell/x64/Shell.efi /efi/shellx64.efi
+
+kernel_version=""
+for f in /usr/lib/modules/*/vmlinuz
+do
+    kernel_version="$(basename "$(dirname "$f")")"
+done
+# dracut --uefi --no-machineid --kernel-cmdline "native ro" --kver "$kernel_version" systemdOS.efi
+# kernel-install add --verbose add "$kernel_version" "/usr/lib/modules/$kernel_version/vmlinuz" systemdOS.efi
+
+dracut --uefi --no-machineid --kernel-cmdline "native ro systemd.volatile=overlay systemd.firstboot=false systemd.hostname=systemdOS systemdOS.live" --kver "$kernel_version" live.efi
+dracut --uefi --no-machineid --kernel-cmdline "ro" --kver "$kernel_version" systemdOS.efi

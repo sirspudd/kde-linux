@@ -1,0 +1,25 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
+
+set -ex
+
+# systemd-machine-id-setup
+# systemd-id128 machine-id
+# root_uuid=$(systemd-id128 --uuid --app-specific=4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709 machine-id)
+# sed -i "s%@ROOT@%${root_uuid}%g" /etc/kernel/cmdline
+
+env
+pacman-key --init
+pacman-key --populate
+
+pacman --sync --noconfirm git base-devel cmake yaml-cpp extra-cmake-modules boost-libs boost
+cd /tmp
+git clone --depth 1 https://github.com/calamares/calamares
+cmake -S calamares -B calamares/build -DBUILD_TESTING=OFF
+cmake --build calamares/build -j12
+cmake --install calamares/build
+
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+

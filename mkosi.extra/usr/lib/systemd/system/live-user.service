@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
+
+[Unit]
+Requires=systemd-logind.service
+After=systemd-logind.service systemd-homed.service
+ConditionKernelCommandLine=systemdOS.live
+
+[Service]
+ExecStartPre=/usr/bin/useradd --create-home live
+ExecStartPre=/usr/bin/usermod --append --groups wheel live
+ExecStart=/usr/bin/passwd --delete live
+ExecStartPost=/usr/bin/systemctl disable live-user.service
+
+[Install]
+RequiredBy=display-manager.service
