@@ -9,7 +9,10 @@
 set -ex
 
 NAME=systemdOS
-VERSION=$(($(cat version)+1))
+_DATE=$(date +%Y%m%d)
+_TIME=$(date +%H%M)
+DATETIME="${_DATE}${_TIME}"
+VERSION="$DATETIME"
 ID=${NAME}_$VERSION
 EFI=$ID.efi
 TAR=${ID}_root-x86-64.tar
@@ -17,7 +20,7 @@ IMG=$ID.raw
 
 echo "$VERSION" > ./mkosi.extra/usr/lib/image_version
 
-mkosi --distribution arch "$@"
+mkosi --distribution arch --output "$ID" --image-id "$NAME" --image-version "$VERSION" "$@"
 
 rm -rv image/efi/EFI/Linux/
 mkdir -p image/efi/EFI/Linux/
