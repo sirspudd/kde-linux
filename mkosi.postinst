@@ -4,6 +4,12 @@
 
 set -ex
 
+env
+
+if [ "$container" != "mkosi" ]; then
+    exec mkosi-chroot "$CHROOT_SCRIPT" "$@"
+fi
+
 cat <<-EOF > /usr/lib/os-release
 NAME="systemdOS"
 PRETTY_NAME="systemdOS"
@@ -15,7 +21,7 @@ DOCUMENTATION_URL="https://wiki.archlinux.org/"
 SUPPORT_URL="https://bbs.archlinux.org/"
 BUG_REPORT_URL="https://bugs.archlinux.org/"
 PRIVACY_POLICY_URL="https://terms.archlinux.org/docs/privacy-policy/"
-LOGO=archlinux-logo
+LOGO=kde-symbolic
 IMAGE_VERSION=$(cat /usr/lib/image_version)
 EOF
 
@@ -27,7 +33,7 @@ cp /usr/share/edk2-shell/x64/Shell.efi /efi/shellx64.efi
 kernel_version=""
 for f in /usr/lib/modules/*/vmlinuz
 do
-    kernel_version="$(basename "$(dirname "$f")")"
+  kernel_version="$(basename "$(dirname "$f")")"
 done
 # dracut --uefi --no-machineid --kernel-cmdline "native ro" --kver "$kernel_version" systemdOS.efi
 # kernel-install add --verbose add "$kernel_version" "/usr/lib/modules/$kernel_version/vmlinuz" systemdOS.efi
