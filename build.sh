@@ -36,7 +36,7 @@ systemd-dissect --with "$IMG" "$(pwd)/btrfs.sh" $NAME $VERSION $ID
 cp -v live.efi "image/efi/EFI/Linux/$EFI"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=image --definitions=mkosi.repart --defer-partitions=root "$IMG"
 
-# TODO before accepting new uploads perofm sanity checks on the artifacts (E.g. the tar being well formed)
+# TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 chmod go+r ./*.efi # efi images are 700, make them readable so the server can serve them
 scp "image/efi/EFI/Linux/$EFI" root@web.local:/var/www/html
 scp "$TAR" root@web.local:/var/www/html
