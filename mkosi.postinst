@@ -38,5 +38,8 @@ done
 # dracut --uefi --no-machineid --kernel-cmdline "native ro" --kver "$kernel_version" systemdOS.efi
 # kernel-install add --verbose add "$kernel_version" "/usr/lib/modules/$kernel_version/vmlinuz" systemdOS.efi
 
+cd /
+rm -fv live.efi
 dracut --uefi --no-machineid --kernel-cmdline "native ro systemd.volatile=overlay systemd.firstboot=false systemd.hostname=systemdOS systemdOS.live" --kver "$kernel_version" live.efi
+rm -rfv systemdOS.efi
 dracut --uefi --no-machineid --kernel-cmdline "ro" --kver "$kernel_version" systemdOS.efi
