@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: BSD-2-Clauses
+# SPDX-FileCopyrightText: None
+
+stages:
+  - start
+
+start:
+  stage: start
+  allow_failure: false
+  image: archlinux:latest
+  script:
+    - ./in_docker.sh --force --debug
+    - ./upload.sh
+  artifacts:
+    expire_in: 7 days
+    when: always
+    paths:
+      - 'kde-builder/kde/src/log/*'
+      - 'systemdOS_*/kde-builder/kde/src/log/*'

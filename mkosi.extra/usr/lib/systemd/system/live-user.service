@@ -4,7 +4,7 @@
 [Unit]
 Requires=systemd-logind.service
 After=systemd-logind.service systemd-homed.service
-ConditionKernelCommandLine=systemdOS.live
+ConditionKernelCommandLine=kdeos.live=1
 
 [Service]
 ExecStartPre=/usr/bin/useradd --create-home live

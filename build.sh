@@ -2,15 +2,18 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
-# Build image using mkosi, well, somehwat. mkosi is actually a bit too inflexible for our purposes so we generate a OS
+# Build image using mkosi, well, somewhat. mkosi is actually a bit too inflexible for our purposes so we generate a OS
 # tree using mkosi and then construct shipable raw images (for installation) and tarballs (for systemd-sysupdate)
 # ourselves.
 
+# TODO port to ruby or python or something. it's getting too long for sh
+
 set -ex
 
-NAME=systemdOS
-_DATE=$(date +%Y%m%d)
-_TIME=$(date +%H%M)
+NAME=kdeos
+_EPOCH=$(date +%s)
+_DATE=$(date --date="@$_EPOCH" +%Y%m%d)
+_TIME=$(date --date="@$_EPOCH" +%H%M)
 DATETIME="${_DATE}${_TIME}"
 VERSION="$DATETIME"
 OUTPUT=${NAME}_$VERSION
@@ -18,31 +21,66 @@ EFI=$OUTPUT.efi
 TAR=${OUTPUT}_root-x86-64.tar
 IMG=$OUTPUT.raw
 
+export SYSTEMD_LOG_LEVEL=debug
+
 echo "$VERSION" > ./mkosi.extra/usr/lib/image_version
 
 mkosi --distribution arch --image-id "$NAME" --image-version "$VERSION" "$@"
 
-rm -rv "${OUTPUT}"/efi/EFI/Linux/
-mkdir -p "${OUTPUT}"/efi/EFI/Linux/
-mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi/EFI/Linux/$EFI"
-mv -v "${OUTPUT}"/live.efi .
+# NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
+rm -rv "${OUTPUT}/efi"
+[ -d "${OUTPUT}/efi" ] || mkdir --mode 0700 "${OUTPUT}/efi"
+[ -d "${OUTPUT}/efi-template" ] || mkdir --mode 0700 "${OUTPUT}/efi-template"
+[ -d "${OUTPUT}/efi-template/EFI" ] || mkdir --mode 0700 "${OUTPUT}/efi-template/EFI"
+[ -d "${OUTPUT}/efi-template/EFI/Linux" ] || mkdir --mode 0700 "${OUTPUT}/efi-template/EFI/Linux"
+cp -v "${OUTPUT}"/${NAME}*.efi "$OUTPUT.efi"
+mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
+mv -v "${OUTPUT}"/live.efi "${OUTPUT}_live.efi"
+
+rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
+rm -rf "${OUTPUT}/usr/share/doc/qt6/examples"
 
 rm -rf "$TAR" ./*.tar
 tar -C "${OUTPUT}"/ -cf "$TAR" .
+SIZE=$(stat --format %s "$TAR") # the apparent size of all data
+zstd -T0 --rm "$TAR"
+
+OUTPUT_IS_BTRFS_SUBVOLUME=false
+if [ "$(stat --file-system --format %T "$OUTPUT")" = "btrfs" ] && [ "$(stat --format %i "$OUTPUT")" = "256" ]; then
+    OUTPUT_IS_BTRFS_SUBVOLUME=true
+fi
+
+# Accurate sizing is a bit of a challenge. In the most ideal scenario we'll be working on btrfs and are able to
+# compress the entire subvolume into a file. This file size will then be more or less the DATA size in the filesystem.
+# On top of that we have the btrfs meta data and system data, these are kind of dependent on the actual partition size
+# but will generally be ~256M and <50M for partitions <50G.
+if $OUTPUT_IS_BTRFS_SUBVOLUME; then
+    btrfs filesystem defrag -czstd -r "$OUTPUT"
+    btrfs subvolume snapshot -r "$OUTPUT" "$OUTPUT.export"
+    btrfs send --compressed-data -f "$OUTPUT.btrfs" "$OUTPUT.export"
+    btrfs subvolume delete "$OUTPUT.export"
+    SIZE=$(stat --format %s "$OUTPUT.btrfs") # the actual size of all data
+    SIZE=$((SIZE+268435456)) # 256M slack
+else
+    SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
+fi
+SIZE=$((SIZE+314572800)) # 256M for btrfs metadata, 44M for system block
+SIZE=$((SIZE+536870912)) # 512M for ESP
 
 rm -f "$IMG" ./*.raw
 touch "$IMG"
-# The root partition contains the shipable efi image.
-systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=esp "$IMG"
-systemd-dissect --with "$IMG" "$(pwd)/btrfs.sh" $NAME "$VERSION" "$OUTPUT"
+# The root partition contains the shipable efi image for use on the installed system.
+systemd-repart --no-pager --empty=allow --size="$SIZE" --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=esp "$IMG"
+if $OUTPUT_IS_BTRFS_SUBVOLUME; then # btrfs subvolume
+    systemd-dissect --with "$IMG" "$(pwd)/btrfs-send-receive.sh" "$PWD/$OUTPUT" "$OUTPUT" "@$NAME"
+else # do a raw copy
+    systemd-dissect --with "$IMG" "$(pwd)/btrfs-copy.sh" "$PWD/$OUTPUT" "$OUTPUT" "@$NAME"
+fi
 # The esp of the image contains the live efi image (divergent cmdline).
-cp -v live.efi "${OUTPUT}/efi/EFI/Linux/$EFI"
+# We copy into efi-template for convenience, it won't actually be used from there, just copied by systemd-repart.
+cp -v "${OUTPUT}_live.efi" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=root "$IMG"
 
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 chmod go+r ./*.efi # efi images are 700, make them readable so the server can serve them
-scp "image/efi/EFI/Linux/$EFI" root@web.local:/var/www/html
-scp "$TAR" root@web.local:/var/www/html
-scp "$IMG" root@web.local:/var/www/html
-scp "live.efi" root@web.local:/var/www/html
-ssh root@web.local -- /bin/sh -c "'cd /var/www/html/ && ./update.sh'"
+ls -lah

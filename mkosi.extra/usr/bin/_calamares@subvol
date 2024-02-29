@@ -20,7 +20,8 @@ mv @systemdOS @systemdOS_0
 ln -s @systemdOS_0 @systemdOS
 btrfs subvolume set-default @systemdOS
 
-# @home created by calamares
+# @home gets created by calamares' mount module
+btrfs subvolume create @snap
 btrfs subvolume create @var-overlay
 btrfs subvolume create @etc-overlay
 mkdir @var-overlay/upper @var-overlay/work @etc-overlay/upper @etc-overlay/work
