@@ -159,6 +159,7 @@ cat <<- EOF > /usr/lib/os-release
 NAME="KDE OS"
 PRETTY_NAME="KDE OS"
 ID=kdeos
+VERSION_ID=$CI_COMMIT_SHORT_SHA
 BUILD_ID=$IMAGE_VERSION
 ANSI_COLOR="38;2;61;174;233"
 HOME_URL="https://os.kde.org/"
@@ -168,6 +169,9 @@ BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDEOS"
 PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
 LOGO=kde-symbolic
 IMAGE_VERSION=$IMAGE_VERSION
+KDEOS_COMMIT_SHA=$CI_COMMIT_SHA
+KDEOS_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA
+KDEOS_CI_URL=$CI_PIPELINE_URL
 EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
