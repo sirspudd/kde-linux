@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: none
 /image/
 /mkosi.cache/
-/mkosi.extra/usr/lib/image_version
 /version
 /*.raw
 /*.tar

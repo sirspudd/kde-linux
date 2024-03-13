@@ -4,24 +4,6 @@
 
 set -ex
 
-# mkosi might have eaten the file, restore it
-cat <<- EOF > /usr/lib/os-release
-NAME="KDE OS"
-PRETTY_NAME="KDE OS"
-ID=kdeos
-BUILD_ID=$(cat /usr/lib/image_version)
-ANSI_COLOR="38;2;23;147;209"
-HOME_URL="https://os.kde.org/"
-DOCUMENTATION_URL="https://userbase.kde.org/KDEOS"
-SUPPORT_URL="https://kde.org/support/"
-BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDEOS"
-PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
-LOGO=kde-symbolic
-IMAGE_VERSION=$(cat /usr/lib/image_version)
-EOF
-[ -f /usr/lib/os-release ] || false
-cat /usr/lib/os-release
-
 deluser --remove builder || true
 passwd --delete root
 passwd --lock root

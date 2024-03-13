@@ -23,8 +23,6 @@ IMG=$OUTPUT.raw
 
 export SYSTEMD_LOG_LEVEL=debug
 
-echo "$VERSION" > ./mkosi.extra/usr/lib/image_version
-
 mkosi --distribution arch --image-id "$NAME" --image-version "$VERSION" "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory

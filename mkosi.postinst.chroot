@@ -159,7 +159,7 @@ cat <<- EOF > /usr/lib/os-release
 NAME="KDE OS"
 PRETTY_NAME="KDE OS"
 ID=kdeos
-BUILD_ID=$(cat /usr/lib/image_version)
+BUILD_ID=$IMAGE_VERSION
 ANSI_COLOR="38;2;61;174;233"
 HOME_URL="https://os.kde.org/"
 DOCUMENTATION_URL="https://userbase.kde.org/KDEOS"
@@ -167,7 +167,7 @@ SUPPORT_URL="https://kde.org/support/"
 BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDEOS"
 PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
 LOGO=kde-symbolic
-IMAGE_VERSION=$(cat /usr/lib/image_version)
+IMAGE_VERSION=$IMAGE_VERSION
 EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
@@ -205,7 +205,7 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output live.efi
-echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$(cat /usr/lib/image_version) \
+echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$IMAGE_VERSION \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on" > cmdline
