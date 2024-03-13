@@ -26,7 +26,7 @@ export SYSTEMD_LOG_LEVEL=debug
 mkosi --distribution arch --image-id "$NAME" --image-version "$VERSION" "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
-rm -rv "${OUTPUT}/efi"
+rm -rfv "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi" ] || mkdir --mode 0700 "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi-template" ] || mkdir --mode 0700 "${OUTPUT}/efi-template"
 [ -d "${OUTPUT}/efi-template/EFI" ] || mkdir --mode 0700 "${OUTPUT}/efi-template/EFI"
