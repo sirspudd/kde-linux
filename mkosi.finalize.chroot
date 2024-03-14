@@ -7,3 +7,5 @@ set -ex
 deluser --remove builder || true
 passwd --delete root
 passwd --lock root
+
+rm -rfv /etc/pacman.d/gnupg
