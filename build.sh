@@ -23,14 +23,18 @@ IMG=$OUTPUT.raw
 
 export SYSTEMD_LOG_LEVEL=debug
 
+cat <<- EOF > mkosi.conf.d/00-environment.conf
+[Content]
+@Environment=CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}
+@Environment=CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}
+@Environment=CI_PIPELINE_URL=${CI_PIPELINE_URL:-htts://invent.kde.org}
+EOF
+
 env
 mkosi \
     --distribution arch \
     --image-id "$NAME" \
     --image-version "$VERSION" \
-    --environment="CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" \
-    --environment="CI_COMMIT_SHA=$CI_COMMIT_SHA" \
-    --environment="CI_PIPELINE_URL=$CI_PIPELINE_URL" \
     "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
