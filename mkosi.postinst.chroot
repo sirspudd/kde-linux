@@ -22,6 +22,10 @@ rm -rfv /efi/
 
 pacman --sync --refresh
 pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs
+# Slightly awkward: plasma-workspace still uses phonon for notifications (should use canberra) which means we need
+# the vlc backend which means we need vlc. Ugh. The reason canberra is nice is because it only does short sound playback
+# so it gets by with only having pulseaudio, not just an entire multimedia framework.
+pacman --sync --noconfirm vlc
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
