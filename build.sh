@@ -24,7 +24,14 @@ IMG=$OUTPUT.raw
 export SYSTEMD_LOG_LEVEL=debug
 
 env
-mkosi --distribution arch --image-id "$NAME" --image-version "$VERSION" "$@"
+mkosi \
+    --distribution arch \
+    --image-id "$NAME" \
+    --image-version "$VERSION" \
+    --environment="CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" \
+    --environment="CI_COMMIT_SHA=$CI_COMMIT_SHA" \
+    --environment="CI_PIPELINE_URL=$CI_PIPELINE_URL" \
+    "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
 rm -rfv "${OUTPUT}/efi"
