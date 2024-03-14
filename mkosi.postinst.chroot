@@ -155,7 +155,7 @@ cmake --install calamares/build
 
 cat <<- EOF > /usr/share/icons/default/index.theme
 [Icon Theme]
-Inherits=Breeze
+Inherits=breeze_cursors
 EOF
 
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
