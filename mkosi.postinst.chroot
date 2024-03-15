@@ -24,7 +24,7 @@ pacman --sync --refresh
 pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs
 # Slightly awkward: plasma-workspace still uses phonon for notifications (should use canberra) which means we need
 # the vlc backend which means we need vlc. Ugh. The reason canberra is nice is because it only does short sound playback
-# so it gets by with only having pulseaudio, not just an entire multimedia framework.
+# so it gets by with only having pulseaudio, not an entire multimedia framework.
 pacman --sync --noconfirm vlc
 
 # YAY Builder
@@ -38,6 +38,7 @@ su - builder -c "git clone https://aur.archlinux.org/yay.git /tmp/yay-build/yay"
 su - builder -c "cd /tmp/yay-build/yay && makepkg --noconfirm"
 pacman --noconfirm --upgrade /tmp/yay-build/yay/*.pkg.tar.*
 pacman --noconfirm --sync libinih libnsl liburcu lzo python apparmor autoconf-archive go-tools python-docutils squashfs-tools xfsprogs
+# FIXME: something breaks with snap-confines setuid bit, it doesn't arrive in the final image
 su - builder -c "yay --noconfirm --sync --sudo /bin/true snapd steam-devices-git"
 pacman --noconfirm --upgrade /home/builder/.cache/yay/*/*.pkg.tar.*
 userdel --remove builder
