@@ -192,18 +192,6 @@ done
 
 plymouth-set-default-theme bgrt
 
-# cd /tmp
-# rm -fv live.efi
-# echo "native ro root=PARTLABEL=KDEOSLive systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
-#   console=ttyS0 console=tty0 \
-#   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on" > cmdline
-# mkinitcpio --uki live.efi --addhooks "systemd,systemd-extension" --cmdline cmdline --kernel "$kernel_version"
-# rm -fv systemdOS.efi
-# echo "native ro root=PARTLABEL=KDEOS" > cmdline
-# mkinitcpio --uki systemdOS.efi --addhooks "systemd,systemd-extension" --cmdline cmdline --kernel "$kernel_version"
-# mv -v ./*.efi /
-# rm -f cmdline
-
 # Could move to config instead of manual command passing
 # NOTE: plymouth MUST be after systemd as per the wiki!
 cat <<- EOF > /etc/mkinitcpio.conf
