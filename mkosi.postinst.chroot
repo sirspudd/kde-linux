@@ -216,7 +216,8 @@ cd /tmp
 echo "native ro root=PARTLABEL=KDEOSLive systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on" > cmdline
+  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
+  splash" > cmdline
 mkinitcpio --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
@@ -228,7 +229,8 @@ echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$IMAGE_VERSION \
   lsm=landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on" > cmdline
+  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
+  splash" > cmdline
 mkinitcpio --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
