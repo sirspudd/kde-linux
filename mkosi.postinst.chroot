@@ -223,7 +223,9 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output live.efi
+# lsm= defaulting to apparmor from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/Kconfig
 echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$IMAGE_VERSION \
+  lsm=landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on" > cmdline
