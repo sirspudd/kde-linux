@@ -40,6 +40,7 @@ pacman --noconfirm --upgrade /tmp/yay-build/yay/*.pkg.tar.*
 pacman --noconfirm --sync libinih libnsl liburcu lzo python apparmor autoconf-archive go-tools python-docutils squashfs-tools xfsprogs
 # FIXME: something breaks with snap-confines setuid bit, it doesn't arrive in the final image
 su - builder -c "yay --noconfirm --sync --sudo /bin/true snapd steam-devices-git"
+touch /var/lib/snapd/apparmor/snap-confine/.keep # this has been gotten lost in the past for unknown reasons
 pacman --noconfirm --upgrade /home/builder/.cache/yay/*/*.pkg.tar.*
 userdel --remove builder
 rm /etc/sudoers.d/builder
