@@ -5,7 +5,7 @@ enable sddm.service
 enable accounts-daemon.service
 enable NetworkManager.service
 enable snapd.socket
-enable snapd.apparmor
+enable snapd.apparmor.service
 enable apparmor.service
 
 enable live-user.service
