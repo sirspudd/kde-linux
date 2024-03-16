@@ -3,6 +3,7 @@
 
 [Unit]
 Requires=systemd-logind.service
+Before=display-manager.service
 After=systemd-logind.service systemd-homed.service
 ConditionKernelCommandLine=kdeos.live=1
 
