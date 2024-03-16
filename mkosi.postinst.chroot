@@ -200,7 +200,7 @@ cat <<- EOF > /etc/mkinitcpio.conf
 MODULES=()
 BINARIES=()
 FILES=()
-HOOKS=(base systemd autodetect modconf kms keyboard block filesystems fsck systemd-extension plymouth)
+HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
 EOF
 cd /tmp
 echo "native ro root=PARTLABEL=KDEOSLive systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
