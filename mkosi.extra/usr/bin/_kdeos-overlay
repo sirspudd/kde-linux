@@ -8,6 +8,12 @@ set -ex
 
 sysroot=/sysroot
 rootdisk=/dev/disk/by-partlabel/KDEOS
+if [ -x /dev/gpt-auto-root ]; then
+    # When the partition was auto detected we can just use the auto-root device
+    rootdisk=/dev/gpt-auto-root
+fi
+
+# TODO should probably transition to .mount units or a generator instead
 
 mount -v -o subvol=/ "$rootdisk" "${sysroot}/system"
 
