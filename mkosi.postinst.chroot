@@ -186,45 +186,8 @@ EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
 
-kernel_version=""
-for f in /usr/lib/modules/*/vmlinuz
-do
-  kernel_version="$(basename "$(dirname "$f")")"
-done
-
 plymouth-set-default-theme bgrt
 
-# Could move to config instead of manual command passing
-# NOTE: plymouth MUST be after systemd as per the wiki!
-cat <<- EOF > /etc/mkinitcpio.conf
-MODULES=()
-BINARIES=()
-FILES=()
-HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
-EOF
 cd /tmp
-echo "native ro root=PARTLABEL=KDEOSLive systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
-  rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
-  console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
-  splash" > cmdline
-mkinitcpio --generate initrd --kernel "$kernel_version"
-ukify build \
-  --linux /boot/vmlinuz-linux \
-  --initrd initrd \
-  --cmdline @cmdline \
-  --output live.efi
-# lsm= defaulting to apparmor from https://wiki.archlinux.org/title/AppArmor
-echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$IMAGE_VERSION \
-  lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
-  rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
-  console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
-  splash" > cmdline
-mkinitcpio --generate initrd --kernel "$kernel_version"
-ukify build \
-  --linux /boot/vmlinuz-linux \
-  --initrd initrd \
-  --cmdline @cmdline \
-  --output kdeos.efi
+/usr/bin/_kdeos-rebuild-efi
 mv -v ./*.efi /
