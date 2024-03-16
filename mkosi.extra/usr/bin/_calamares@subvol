@@ -15,10 +15,10 @@ device=$(findmnt --noheadings --nofsroot --output SOURCE "$ROOT")
 mount -o subvol=/ "$device" "$ROOT/system"
 cd "$ROOT/system"
 
+. /etc/os-release
+
 # FIXME set actual version
-mv @systemdOS @systemdOS_0
-ln -s @systemdOS_0 @systemdOS
-btrfs subvolume set-default @systemdOS
+mv @kdeos "@kdeos_$IMAGE_VERSION"
 
 # @home gets created by calamares' mount module
 btrfs subvolume create @snap
