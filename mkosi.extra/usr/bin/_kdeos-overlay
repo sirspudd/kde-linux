@@ -15,7 +15,7 @@ fi
 
 # TODO should probably transition to .mount units or a generator instead
 
-mount -v -o subvol=/ "$rootdisk" "${sysroot}/system"
+mount -v -o rw,subvol=/ "$rootdisk" "${sysroot}/system"
 
 mount -v \
     -o subvol=@home \
