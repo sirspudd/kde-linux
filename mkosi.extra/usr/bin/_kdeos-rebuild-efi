@@ -21,6 +21,7 @@ HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems
 EOF
 
 echo "native ro rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
+  lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
