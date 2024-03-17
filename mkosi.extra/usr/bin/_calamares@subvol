@@ -12,16 +12,40 @@ ROOT=$1
 
 device=$(findmnt --noheadings --nofsroot --output SOURCE "$ROOT")
 [ "$device" = "" ] && exit 1
-mount -o subvol=/ "$device" "$ROOT/system"
-cd "$ROOT/system"
 
 . /etc/os-release
 
-# FIXME set actual version
-mv @kdeos "@kdeos_$IMAGE_VERSION"
+tmpdir=$(mktemp --directory)
 
-# @home gets created by calamares' mount module
+# Calamares likes to mount stuff even with an empty config. Throw it away again.
+cd "$ROOT"
+umount -R ./*
+rm -rfv ./*
+
+mount -o ro /dev/gpt-auto-root /system
+mount -o rw "$device" "$tmpdir"
+cd "$tmpdir"
+rm -rfv ./*
+btrfs send "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
+btrfs subvolume create @home
 btrfs subvolume create @snap
 btrfs subvolume create @var-overlay
 btrfs subvolume create @etc-overlay
 mkdir @var-overlay/upper @var-overlay/work @etc-overlay/upper @etc-overlay/work
+
+# Overmount calamares' mount with the subvol mount
+umount -R "$ROOT"
+mount -o "subvol=@kdeos_$IMAGE_VERSION" "$device" "$ROOT"
+mount -t proc proc "$ROOT/proc"
+mount -t sysfs sys "$ROOT/sys"
+mount -o bind /dev "$ROOT/dev"
+mount -t tmpfs tmpfs "$ROOT/run"
+mkdir "$ROOT/run/udev"
+mount -o bind /run/udev "$ROOT/run/udev"
+mount -t efivarfs efivarfs "$ROOT/sys/firmware/efi/efivars"
+_kdeos-overlay "$device" "$ROOT"
+
+# ESP is a bit tricky. Find the block device of the root partition and then we'll ask systemd for an ESP on that device.
+blockdev=/dev/$(lsblk --noheadings --output pkname "$device")
+espdev=$(_kdeos-find-esp "$blockdev")
+mount "$espdev" "$ROOT/efi"
