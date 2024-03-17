@@ -14,21 +14,23 @@ sysroot=${2:-/sysroot}
 # TODO should probably transition to .mount units or a generator instead
 # NOTE: this is also called by calamares, so maybe mount units are a bad idea
 
-mount -v -o rw,subvol=/ "$rootdisk" "${sysroot}/system"
+mount -v \
+    -o rw,subvol=/ \
+    "$rootdisk" "${sysroot}/system"
 
 mount -v \
-    -o subvol=@home \
+    -o rw,subvol=@home \
     "$rootdisk" "${sysroot}/home"
 mount -v \
-    -o subvol=@snap \
+    -o rw,subvol=@snap \
     "$rootdisk" "${sysroot}/snap"
 mount -v \
     -t overlay \
-    -o "lowerdir=${sysroot}/etc,upperdir=${sysroot}/system/@etc-overlay/upper,workdir=${sysroot}/system/@etc-overlay/work,index=off,metacopy=off" \
+    -o "rw,lowerdir=${sysroot}/etc,upperdir=${sysroot}/system/@etc-overlay/upper,workdir=${sysroot}/system/@etc-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/etc"
 mount -v \
     -t overlay \
-    -o "lowerdir=${sysroot}/var,upperdir=${sysroot}/system/@var-overlay/upper,workdir=${sysroot}/system/@var-overlay/work,index=off,metacopy=off" \
+    -o "rw,lowerdir=${sysroot}/var,upperdir=${sysroot}/system/@var-overlay/upper,workdir=${sysroot}/system/@var-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/var"
 
 # TODO: should we maybe also mount /etc into the initrd /etc so we have early access to fstab and the like
