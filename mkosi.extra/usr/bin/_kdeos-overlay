@@ -31,3 +31,5 @@ mount -v \
     -t overlay \
     -o "lowerdir=${sysroot}/var,upperdir=${sysroot}/system/@var-overlay/upper,workdir=${sysroot}/system/@var-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/var"
+
+# TODO: should we maybe also mount /etc into the initrd /etc so we have early access to fstab and the like
