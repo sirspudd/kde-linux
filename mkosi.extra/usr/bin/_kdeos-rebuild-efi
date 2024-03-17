@@ -20,7 +20,7 @@ FILES=()
 HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
 EOF
 
-echo "native ro root=PARTLABEL=KDEOSLive systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
+echo "native ro systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
@@ -33,7 +33,7 @@ ukify build \
   --output live.efi
 
 # lsm= defaulting to apparmor from https://wiki.archlinux.org/title/AppArmor
-echo "native ro root=PARTLABEL=KDEOS rootflags=subvol=@kdeos_$IMAGE_VERSION \
+echo "native ro rootflags=subvol=@kdeos_$IMAGE_VERSION \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
