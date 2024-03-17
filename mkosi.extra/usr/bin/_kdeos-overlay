@@ -28,6 +28,9 @@ mount -v \
     -o rw,subvol=@home \
     "$rootdisk" "${sysroot}/home"
 mount -v \
+    -o rw,subvol=@locale \
+    "$rootdisk" "${sysroot}/usr/lib/locale"
+mount -v \
     -o rw,subvol=@snap \
     "$rootdisk" "${sysroot}/snap"
 mount -v \

@@ -28,6 +28,7 @@ cd "$tmpdir"
 rm -rfv ./*
 btrfs send "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
 btrfs subvolume create @home
+btrfs subvolume create @locale
 btrfs subvolume create @snap
 btrfs subvolume create @var-overlay
 btrfs subvolume create @etc-overlay
