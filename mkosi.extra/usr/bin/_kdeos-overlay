@@ -4,11 +4,12 @@
 
 set -ex
 
-rootdisk=${1:-/dev/disk/by-partlabel/KDEOS}
-if [ -r /dev/gpt-auto-root ] && [ ! -r "$rootdisk" ]; then
+rootdisk=/dev/disk/by-partlabel/KDEOS
+if [ -r /dev/gpt-auto-root ]; then
     # When the partition was auto detected we can just use the auto-root device
     rootdisk=/dev/gpt-auto-root
 fi
+rootdisk=${1:-$rootdisk}
 sysroot=${2:-/sysroot}
 
 # TODO should probably transition to .mount units or a generator instead
