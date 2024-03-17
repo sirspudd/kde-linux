@@ -8,7 +8,7 @@ set -ex
 
 sysroot=/sysroot
 rootdisk=/dev/disk/by-partlabel/KDEOS
-if [ -x /dev/gpt-auto-root ]; then
+if [ -r /dev/gpt-auto-root ]; then
     # When the partition was auto detected we can just use the auto-root device
     rootdisk=/dev/gpt-auto-root
 fi

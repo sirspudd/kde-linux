@@ -11,6 +11,9 @@ Before=initrd-root-fs.target initrd-parse-etc.service shutdown.target
 AssertPathExists=/etc/initrd-release
 # On the live system we let systemd.volatile handle the overlay since we want to discard changes
 ConditionKernelCommandLine=!kdeos.live=1
+# Make sure the module is loaded
+Wants=modprobe@overlay.service
+After=modprobe@overlay.service
 
 [Service]
 Type=oneshot

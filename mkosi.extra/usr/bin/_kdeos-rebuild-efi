@@ -14,7 +14,7 @@ done
 
 # NOTE: plymouth MUST be after systemd as per the wiki!
 cat <<- EOF > /etc/mkinitcpio.conf
-MODULES=()
+MODULES=(overlay)
 BINARIES=()
 FILES=()
 HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
