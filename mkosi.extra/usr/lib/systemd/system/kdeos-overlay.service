@@ -19,3 +19,4 @@ After=modprobe@overlay.service
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/_kdeos-overlay
+Restart=no
