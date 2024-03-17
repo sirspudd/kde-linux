@@ -20,7 +20,7 @@ FILES=()
 HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
 EOF
 
-echo "native ro systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
+echo "native ro rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 \
   rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
   console=ttyS0 console=tty0 \
   systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \

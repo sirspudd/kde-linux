@@ -33,4 +33,3 @@ btrfs subvolume delete "$EXPORT"
 rm -f "$OUTPUT_ABS.btrfs"
 
 ln -svf "@$OUTPUT" "$ID"
-btrfs subvolume set-default "$ID"
