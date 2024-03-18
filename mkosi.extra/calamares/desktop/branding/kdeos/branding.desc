@@ -16,6 +16,9 @@ strings:
 images:
     productLogo: "kde-symbolic.png"
     productIcon: "kde-symbolic.png"
+    productWelcome: "konqi-kde-hi.png"
+
+sidebar: qml,top
 
 slideshow: "/calamares/slides/index.qml"
 slideshowAPI: 2
