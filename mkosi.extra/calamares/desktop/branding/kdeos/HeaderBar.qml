@@ -25,6 +25,8 @@ RowLayout {
                     return "drive-multipartition-symbolic"
                 case 4:
                     return "system-users-symbolic"
+                case 5:
+                    return "run-install-symbolic"
                 }
                 return "kde-symbolic"
             }
