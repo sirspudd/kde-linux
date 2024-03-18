@@ -8,147 +8,33 @@ import QtQuick.Controls as QQC
 import org.kde.kirigami as Kirigami
 import io.calamares.ui as Calamares
 
-QQC.Control {
-    height: implicitHeight + Kirigami.Units.gridUnit
+Item {
+    height: header.implicitHeight + 9 // the +9 is anyone's guess, calamares' sizing is all sorts of wonky
 
-    background: Rectangle {
+    Kirigami.Theme.colorSet: Kirigami.Theme.Header
+    Kirigami.Theme.inherit: false
+
+    Rectangle {
         anchors.fill: parent
         color: Kirigami.Theme.backgroundColor
     }
 
-    contentItem: RowLayout {
-        Layout.fillWidth: true
+    ColumnLayout {
+        id: header
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-        RowLayout {
+        Kirigami.AbstractApplicationHeader {
             Layout.fillWidth: true
-            Kirigami.Icon {
-                // TODO should be the page icon but calamares has no actual notion of icons for pages
-                source: {
-                    switch (control.currentIndex) {
-                    case 0:
-                        return "kde-symbolic"
-                    case 1:
-                        return "globe-symbolic"
-                    case 2:
-                        return "input-keyboard-symbolic"
-                    case 3:
-                        return "drive-multipartition-symbolic"
-                    case 4:
-                        return "system-users-symbolic"
-                    }
-                    return "kde-symbolic"
-                }
-            }
-            Kirigami.Heading {
-                Layout.fillWidth: true
-                text: progressRepeater.itemAt(control.currentIndex).text
+            separatorVisible: false // We want more space to the separator, so we'll place it via layout
+
+            contentItem: HeaderBar {
+                anchors.margins: Kirigami.Units.smallSpacing
             }
         }
 
-        QQC.Control {
-            id: control
-            implicitWidth: row.implicitWidth
-            implicitHeight: row.implicitHeight
-
-            spacing: Kirigami.Units.mediumSpacing
-
-            property int currentIndex: Calamares.ViewManager.currentStepIndex
-
-            Rectangle {
-                id: backgroundLine
-
-                x: {
-                    progressRepeater.count // bind
-                    const first = progressRepeater.itemAt(0).dot
-                    return first.x + first.width / 2.0
-                }
-
-                y: {
-                    progressRepeater.count // bind
-                    const first = progressRepeater.itemAt(0).dot
-                    return (first.y + first.height / 2.0) - (backgroundLine.height / 2.0)
-                }
-
-                height: {
-                    progressRepeater.count // bind
-                    const first = progressRepeater.itemAt(0).dot
-                    return first.implicitHeight / 4.0
-                }
-
-                width: {
-                    progressRepeater.count // bind
-                    control.currentIndex // bind
-                    const last = progressRepeater.itemAt(progressRepeater.count - 1).dot
-                    // It is entirely unclear to me why this requires manual mapping while the coordinates don't
-                    const lastPoint = mapFromItem(last, last.x, last.y)
-                    return lastPoint.x + last.width / 2.0
-                }
-
-                color: Kirigami.Theme.disabledTextColor
-            }
-
-            Rectangle {
-                id: progressor
-                anchors.left: backgroundLine.left
-                anchors.top: backgroundLine.top
-                anchors.bottom: backgroundLine.bottom
-
-                width: {
-                    const current = progressRepeater.itemAt(control.currentIndex).dot
-                    const currentPoint = mapFromItem(current, current.x, current.y)
-                    const currentCenter = currentPoint.x + current.width
-                    console.assert(currentCenter > progressor.x)
-                    return currentCenter - progressor.x
-                }
-
-                color: Kirigami.Theme.highlightColor
-                Behavior on width {
-                    SequentialAnimation {
-                        NumberAnimation {
-                            duration: Kirigami.Units.shortDuration
-                        }
-                        ScriptAction {
-                            script: {
-                                for (let i = 0; i < progressRepeater.count; i++) {
-                                    progressRepeater.itemAt(i).done = control.currentIndex >= i
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Row {
-                id: row
-                spacing: control.spacing * 8
-
-                Repeater {
-                    id: progressRepeater
-                    model: Calamares.ViewManager
-                    delegate: ColumnLayout {
-                        property bool done: false
-                        readonly property alias dot: _rectangle
-                        readonly property alias text: _label.text
-
-                        Kirigami.ShadowedRectangle {
-                            Layout.alignment: Qt.AlignHCenter
-                            id: _rectangle
-                            implicitWidth: implicitHeight
-                            implicitHeight: Kirigami.Units.gridUnit
-
-                            radius: height / 2.0
-                            color: (index === 0 || done) ? progressor.color : backgroundLine.color
-                        }
-
-                        QQC.Label {
-                            id: _label
-                            text: display
-                            color: backgroundLine.color
-                            opacity: 0.8
-                        }
-                    }
-                }
-            }
+        Kirigami.Separator {
+            Layout.fillWidth: true
         }
     }
 }
