@@ -19,6 +19,7 @@ images:
     productWelcome: "konqi-kde-hi.png"
 
 sidebar: qml,top
+navigation: qml,bottom
 
 slideshow: "/calamares/slides/index.qml"
 slideshowAPI: 2
