@@ -9,9 +9,6 @@ import org.kde.kirigami as Kirigami
 import io.calamares.ui as Calamares
 
 RowLayout {
-    anchors.left: parent.left
-    anchors.right: parent.right
-
     RowLayout {
         Layout.fillWidth: true
         Kirigami.Icon {

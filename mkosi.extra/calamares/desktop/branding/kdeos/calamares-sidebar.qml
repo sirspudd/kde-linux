@@ -29,6 +29,8 @@ Item {
             separatorVisible: false // We want more space to the separator, so we'll place it via layout
 
             contentItem: HeaderBar {
+                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.margins: Kirigami.Units.smallSpacing
             }
         }
