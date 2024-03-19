@@ -141,6 +141,10 @@ include \${module-definitions-dir}/kf6-qt6.ksb
 # To change options for modules that have already been defined, use an
 # 'options' block. See kf6-common-options.ksb for an example
 
+options plasma-workspace
+    branch work/sitter/livestuff
+end options
+
 # kate: syntax kdesrc-buildrc;
 EOF
 

@@ -9,6 +9,7 @@ enable snapd.apparmor.service
 enable apparmor.service
 
 enable live-user.service
+enable plasma-setup-live-system.service
 enable kdeos-overlay.service
 
 # networkd - we use networkmanager
