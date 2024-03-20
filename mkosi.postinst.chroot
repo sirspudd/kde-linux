@@ -145,7 +145,7 @@ include \${module-definitions-dir}/kf6-qt6.ksb
 EOF
 
 # No packagekit support in discover please! We don't want discover talking about pacman things.
-pacman --remove packagekit libpackagekit-glib || true
+pacman --remove --noconfirm packagekit libpackagekit-glib || true
 
 cat ~/.config/kdesrc-buildrc
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
