@@ -20,12 +20,9 @@ FILES=()
 HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
 EOF
 
-echo "native rw rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 plasma.live.user=live \
+echo "rw rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 plasma.live.user=live \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
-  rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
-  console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
-  splash" > cmdline
+  quiet splash" > cmdline
 mkinitcpio --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
@@ -34,12 +31,9 @@ ukify build \
   --output live.efi
 
 # lsm= defaulting to apparmor from https://wiki.archlinux.org/title/AppArmor
-echo "native rw rootflags=subvol=@kdeos_$IMAGE_VERSION \
+echo "rw rootflags=subvol=@kdeos_$IMAGE_VERSION \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
-  rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1 \
-  console=ttyS0 console=tty0 \
-  systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on \
-  splash" > cmdline
+  quiet splash" > cmdline
 mkinitcpio --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
