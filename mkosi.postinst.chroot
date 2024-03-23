@@ -28,6 +28,8 @@ pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfsto
 pacman --sync --noconfirm vlc
 # For discover backend
 pacman --sync --noconfirm fwupd
+# For kio-extras
+pacman --sync --noconfirm smbclient
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
