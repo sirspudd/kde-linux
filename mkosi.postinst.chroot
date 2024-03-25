@@ -190,7 +190,7 @@ EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
 
-plymouth-set-default-theme bgrt
+plymouth-set-default-theme breeze-bgrt
 
 cd /tmp
 /usr/bin/_kdeos-rebuild-efi
