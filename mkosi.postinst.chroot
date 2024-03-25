@@ -30,6 +30,8 @@ pacman --sync --noconfirm vlc
 pacman --sync --noconfirm fwupd
 # For kio-extras
 pacman --sync --noconfirm smbclient
+# For selenium
+pacman --sync --noconfirm python-atspi
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
