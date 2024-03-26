@@ -1,0 +1,50 @@
+#!/bin/env python
+
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
+
+import multiprocessing
+from multiprocessing import Pool
+from glob import glob
+import os
+import subprocess
+
+def extract(file: str, realdebugfile: str, debugfile: str):
+    if file.endswith('.o'): # don't break gcc object files, thank you
+        return
+
+    try:
+        out = subprocess.check_output(['file', '-b', file])
+        if not out.decode('utf-8').startswith('ELF '):
+            return
+    except BaseException as e:
+        print(e)
+        return
+
+    subprocess.run(['eu-strip', '--remove-comment', '--reloc-debug-sections', '-f', debugfile, '-F', realdebugfile, file])
+
+if __name__ == '__main__':
+    debugroot = '/tmp/debugroot'
+    os.mkdir(debugroot)
+
+    with Pool(multiprocessing.cpu_count()) as pool:
+        scheduled = []
+        for subdir in ['lib', 'bin', 'sbin']:
+            for path in glob(f'/usr/{subdir}/**/*', recursive=True):
+                file = os.path.realpath(path)
+                realdebugfile = f'/usr/lib/debug/{file}.debug'
+                debugfile = f'{debugroot}{file}'
+
+                if file in scheduled:
+                    continue
+                scheduled.append(file)
+
+                debugdir = os.path.dirname(debugfile)
+                if not os.path.exists(debugdir):
+                    os.makedirs(debugdir, exist_ok=True)
+
+                pool.apply_async(extract, (file, realdebugfile, debugfile,))
+
+    tar = 'debug.tar'
+    subprocess.run(['tar', '-C', f'{debugroot}/', '-cf', tar, '.'])
+    subprocess.run(['zstd', '-T0', '--rm', tar])

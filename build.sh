@@ -47,9 +47,14 @@ cp -v "${OUTPUT}"/${NAME}*.efi "$OUTPUT.efi"
 mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "${OUTPUT}_live.efi"
 
+# Move debug tarball out of the tree
+mv -v "$OUTPUT/debug.tar.zst" "$OUTPUT.debug.tar.zst"
+
+# Cleanup
 rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
 rm -rf "${OUTPUT}/usr/share/doc/qt6/examples"
 
+# Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
 rm -rf "$TAR" ./*.tar
 tar -C "${OUTPUT}"/ -cf "$TAR" .
 SIZE=$(stat --format %s "$TAR") # the apparent size of all data

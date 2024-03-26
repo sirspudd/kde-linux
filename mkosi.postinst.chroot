@@ -170,6 +170,9 @@ cat <<- EOF > /usr/share/icons/default/index.theme
 Inherits=breeze_cursors
 EOF
 
+cd /
+_kdeos-make-debug-archive
+
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
 cat <<- EOF > /usr/lib/os-release
 NAME="KDE OS"
