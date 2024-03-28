@@ -30,6 +30,8 @@ pacman --sync --noconfirm fwupd
 pacman --sync --noconfirm smbclient
 # For selenium
 pacman --sync --noconfirm python-atspi
+# For print-manager
+pacman --sync --noconfirm cups
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
