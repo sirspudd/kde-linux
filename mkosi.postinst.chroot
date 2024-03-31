@@ -44,10 +44,13 @@ su - builder -c "git clone https://aur.archlinux.org/yay.git /tmp/yay-build/yay"
 su - builder -c "cd /tmp/yay-build/yay && makepkg --noconfirm"
 pacman --noconfirm --upgrade /tmp/yay-build/yay/*.pkg.tar.*
 pacman --noconfirm --sync libinih libnsl liburcu lzo python apparmor autoconf-archive go-tools python-docutils squashfs-tools xfsprogs
+# For build deps for systemd-bootchart
+pacman --noconfirm --sync intltool docbook-xsl
 # FIXME: something breaks with snap-confines setuid bit, it doesn't arrive in the final image
-su - builder -c "yay --noconfirm --sync --sudo /bin/true snapd steam-devices-git"
+su - builder -c "yay --noconfirm --sync --sudo /bin/true snapd steam-devices-git systemd-bootchart"
 pacman --noconfirm --upgrade /home/builder/.cache/yay/snapd/*.pkg.tar.*
 pacman --noconfirm --upgrade /home/builder/.cache/yay/steam-devices-git/*.pkg.tar.*
+pacman --noconfirm --upgrade /home/builder/.cache/yay/systemd-bootchart/*.pkg.tar.*
 touch /var/lib/snapd/apparmor/snap-confine/.keep # this has been gotten lost in the past for unknown reasons
 userdel --remove builder
 rm /etc/sudoers.d/builder
