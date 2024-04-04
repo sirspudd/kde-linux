@@ -40,4 +40,3 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output kdeos.efi
-
