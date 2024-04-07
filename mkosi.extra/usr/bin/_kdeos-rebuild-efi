@@ -13,7 +13,7 @@ do
 done
 
 # NOTE: plymouth MUST be after systemd as per the wiki!
-cat <<- EOF > /etc/mkinitcpio.conf
+cat <<- EOF > mkinitcpio.conf
 MODULES=(overlay)
 BINARIES=()
 FILES=()
@@ -23,7 +23,7 @@ EOF
 echo "rw rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 plasma.live.user=live \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
   quiet splash" > cmdline
-mkinitcpio --generate initrd --kernel "$kernel_version"
+mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
   --initrd initrd \
@@ -34,7 +34,7 @@ ukify build \
 echo "rw rootflags=subvol=@kdeos_$IMAGE_VERSION \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
   quiet splash" > cmdline
-mkinitcpio --generate initrd --kernel "$kernel_version"
+mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
   --initrd initrd \
