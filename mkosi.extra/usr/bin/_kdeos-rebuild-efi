@@ -17,7 +17,7 @@ cat <<- EOF > mkinitcpio.conf
 MODULES=(overlay)
 BINARIES=()
 FILES=()
-HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth)
+HOOKS=(base systemd autodetect modconf kms keyboard block sd-encrypt filesystems fsck systemd-extension plymouth microcode)
 EOF
 
 echo "rw rootflags=subvol=@kdeos_$IMAGE_VERSION systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kdeos kdeos.live=1 plasma.live.user=live \
