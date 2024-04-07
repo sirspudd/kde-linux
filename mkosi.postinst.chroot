@@ -20,6 +20,12 @@ mkdir -pv /efi/EFI/Linux
 /usr/lib/systemd/systemd-sysupdate --verify=no list # verify=no because we only care if the configs are valid
 rm -rfv /efi/
 
+# Generate all locales. Because /usr/lib is not writable in the target system we need to ship all locales pre-generated.
+# Sucks. But oh well.
+cat /usr/share/i18n/SUPPORTED > /etc/locale.gen
+locale-gen
+
+# Install build and runtime dependencies
 pacman --sync --refresh
 pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs
 # NOTE: plasma-workspace depends on phonon (to build integration plugins **for** phonon) but doesn't actually
