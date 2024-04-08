@@ -38,6 +38,8 @@ pacman --sync --noconfirm smbclient
 pacman --sync --noconfirm python-atspi
 # For print-manager
 pacman --sync --noconfirm cups
+# For spectacle
+pacman --sync --noconfirm opencv
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
