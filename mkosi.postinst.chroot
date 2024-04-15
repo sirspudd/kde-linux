@@ -79,6 +79,7 @@ pacman --sync --noconfirm cairo
 pipenv install pycairo
 #
 export PATH="$PWD":"$PATH"
+export KDESRC_BUILD_IGNORE_MISSING_PROGRAMS=1
 pipenv run kde-builder --install-distro-packages
 pipenv run kde-builder --generate-config
 cat <<- EOF > /tmp/kde-builder/.config/kdesrc-buildrc
