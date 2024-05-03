@@ -40,6 +40,8 @@ pacman --sync --noconfirm python-atspi
 pacman --sync --noconfirm cups cups-browsed
 # For spectacle
 pacman --sync --noconfirm opencv
+# For fingerprint login
+pacman --sync --noconfirm fprintd
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
