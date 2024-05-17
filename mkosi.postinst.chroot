@@ -82,8 +82,8 @@ pipenv install pycairo
 #
 export PATH="$PWD":"$PATH"
 export KDESRC_BUILD_IGNORE_MISSING_PROGRAMS=1
-pipenv run kde-builder --install-distro-packages
-pipenv run kde-builder --generate-config
+pipenv run kde-builder --install-distro-packages --prompt-answer yes
+pipenv run kde-builder --generate-config --prompt-answer yes
 cat <<- EOF > /tmp/kde-builder/.config/kdesrc-buildrc
 global
     branch-group kf6-qt6
@@ -170,7 +170,7 @@ pacman --remove --noconfirm packagekit libpackagekit-glib || true
 cat ~/.config/kdesrc-buildrc
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
 # shellcheck disable=SC2086
-pipenv run kde-builder ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
+pipenv run kde-builder --prompt-answer yes ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
 
 # Calamares
 cd /tmp
