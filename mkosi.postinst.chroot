@@ -170,7 +170,7 @@ pacman --remove --noconfirm packagekit libpackagekit-glib || true
 cat ~/.config/kdesrc-buildrc
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
 # shellcheck disable=SC2086
-pipenv run kde-builder --prompt-answer yes ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
+pipenv run kde-builder ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
 
 # Calamares
 cd /tmp
