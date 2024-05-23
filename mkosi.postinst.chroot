@@ -151,7 +151,7 @@ global
     # Enable this if you want to use Visual Studio Code for development
     generate-vscode-project-config false
 
-    ignore-modules packagekit-qt
+    ignore-modules packagekit-qt appstream
 end global
 
 # With base options set, the remainder of the file is used to define modules to build, in the
