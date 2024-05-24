@@ -72,18 +72,14 @@ cd /opt
 echo "$PWD"
 env
 export HOME=/tmp/kde-builder
-pacman --sync --noconfirm python-pipenv
+pacman --sync --noconfirm git dbus-python python-promise python-yaml python-setproctitle
 git clone https://invent.kde.org/sdk/kde-builder.git
 cd kde-builder
-pipenv --python /usr/bin/python install
-# Hack for https://invent.kde.org/sdk/kde-builder/-/issues/16
-pacman --sync --noconfirm cairo
-pipenv install pycairo
 #
 export PATH="$PWD":"$PATH"
 export KDESRC_BUILD_IGNORE_MISSING_PROGRAMS=1
-pipenv run kde-builder --install-distro-packages --prompt-answer yes
-pipenv run kde-builder --generate-config --prompt-answer yes
+./kde-builder --install-distro-packages --prompt-answer yes
+./kde-builder --generate-config --prompt-answer yes
 cat <<- EOF > /tmp/kde-builder/.config/kdesrc-buildrc
 global
     branch-group kf6-qt6
@@ -170,7 +166,7 @@ pacman --remove --noconfirm packagekit libpackagekit-glib || true
 cat ~/.config/kdesrc-buildrc
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
 # shellcheck disable=SC2086
-pipenv run kde-builder ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
+./kde-builder ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
 
 # Calamares
 cd /tmp
