@@ -118,7 +118,7 @@ global
 
     # kde-builder can install a sample .xsession file for "Custom"
     # (or "XSession") logins,
-    install-session-driver false
+    install-login-session false
 
     # or add a environment variable-setting script to
     # ~/.config/kde-env-master.sh
