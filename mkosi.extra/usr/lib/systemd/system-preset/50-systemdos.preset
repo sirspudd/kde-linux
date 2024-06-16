@@ -8,6 +8,7 @@ enable snapd.socket
 enable snapd.apparmor.service
 enable apparmor.service
 enable systemd-oomd.service
+enable bluetooth.service
 
 enable live-user.service
 enable plasma-setup-live-system.service

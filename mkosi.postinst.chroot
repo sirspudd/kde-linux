@@ -42,6 +42,8 @@ pacman --sync --noconfirm cups cups-browsed
 pacman --sync --noconfirm opencv
 # For fingerprint login
 pacman --sync --noconfirm fprintd
+# For DDC/CI external monitors brightness; https://wiki.archlinux.org/title/backlight
+pacman --sync --noconfirm ddcutil
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
