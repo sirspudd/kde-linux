@@ -4,6 +4,10 @@
 
 set -e
 
+# Trigger mount of ESP by accessing it.
+# TODO file bug that sysupdate doesn't do that.
+stat /efi/EFI
+
 export TAR_OPTIONS="--zstd"
 # FIXME set up signing shebang so we can run with verify
 exec /usr/lib/systemd/systemd-sysupdate --verify=no "$@"
