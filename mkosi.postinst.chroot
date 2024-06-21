@@ -44,6 +44,8 @@ pacman --sync --noconfirm opencv
 pacman --sync --noconfirm fprintd
 # For DDC/CI external monitors brightness; https://wiki.archlinux.org/title/backlight
 pacman --sync --noconfirm ddcutil
+# For users KCM
+pacman --sync --noconfirm accountsservice
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
