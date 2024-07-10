@@ -10,6 +10,7 @@ echo 'https://mirror.23m.com/archlinux/' > /etc/pacman.d/mirrorlist.new
 cat /etc/pacman.d/mirrorlist >> /etc/pacman.d/mirrorlist.new
 mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist
 
+pacman --sync --refresh --noconfirm archlinux-keyring
 pacman --sync --refresh --noconfirm --sysupgrade
 pacman --sync --refresh --noconfirm mkosi git base-devel ukify vim cpio tree \
     rsync btrfs-progs s3cmd dosfstools qemu-img erofs-utils squashfs-tools
