@@ -40,7 +40,7 @@ mount -v \
     "$rootdisk" "${sysroot}/usr/lib/locale"
 mount -v \
     -o rw,subvol=@snap \
-    "$rootdisk" "${sysroot}/snap"
+    "$rootdisk" "${sysroot}/var/lib/snapd/snap"
 mount -v \
     -t overlay \
     -o "rw,lowerdir=${sysroot}/etc,upperdir=${sysroot}/system/@etc-overlay/upper,workdir=${sysroot}/system/@etc-overlay/work,index=off,metacopy=off" \

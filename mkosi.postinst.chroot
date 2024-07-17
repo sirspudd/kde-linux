@@ -7,7 +7,7 @@ set -ex
 env
 
 mkdir --mode 0700 /system # for the kdeos-overlay.service
-mkdir /snap # for snapd
+ln -s var/lib/snapd/snap /snap # for snapd
 
 export SYSTEMD_ESP_PATH="$BOOT_MNT"
 mkdir --mode 0700 "$SYSTEMD_ESP_PATH"
@@ -66,6 +66,7 @@ pacman --noconfirm --upgrade /home/builder/.cache/yay/snapd/*.pkg.tar.*
 pacman --noconfirm --upgrade /home/builder/.cache/yay/steam-devices-git/*.pkg.tar.*
 pacman --noconfirm --upgrade /home/builder/.cache/yay/systemd-bootchart/*.pkg.tar.*
 touch /var/lib/snapd/apparmor/snap-confine/.keep # this has been gotten lost in the past for unknown reasons
+mkdir /var/lib/snapd/snap/ # make sure the final snap location exists. we'll mount into it
 userdel --remove builder
 rm /etc/sudoers.d/builder
 rm -rf /home/builder
