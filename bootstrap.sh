@@ -12,7 +12,9 @@ mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist
 
 pacman --sync --refresh --noconfirm archlinux-keyring
 pacman-key --init
-pacman-key --refresh-keys
+# Unclear if we need this, should the keys run out of date we probably need to run this manually. Add a comment if that
+# is the case for it being here.
+# pacman-key --refresh-keys
 pacman --sync --refresh --noconfirm --sysupgrade
 pacman --sync --refresh --noconfirm mkosi git base-devel ukify vim cpio tree \
     rsync btrfs-progs s3cmd dosfstools qemu-img erofs-utils squashfs-tools
