@@ -18,3 +18,8 @@ pacman-key --init
 pacman --sync --refresh --noconfirm --sysupgrade
 pacman --sync --refresh --noconfirm mkosi git base-devel ukify vim cpio tree \
     rsync btrfs-progs s3cmd dosfstools qemu-img erofs-utils squashfs-tools
+
+# Use mkosi from git to not have to wait for releases when things break.
+# OTOH things may break in git. So which version is used may change over time.
+git clone https://github.com/systemd/mkosi
+ln -s "$PWD/mkosi/bin/mkosi" /usr/local/bin/mkosi
