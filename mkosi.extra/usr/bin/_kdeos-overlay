@@ -27,6 +27,8 @@ mount -v \
 # Make sure our subvolumes exist! In particular if we introduce subvolumes after installation.
 # FIXME This is a bit garbage. It'd be much tidier if we could tell repart to do this for us. But in some sort of
 # safe mode so it doesn't twiddle the partition table.
+# FIXME does this even work? do we have btrfs util in the initrd?
+
 [ -d "${sysroot}/system/@root" ] || btrfs subvolume create "${sysroot}/system/@root"
 
 mount -v \
