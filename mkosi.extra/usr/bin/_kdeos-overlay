@@ -38,6 +38,9 @@ mount -v \
     -o rw,subvol=@root \
     "$rootdisk" "${sysroot}/root"
 mount -v \
+    -o rw,subvol=@snap \
+    "$rootdisk" "${sysroot}/snap"
+mount -v \
     -o rw,subvol=@locale \
     "$rootdisk" "${sysroot}/usr/lib/locale"
 mount -v \
@@ -48,8 +51,5 @@ mount -v \
     -t overlay \
     -o "rw,lowerdir=${sysroot}/var,upperdir=${sysroot}/system/@var-overlay/upper,workdir=${sysroot}/system/@var-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/var"
-mount -v \
-    -o rw,subvol=@snap \
-    "$rootdisk" "${sysroot}/var/lib/snapd/snap"
 
 # TODO: should we maybe also mount /etc into the initrd /etc so we have early access to fstab and the like
