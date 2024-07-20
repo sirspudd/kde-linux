@@ -27,7 +27,7 @@ mount -v \
 # Make sure our subvolumes exist! In particular if we introduce subvolumes after installation.
 # FIXME This is a bit garbage. It'd be much tidier if we could tell repart to do this for us. But in some sort of
 # safe mode so it doesn't twiddle the partition table.
-btrfs subvolume create "${sysroot}/system/@root"
+[ -d "${sysroot}/system/@root" ] || btrfs subvolume create "${sysroot}/system/@root"
 
 mount -v \
     -o rw,subvol=@home \
@@ -39,9 +39,6 @@ mount -v \
     -o rw,subvol=@locale \
     "$rootdisk" "${sysroot}/usr/lib/locale"
 mount -v \
-    -o rw,subvol=@snap \
-    "$rootdisk" "${sysroot}/var/lib/snapd/snap"
-mount -v \
     -t overlay \
     -o "rw,lowerdir=${sysroot}/etc,upperdir=${sysroot}/system/@etc-overlay/upper,workdir=${sysroot}/system/@etc-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/etc"
@@ -49,5 +46,8 @@ mount -v \
     -t overlay \
     -o "rw,lowerdir=${sysroot}/var,upperdir=${sysroot}/system/@var-overlay/upper,workdir=${sysroot}/system/@var-overlay/work,index=off,metacopy=off" \
     overlay "${sysroot}/var"
+mount -v \
+    -o rw,subvol=@snap \
+    "$rootdisk" "${sysroot}/var/lib/snapd/snap"
 
 # TODO: should we maybe also mount /etc into the initrd /etc so we have early access to fstab and the like
