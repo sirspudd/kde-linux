@@ -66,7 +66,6 @@ pacman --noconfirm --upgrade /home/builder/.cache/yay/snapd/*.pkg.tar.*
 pacman --noconfirm --upgrade /home/builder/.cache/yay/steam-devices-git/*.pkg.tar.*
 pacman --noconfirm --upgrade /home/builder/.cache/yay/systemd-bootchart/*.pkg.tar.*
 touch /var/lib/snapd/apparmor/snap-confine/.keep # this has been gotten lost in the past for unknown reasons
-mkdir /var/lib/snapd/snap/ # make sure the final snap location exists. we'll mount into it
 userdel --remove builder
 rm /etc/sudoers.d/builder
 rm -rf /home/builder
