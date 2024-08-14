@@ -185,16 +185,16 @@ _kdeos-make-debug-archive
 
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
 cat <<- EOF > /usr/lib/os-release
-NAME="KDE OS"
-PRETTY_NAME="KDE OS"
-ID=kdeos
+NAME="KDE Linux"
+PRETTY_NAME="KDE Linux"
+ID=kdelinux
 VERSION_ID=$CI_COMMIT_SHORT_SHA
 BUILD_ID=$IMAGE_VERSION
 ANSI_COLOR="38;2;61;174;233"
-HOME_URL="https://os.kde.org/"
-DOCUMENTATION_URL="https://userbase.kde.org/KDEOS"
+HOME_URL="https://linux.kde.org/"
+DOCUMENTATION_URL="https://userbase.kde.org/KDELinux"
 SUPPORT_URL="https://kde.org/support/"
-BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDEOS"
+BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDELinux"
 PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
 LOGO=kde-symbolic
 IMAGE_VERSION=$IMAGE_VERSION
