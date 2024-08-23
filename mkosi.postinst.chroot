@@ -180,9 +180,6 @@ cat <<- EOF > /usr/share/icons/default/index.theme
 Inherits=breeze_cursors
 EOF
 
-cd /
-_kdeos-make-debug-archive
-
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
 cat <<- EOF > /usr/lib/os-release
 NAME="KDE Linux"
@@ -204,6 +201,10 @@ KDEOS_CI_URL=$CI_PIPELINE_URL
 EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
+
+# Generate the debug archive after the os-release so we can easily turn it into a systemd-sysext
+cd /
+_kdeos-make-debug-archive
 
 plymouth-set-default-theme breeze-bgrt
 

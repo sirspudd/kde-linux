@@ -8,6 +8,7 @@ from multiprocessing import Pool
 from glob import glob
 import os
 import subprocess
+import shutil
 
 def extract(file: str, realdebugfile: str, debugfile: str):
     if file.endswith('.o'): # don't break gcc object files, thank you
@@ -44,6 +45,10 @@ if __name__ == '__main__':
                     os.makedirs(debugdir, exist_ok=True)
 
                 pool.apply_async(extract, (file, realdebugfile, debugfile,))
+
+    extension_dir = f'{debugroot}/usr/lib/extension-release.d/'
+    os.makedirs(extension_dir)
+    shutil.copy2('/usr/lib/os-release', f'{extension_dir}/extension-release.debug')
 
     tar = 'debug.tar'
     subprocess.run(['tar', '-C', f'{debugroot}/', '-cf', tar, '.'])
