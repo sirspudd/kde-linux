@@ -48,7 +48,7 @@ mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "${OUTPUT}_live.efi"
 
 # Move debug tarball out of the tree
-mv -v "$OUTPUT/debug.tar.zst" "$OUTPUT.debug.tar.zst"
+mv -v "$OUTPUT/debug.tar.zst" "${OUTPUT}_debug-x86-64.tar.zst"
 
 # Cleanup
 rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
