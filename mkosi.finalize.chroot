@@ -4,7 +4,7 @@
 
 set -ex
 
-deluser --remove builder || true
+userdel --remove --force builder || true
 passwd --delete root
 passwd --lock root
 
