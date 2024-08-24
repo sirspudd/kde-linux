@@ -31,6 +31,7 @@ cat <<- EOF > mkosi.conf.d/00-environment.conf
 EOF
 
 env
+echo "from pathlib import Path; print(Path.cwd())" | python -
 mkosi \
     --distribution arch \
     --image-id "$NAME" \
