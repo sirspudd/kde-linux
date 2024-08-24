@@ -30,6 +30,11 @@ cat <<- EOF > mkosi.conf.d/00-environment.conf
 @Environment=CI_PIPELINE_URL=${CI_PIPELINE_URL:-htts://invent.kde.org}
 EOF
 
+cat <<- EOF > mkosi.conf.d/00-outputdirectory.conf
+[Output]
+OutputDirectory=${PWD}
+EOF
+
 env
 echo "from pathlib import Path; print(Path.cwd())" | python -
 mkosi \
