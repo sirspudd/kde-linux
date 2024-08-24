@@ -6,6 +6,13 @@
 
 set -ex
 
+if ! docker info | grep 'Storage Driver: btrfs'; then
+  echo "You should run this on a btrfs'd docker instance. \
+        The btrfs can be a local file mounted into place at /var/lib/docker. \
+        Other docker backends will perform poorly if at all!"
+  exit 1
+fi
+
 docker run \
   --privileged \
   --env CI_PROJECT_DIR=/workspace \
