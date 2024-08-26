@@ -13,6 +13,7 @@ enable bluetooth.service
 enable live-user.service
 enable plasma-setup-live-system.service
 enable kdeos-overlay.service
+enable var-lib-snapd-snap.mount
 
 # networkd - we use networkmanager
 disable systemd-networkd-wait-online.service
