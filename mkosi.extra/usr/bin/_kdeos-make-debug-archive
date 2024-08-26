@@ -34,7 +34,7 @@ if __name__ == '__main__':
             for path in glob(f'/usr/{subdir}/**/*', recursive=True):
                 file = os.path.realpath(path)
                 realdebugfile = f'/usr/lib/debug/{file}.debug'
-                debugfile = f'{debugroot}{file}'
+                debugfile = realdebugfile
 
                 if file in scheduled:
                     continue
