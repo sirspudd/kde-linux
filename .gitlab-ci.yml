@@ -9,6 +9,7 @@ start:
   allow_failure: false
   image: archlinux:latest
   script:
+    - ls -lahR
     - ./in_docker.sh --force --debug
     - ./upload.sh
   artifacts:
