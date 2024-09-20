@@ -1,0 +1,53 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2016 Jonathan Riddell <jr@jriddell.org>
+# SPDX-FileCopyrightText: 2017-2021 Harald Sitter <sitter@kde.org>
+
+set -eux
+
+if ! grep "kdeos.live=1" /proc/cmdline; then
+    echo "kdeos.live=1 not in cmdline"
+    exit 1
+fi
+
+if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
+    echo "gpt-auto-root is not KDEOSLive"
+    exit 1
+fi
+
+cat << EOF > /etc/sddm.conf.d/live.conf
+[Autologin]
+User=live
+Session=plasma.desktop
+Relogin=true
+EOF
+
+/usr/bin/useradd --create-home live
+/usr/bin/usermod --append --groups wheel live
+/usr/bin/passwd --delete live
+
+mkdir /home/live/.config/
+mkdir /home/live/Desktop/
+
+# No search indexing. Useless and eating away at already meh performance
+cat << EOF > /home/live/.config/baloofilerc
+[Basic Settings]
+Indexing-Enabled=false
+EOF
+
+cat << EOF > /home/live/.config/plasma-welcomerc
+[General]
+LiveEnvironment=true
+LiveInstaller=calamares
+EOF
+
+# KWallet is also useless in a live environment
+cat << EOF > /home/live/.config/kwalletrc
+[Wallet]
+Enabled=false
+EOF
+
+cp /usr/share/applications/calamares.desktop /home/live/Desktop/
+
+chown -R live:live /home/live/
+

@@ -10,7 +10,7 @@ enable apparmor.service
 enable systemd-oomd.service
 enable bluetooth.service
 
-enable live-user.service
+enable kde-linux-live-setup.service
 enable plasma-setup-live-system.service
 enable kdeos-overlay.service
 enable var-lib-snapd-snap.mount
