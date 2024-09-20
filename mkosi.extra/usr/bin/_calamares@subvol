@@ -23,9 +23,11 @@ umount -R ./*
 rm -rfv ./*
 
 mount -o ro /dev/gpt-auto-root /system
-mount -o rw "$device" "$tmpdir"
+mount -o rw,compress=zstd:1 "$device" "$tmpdir"
 cd "$tmpdir"
 rm -rfv ./*
+
+btrfs quota enable --simple .
 btrfs send "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
 btrfs subvolume create @home
 btrfs subvolume create @root
