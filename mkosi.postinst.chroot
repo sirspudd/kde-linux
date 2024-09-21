@@ -206,6 +206,11 @@ cat /usr/lib/os-release
 cd /
 _kdeos-make-debug-archive
 
+mkdir flatpak
+flatpak remote-add --if-not-exists --collection-id=org.flathub.Stable flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak create-usb flatpak org.mozilla.firefox
+rm -rf /var/lib/flatpak # reset the state in the image
+
 plymouth-set-default-theme breeze-bgrt
 
 cd /tmp

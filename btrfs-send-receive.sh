@@ -32,4 +32,9 @@ btrfs subvolume snapshot -r "$EXPORT" "@$OUTPUT"
 btrfs subvolume delete "$EXPORT"
 rm -f "$OUTPUT_ABS.btrfs"
 
+btrfs receive -f "$OUTPUT_ABS.btrfs.flatpak" .
+btrfs subvolume snapshot -r "$EXPORT.flatpak" "@flatpak"
+btrfs subvolume delete "$EXPORT.flatpak"
+rm -f "$OUTPUT_ABS.btrfs.flatpak"
+
 ln -svf "@$OUTPUT" "$ID"

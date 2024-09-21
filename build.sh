@@ -54,8 +54,26 @@ cp -v "${OUTPUT}"/${NAME}*.efi "$OUTPUT.efi"
 mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "${OUTPUT}_live.efi"
 
+OUTPUT_IS_BTRFS_SUBVOLUME=false
+if [ "$(stat --file-system --format %T "$OUTPUT")" = "btrfs" ] && [ "$(stat --format %i "$OUTPUT")" = "256" ]; then
+    OUTPUT_IS_BTRFS_SUBVOLUME=true
+fi
+
 # Move debug tarball out of the tree
 mv -v "$OUTPUT/debug.tar.zst" "${OUTPUT}_debug-x86-64.tar.zst"
+
+FLATPAK_SIZE=""
+# Move flatpak out of the tree and into subvolume
+if $OUTPUT_IS_BTRFS_SUBVOLUME; then
+    btrfs subvolume create "$OUTPUT.flatpak"
+    cp -rf --reflink=always "$OUTPUT/flatpak/." "$OUTPUT.flatpak"
+    rm -rf "$OUTPUT/flatpak"
+    btrfs filesystem defrag -czstd -r "$OUTPUT.flatpak"
+    btrfs subvolume snapshot -r "$OUTPUT.flatpak" "$OUTPUT.export.flatpak"
+    btrfs send --compressed-data -f "$OUTPUT.btrfs.flatpak" "$OUTPUT.export.flatpak"
+    btrfs subvolume delete "$OUTPUT.export.flatpak"
+    FLATPAK_SIZE=$(stat --format %s "$OUTPUT.btrfs.flatpak") # the actual size of all data
+fi
 
 # Cleanup
 rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
@@ -66,11 +84,6 @@ rm -rf "$TAR" ./*.tar
 tar -C "${OUTPUT}"/ -cf "$TAR" .
 SIZE=$(stat --format %s "$TAR") # the apparent size of all data
 zstd -T0 --rm "$TAR"
-
-OUTPUT_IS_BTRFS_SUBVOLUME=false
-if [ "$(stat --file-system --format %T "$OUTPUT")" = "btrfs" ] && [ "$(stat --format %i "$OUTPUT")" = "256" ]; then
-    OUTPUT_IS_BTRFS_SUBVOLUME=true
-fi
 
 # Accurate sizing is a bit of a challenge. In the most ideal scenario we'll be working on btrfs and are able to
 # compress the entire subvolume into a file. This file size will then be more or less the DATA size in the filesystem.
@@ -86,6 +99,7 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
 else
     SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
 fi
+SIZE=$((SIZE+FLATPAK_SIZE)) # however much we need for flatpak
 SIZE=$((SIZE+314572800)) # 256M for btrfs metadata, 44M for system block
 SIZE=$((SIZE+536870912)) # 512M for ESP
 
