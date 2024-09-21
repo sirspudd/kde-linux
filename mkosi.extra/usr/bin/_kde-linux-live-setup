@@ -15,6 +15,7 @@ if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --
     exit 1
 fi
 
+mkdir /etc/sddm.conf.d/
 cat << EOF > /etc/sddm.conf.d/live.conf
 [Autologin]
 User=live
@@ -51,3 +52,4 @@ cp /usr/share/applications/calamares.desktop /home/live/Desktop/
 
 chown -R live:live /home/live/
 
+_kde-linux-install-flatpaks
