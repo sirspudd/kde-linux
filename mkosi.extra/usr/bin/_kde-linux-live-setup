@@ -20,7 +20,8 @@ cat << EOF > /etc/sddm.conf.d/live.conf
 [Autologin]
 User=live
 Session=plasma.desktop
-Relogin=true
+# Do not relogin for now it may cause login loops of death
+# Relogin=true
 EOF
 
 /usr/bin/useradd --create-home live
