@@ -61,3 +61,9 @@ fi
 blockdev=/dev/$(basename "$(readlink --canonicalize "/sys/class/block/$realdevice/..")")
 espdev=$(_kdeos-find-esp "$blockdev")
 mount "$espdev" "$ROOT/efi"
+
+# Once everything is in place we'll shove some extra data into the overlays.
+# We notably don't want to carry flatpaks in the rootfs but for purposes of the image file they must be shipped somehow.
+# In the live session they are mounted in place, for the installed system we actually seed /var/lib/flatpak with data.
+rm -rf "$ROOT/var/lib/flatpak"
+cp -ra /system/@flatpak "$ROOT/var/lib/flatpak"
