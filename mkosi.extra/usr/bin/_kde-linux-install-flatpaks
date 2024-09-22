@@ -4,4 +4,4 @@
 
 set -eux
 
-flatpak install --sideload-repo=/system/@flatpak/.ostree/repo flathub org.mozilla.firefox
+flatpak install --noninteractive --assumeyes --sideload-repo=/system/@flatpak/.ostree/repo flathub org.mozilla.firefox
