@@ -12,4 +12,4 @@ ExecStart=/usr/bin/_kde-linux-live-setup
 ExecStartPost=/usr/bin/systemctl disable %n
 
 [Install]
-RequiredBy=display-manager.service
+RequiredBy=multi-user.service
