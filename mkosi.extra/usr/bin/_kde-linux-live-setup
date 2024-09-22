@@ -15,6 +15,10 @@ if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --
     exit 1
 fi
 
+useradd --create-home live
+usermod --append --groups wheel live
+passwd --delete live
+
 timedatectl set-timezone UTC
 localectl set-locale C.UTF-8
 
@@ -26,10 +30,6 @@ Session=plasma.desktop
 # Do not relogin for now it may cause login loops of death
 # Relogin=true
 EOF
-
-/usr/bin/useradd --create-home live
-/usr/bin/usermod --append --groups wheel live
-/usr/bin/passwd --delete live
 
 mkdir /home/live/.config/
 mkdir /home/live/Desktop/
