@@ -15,6 +15,9 @@ if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --
     exit 1
 fi
 
+timedatectl set-timezone UTC
+localectl set-locale C.UTF-8
+
 mkdir /etc/sddm.conf.d/
 cat << EOF > /etc/sddm.conf.d/live.conf
 [Autologin]
