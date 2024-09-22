@@ -13,3 +13,4 @@ ExecStartPost=/usr/bin/systemctl disable %n
 
 [Install]
 RequiredBy=multi-user.target
+RequiredBy=display-manager.service
