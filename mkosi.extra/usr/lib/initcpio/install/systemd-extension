@@ -6,7 +6,7 @@ build() {
     map add_binary \
         /usr/lib/systemd/systemd-volatile-root \
         /usr/bin/_kdeos-overlay \
-        /usr/lib/systemd/system-generators/kdeos-live-generator \
+        /usr/lib/systemd/system-generators/kde-linux-live-generator \
         /usr/lib/systemd/systemd-bootchart \
         /usr/bin/btrfs
 
