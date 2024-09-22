@@ -12,4 +12,4 @@ ExecStart=/usr/bin/_kde-linux-live-setup
 ExecStartPost=/usr/bin/systemctl disable %n
 
 [Install]
-RequiredBy=multi-user.service
+RequiredBy=multi-user.target
