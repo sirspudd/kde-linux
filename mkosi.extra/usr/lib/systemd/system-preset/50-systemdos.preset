@@ -9,6 +9,7 @@ enable snapd.apparmor.service
 enable apparmor.service
 enable systemd-oomd.service
 enable bluetooth.service
+enable cups.service
 
 enable kde-linux-btrfs.service
 enable kde-linux-live-setup.service
