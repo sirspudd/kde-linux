@@ -21,11 +21,13 @@ tmpdir=$(mktemp --directory)
 cd "$ROOT"
 umount -R ./*
 rm -rfv ./*
+btrfs subvolume sync . || true
 
 mount -o ro /dev/gpt-auto-root /system
-mount -o rw,compress=zstd:1 "$device" "$tmpdir"
+mount -o rw "$device" "$tmpdir"
 cd "$tmpdir"
 rm -rfv ./*
+btrfs subvolume sync . || true
 
 btrfs quota enable --simple .
 btrfs send "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
