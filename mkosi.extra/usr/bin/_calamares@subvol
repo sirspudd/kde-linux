@@ -22,6 +22,7 @@ cd "$ROOT"
 umount -R ./*
 rm -rfv ./*
 btrfs subvolume sync . || true
+umount -R --lazy "$ROOT" # unmount is important as otherwise we still hold a subvolume open and it can never sync deletion
 
 mount -o ro /dev/gpt-auto-root /system
 mount -o rw "$device" "$tmpdir"
@@ -40,7 +41,6 @@ btrfs subvolume create @etc-overlay
 mkdir @var-overlay/upper @var-overlay/work @etc-overlay/upper @etc-overlay/work
 
 # Overmount calamares' mount with the subvol mount
-umount -R "$ROOT"
 mount -o "subvol=@kdeos_$IMAGE_VERSION" "$device" "$ROOT"
 mount -t proc proc "$ROOT/proc"
 mount -t sysfs sys "$ROOT/sys"
