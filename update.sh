@@ -10,4 +10,4 @@ stat /efi/EFI
 
 export TAR_OPTIONS="--zstd"
 # FIXME set up signing shebang so we can run with verify
-exec /usr/lib/systemd/systemd-sysupdate --verify=no "$@"
+exec systemd-inhibit --what=sleep:shutdown --mode=block --who="Systemd Sysupdate" --why="Updating System" /usr/lib/systemd/systemd-sysupdate --verify=no "$@"
