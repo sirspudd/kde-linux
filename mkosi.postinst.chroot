@@ -22,7 +22,8 @@ rm -rfv /efi/
 
 # Generate all locales. Because /usr/lib is not writable in the target system we need to ship all locales pre-generated.
 # Sucks. But oh well.
-cat /usr/share/i18n/SUPPORTED > /etc/locale.gen
+# We can at least limit to UTF-8 variants because nobody uses the rest and Qt doesn't even work with them.
+grep UTF-8 /usr/share/i18n/SUPPORTED > /etc/locale.gen
 locale-gen
 
 # Install build and runtime dependencies
