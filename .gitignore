@@ -9,3 +9,7 @@
 /pacman-cache/
 /systemdOS_*/
 /kde-builder/
+
+mkosi.local.conf
+
+kdeos_*

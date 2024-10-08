@@ -42,3 +42,24 @@ sudo ./update.sh update
 - check VirtIO Disk 2 and move it above 1
 - [Apply]
 - [Begin installation]
+
+# Local Development
+
+In order to speed up local builds, you can create a `mkosi.local.conf` file in the root of the repository with the following content:
+
+```ini
+[Content]
+Environment=LOCALE_GEN="en_US.UTF-8 UTF-8" # replace with your locale`
+Environment=MIRRORS_COUNTRY=us # replace with your country code`
+Environment=PARALLEL_DOWNLOADS=50 # if your internet connection is fast
+
+# Only uncomment this after you have done a complete build once
+#Environment=KDE_BUILDER_ARGS="--no-src --install-only"
+```
+
+
+Then (assuming you have docker with the BTRFS storage driver) you can run:
+
+```bash
+./build_docker.sh --incremental
+```

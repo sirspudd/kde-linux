@@ -22,7 +22,12 @@ if [ "$1" = "final" ]; then
   echo 'Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
   # Then use fastest servers we can find
   pacman --sync --refresh --noconfirm reflector
-  reflector --country de --score 10 --fastest 3 > /etc/pacman.d/mirrorlist
+  reflector --protocol https --country ${MIRRORS_COUNTRY:-de} --score 10 --fastest 3 >/etc/pacman.d/mirrorlist
+
+  PARALLELL_DOWNLOADS=${PARALLELL_DOWNLOADS:-5}
+
+  # enable parallel downloads for m0ar speed!
+  sed -i "s/#ParallelDownloads = 5/ParallelDownloads = $PARALLELL_DOWNLOADS/" /etc/pacman.conf
 
   # Flatpak
   pacman --sync --noconfirm flatpak

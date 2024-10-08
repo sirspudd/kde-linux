@@ -24,6 +24,13 @@ rm -rfv /efi/
 # Sucks. But oh well.
 # We can at least limit to UTF-8 variants because nobody uses the rest and Qt doesn't even work with them.
 grep UTF-8 /usr/share/i18n/SUPPORTED > /etc/locale.gen
+
+# Also allow overriding the list by setting a LOCALE_GEN environment variable
+# in mkosi.local.conf or command line parameters for local builds
+if [ -n "$LOCALE_GEN" ]; then
+    echo "$LOCALE_GEN" > /etc/locale.gen
+fi
+
 locale-gen
 
 # Install build and runtime dependencies
@@ -76,7 +83,10 @@ whoami
 cd /opt
 echo "$PWD"
 env
-export HOME=/tmp/kde-builder
+
+KDE_BUILD_ROOT="$CHROOT_SRCDIR/kde-builder"
+
+export HOME=$KDE_BUILD_ROOT
 pacman --sync --noconfirm git dbus-python python-promise python-yaml python-setproctitle
 git clone https://invent.kde.org/sdk/kde-builder.git
 cd kde-builder
@@ -85,7 +95,7 @@ export PATH="$PWD":"$PATH"
 export KDESRC_BUILD_IGNORE_MISSING_PROGRAMS=1
 ./kde-builder --install-distro-packages --prompt-answer yes
 ./kde-builder --generate-config --prompt-answer yes
-cat <<- EOF > /tmp/kde-builder/.config/kdesrc-buildrc
+cat <<- EOF > $KDE_BUILD_ROOT/.config/kdesrc-buildrc
 global
     branch-group kf6-qt6
 
@@ -99,11 +109,11 @@ global
     install-dir /usr
 
     # Directory for downloaded source code
-    source-dir /tmp/kde-builder/kde/src
+    source-dir $KDE_BUILD_ROOT/kde/src
 
     # Directory to build KDE into before installing
     # relative to source-dir by default
-    build-dir /tmp/kde-builder/kde/build
+    build-dir $KDE_BUILD_ROOT/kde/build
 
     # qt-install-dir ~/kde/qt # Where to install Qt6 if kde-builder supplies it
 
@@ -167,7 +177,7 @@ pacman --remove --noconfirm packagekit libpackagekit-glib || true
 cat ~/.config/kdesrc-buildrc
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
 # shellcheck disable=SC2086
-./kde-builder ${KDE_BUILDER_TARGET} || (mv /tmp/kde-builder "$CHROOT_SRCDIR"; false)
+./kde-builder ${KDE_BUILDER_ARGS} ${KDE_BUILDER_TARGET}
 
 # Calamares
 cd /tmp
