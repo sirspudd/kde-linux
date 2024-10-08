@@ -9,3 +9,22 @@ passwd --delete root
 passwd --lock root
 
 rm -rfv /etc/pacman.d/gnupg
+
+# Remove all excess things we don't want in the final image
+## Multimedia players we only want for their libraries
+rm -rfv \
+    /usr/share/applications/vlc.desktop \
+    /usr/bin/vlc \
+    /usr/share/applications/mpv.desktop \
+    /usr/bin/mpv
+# Application entries that have zero value because we either have better stuff or they are for terminal applications
+rm -rfv \
+    /usr/share/applications/avahi-discover.desktop \
+    /usr/share/applications/vim.desktop \
+    /usr/share/applications/htop.desktop \
+    /usr/share/applications/lstopo.desktop \
+    /usr/share/applications/bssh.desktop \
+    /usr/share/applications/bvnc.desktop \
+    /usr/share/applications/cups.desktop \
+    /usr/share/applications/system-config-printer.desktop \
+    /usr/share/applications/qv4l2.desktop
