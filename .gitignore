@@ -9,6 +9,9 @@
 /pacman-cache/
 /systemdOS_*/
 /kde-builder/
+/.secure_files/
+/upload-vacuum/upload-vacuum
+/upload-vacuum/vendor/
 
 mkosi.local.conf
 

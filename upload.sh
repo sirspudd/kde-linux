@@ -4,23 +4,27 @@
 
 set -e
 
-s3="s3cmd \
-  --access_key=$AWS_ACCESS_KEY_ID \
-  --secret_key=$AWS_SECRET_ACCESS_KEY \
-  --host fra1.digitaloceanspaces.com \
-  --host-bucket=%(bucket)s.fra1.digitaloceanspaces.com \
-  --no-progress"
+# For the vacuum helper and this script
+export SSH_IDENTITY="$PWD/.secure_files/ssh.key"
+export SSH_USER=kdeos
+export SSH_HOST=files.kde.org
+export SSH_PATH=/home/kdeos/kde-linux
+export SSH_REALLY_DELETE=1
 
-$s3 get s3://kdeos/SHA256SUMS SHA256SUMS || true
+go -C ./upload-vacuum/ build -o upload-vacuum .
+./upload-vacuum/upload-vacuum
+
+# For this script only
+REMOTE=$USER@$HOST:$PATH
+
+scp -i "$IDENTITY" "$REMOTE/SHA256SUMS" SHA256SUMS || true
 [ -f SHA256SUMS ] || touch SHA256SUMS
 
-# More readable this way.
+# More readable this way, ignore shellcheck
 # shellcheck disable=SC2129
 sha256sum -- *.efi >> SHA256SUMS
 sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
 
-$s3 --acl-public put ./*.efi s3://kdeos
-$s3 --acl-public put ./*.raw s3://kdeos
-$s3 --acl-public put ./*.tar.zst s3://kdeos
-$s3 --acl-public put SHA256SUMS s3://kdeos
+scp -i "$IDENTITY" ./*.efi ./*.raw ./*.tar.zst "$REMOTE"
+scp -i "$IDENTITY" SHA256SUMS "$REMOTE" # upload as last artifact to finalize the upload

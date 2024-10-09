@@ -10,6 +10,7 @@ start:
   image: archlinux:latest
   script:
     - ls -lahR
+    - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
     - ./in_docker.sh --force --debug
     - ./upload.sh
   artifacts:
