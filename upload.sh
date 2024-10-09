@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
 
-set -e
+set -eu
 
 # For the vacuum helper and this script
 export SSH_IDENTITY="$PWD/.secure_files/ssh.key"
@@ -15,9 +15,9 @@ go -C ./upload-vacuum/ build -o upload-vacuum .
 ./upload-vacuum/upload-vacuum
 
 # For this script only
-REMOTE=$USER@$HOST:$PATH
+REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
 
-scp -i "$IDENTITY" "$REMOTE/SHA256SUMS" SHA256SUMS || true
+scp -i "$SSH_IDENTITY" "$REMOTE/SHA256SUMS" SHA256SUMS || true
 [ -f SHA256SUMS ] || touch SHA256SUMS
 
 # More readable this way, ignore shellcheck
@@ -26,5 +26,5 @@ sha256sum -- *.efi >> SHA256SUMS
 sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
 
-scp -i "$IDENTITY" ./*.efi ./*.raw ./*.tar.zst "$REMOTE"
-scp -i "$IDENTITY" SHA256SUMS "$REMOTE" # upload as last artifact to finalize the upload
+scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst "$REMOTE"
+scp -i "$SSH_IDENTITY" SHA256SUMS "$REMOTE" # upload as last artifact to finalize the upload
