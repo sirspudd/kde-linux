@@ -11,6 +11,8 @@ export SSH_HOST=files.kde.org
 export SSH_PATH=/home/kdeos/kde-linux
 export SSH_REALLY_DELETE=1
 
+chmod 600 "$SSH_IDENTITY"
+
 go -C ./upload-vacuum/ build -o upload-vacuum .
 ./upload-vacuum/upload-vacuum
 
