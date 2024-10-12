@@ -21,17 +21,21 @@ rm -rfv \
 
 ## Development tools that aren't useful even for the development edition
 rm -rfv \
-    /usr/bin/qvidcap \
     /usr/bin/assistant \
     /usr/bin/assistant-qt5 \
+    /usr/share/applications/assistant.desktop \
     /usr/bin/designer \
     /usr/bin/designer-qt5 \
+    usr/share/applications/designer.desktop \
     /usr/bin/linguist \
     /usr/bin/linguist-qt5 \
+    sr/share/applications/linguist.desktop \
     /usr/bin/qdbusviewer \
     /usr/bin/qdbusviewer-qt5 \
+    /usr/share/applications/qdbusviewer.desktop \
     /usr/share/applications/qv4l2.desktop \
-    /usr/share/applications/qvidap.desktop \
+    /usr/bin/qvidcap \
+    /usr/share/applications/qvidcap.desktop \
 
 ## HP device management apps that are useless even for 99% of HP device owners, and we have our own better stuff
 rm -rfv \
