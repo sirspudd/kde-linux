@@ -128,7 +128,7 @@ func main() {
 	for key := range releases {
 		toKeep = append(toKeep, key)
 	}
-	sort.Strings(toKeep)
+	sort.Sort(sort.Reverse(sort.StringSlice(toKeep)))
 
 	if len(toKeep) == 0 {
 		log.Println("No releases found")
