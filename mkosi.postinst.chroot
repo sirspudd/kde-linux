@@ -228,7 +228,7 @@ mv /var/lib/flatpak / # we'll extract this and later mount it into place
 
 # Samba usershare setup
 mkdir -p /var/lib/samba/sambashares
-chgrp sambashares /var/lib/samba/sambashares
+chgrp sambashare /var/lib/samba/sambashares
 mkdir -p /etc/samba
 
 cat <<- EOF >> /etc/samba/smb.conf
