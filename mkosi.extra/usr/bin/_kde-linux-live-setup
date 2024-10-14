@@ -52,6 +52,12 @@ cat << EOF > /home/live/.config/kwalletrc
 Enabled=false
 EOF
 
+# Allow sudo in the live environment for troubleshooting
+mkdir -p /etc/sudoers.d
+cat << EOF > /etc/sudoers.d/04_live
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL
+EOF
+
 cp /usr/share/applications/calamares.desktop /home/live/Desktop/
 chmod +x /home/live/Desktop/calamares.desktop # without this there'd be a dialog asking if it really should execute
 
