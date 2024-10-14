@@ -26,10 +26,10 @@ rm -rfv \
     /usr/share/applications/assistant.desktop \
     /usr/bin/designer \
     /usr/bin/designer-qt5 \
-    usr/share/applications/designer.desktop \
+    /usr/share/applications/designer.desktop \
     /usr/bin/linguist \
     /usr/bin/linguist-qt5 \
-    sr/share/applications/linguist.desktop \
+    /usr/share/applications/linguist.desktop \
     /usr/bin/qdbusviewer \
     /usr/bin/qdbusviewer-qt5 \
     /usr/share/applications/qdbusviewer.desktop \
