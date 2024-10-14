@@ -46,6 +46,8 @@ pacman --sync --noconfirm smbclient
 pacman --sync --noconfirm python-atspi
 # For print-manager
 pacman --sync --noconfirm cups cups-browsed system-config-printer
+# For kdenetwork-filesharing
+pacman --sync --noconfirm samba
 # For spectacle
 pacman --sync --noconfirm opencv
 # For fingerprint login
@@ -223,6 +225,19 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak install --noninteractive --assumeyes org.mozilla.firefox
 mv /var/lib/flatpak / # we'll extract this and later mount it into place
+
+# Samba usershare setup
+mkdir -p /var/lib/samba/sambashares
+chgrp sambashares /var/lib/samba/sambashares
+mkdir -p /etc/samba
+
+cat <<- EOF >> /etc/samba/smb.conf
+[global]
+  usershare path = /var/lib/samba/sambashares
+  usershare max shares = 100
+  usershare allow guests = yes # optional, negotiable
+  usershare owner only = yes
+EOF
 
 plymouth-set-default-theme breeze-bgrt
 
