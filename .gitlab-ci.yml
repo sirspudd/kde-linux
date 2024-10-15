@@ -11,9 +11,6 @@ start:
   script:
     - pacman --sync --refresh --noconfirm curl which git
     - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
-    # invent.kde.org seems to mangle permissions, restore them so we have accurate permissions for configs and whatnot
-    # https://stackoverflow.com/questions/2517339/how-to-restore-the-permissions-of-files-and-directories-within-git-if-they-have
-    - git diff -p -R --no-ext-diff --no-color --diff-filter=M | grep -E "^(diff|(old|new) mode)" --color=never | git apply
     - ./in_docker.sh --force --debug
     - ./upload.sh
   artifacts:
