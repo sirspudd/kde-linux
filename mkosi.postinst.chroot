@@ -226,16 +226,12 @@ flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak install --noninteractive --assumeyes org.mozilla.firefox
 mv /var/lib/flatpak / # we'll extract this and later mount it into place
 
-# Samba usershare setup
-mkdir -p /var/lib/samba/sambashares
-chgrp sambashare /var/lib/samba/sambashares
-mkdir -p /etc/samba
-
+# Enable samba usershare
 cat <<- EOF >> /etc/samba/smb.conf
 [global]
-  usershare path = /var/lib/samba/sambashares
+  usershare path = /var/lib/samba/usershares
   usershare max shares = 100
-  usershare allow guests = yes # optional, negotiable
+  usershare allow guests = yes
   usershare owner only = yes
 EOF
 
