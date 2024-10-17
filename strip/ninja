@@ -6,9 +6,22 @@
 
 # Hijack ninja to run the strip target instead of the default install target.
 
+is_cmake_build = File.exist?('CMakeCache.txt')
+is_meson_build = Dir.exist?('meson-info')
+
 args = ARGV.map do |arg|
   next arg if arg != 'install'
-  'install/strip'
+
+  if is_cmake_build
+    'install/strip'
+  elsif is_meson_build
+    # TODO support meson. The trouble is that meson needs configuring with -Dstrip=true but kde-builder has no way to pass that through.
+    # The actual target is actually install, just happens to also strip when configured with strip.
+    # https://invent.kde.org/sdk/kde-builder/-/issues/121
+    'install'
+  else
+    raise "Unknown build system; Cannot strip! -- #{ARGV} -- #{Dir.pwd} -- #{Dir.glob('*')}"
+  end
 end
 
 exec('/usr/bin/ninja', *args)
