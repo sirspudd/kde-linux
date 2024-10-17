@@ -1,0 +1,21 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
+
+set -eux
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <file>"
+    exit 1
+fi
+
+FILE=$1
+
+REALPATH=$(realpath "$FILE")
+DEBUGROOT=/tmp/debugroot
+REALDEBUGFILE=/usr/lib/debug$REALPATH.debug
+DEBUGFILE=$DEBUGROOT$REALDEBUGFILE
+
+mkdir -p "$(dirname "$DEBUGFILE")"
+
+exec /usr/bin/eu-strip --remove-comment --reloc-debug-sections -f "$DEBUGFILE" -F "$REALDEBUGFILE" "$FILE"

@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
+
+# Hijack ninja to run the strip target instead of the default install target.
+
+args = ARGV.map do |arg|
+  next arg if arg != 'install'
+  'install/strip'
+end
+
+exec('/usr/bin/ninja', *args)
