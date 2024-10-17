@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
@@ -7,7 +7,7 @@ set -ex
 env
 
 mkdir --mode 0700 /system # for the kdeos-overlay.service
-mkdir /snap               # for snapd (will get a subvolume mounted into that snapd then mounts the snaps into)
+mkdir /snap # for snapd (will get a subvolume mounted into that snapd then mounts the snaps into)
 
 export SYSTEMD_ESP_PATH="$BOOT_MNT"
 mkdir --mode 0700 "$SYSTEMD_ESP_PATH"
@@ -33,42 +33,52 @@ fi
 
 locale-gen
 
-packages=(
-    git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs glib2-devel
-    # NOTE: plasma-workspace depends on phonon (to build integration plugins **for** phonon) but doesn't actually
-    #   need a working backend so we build without vlc for now.
-    # For discover backend
-    fwupd
-    # For kio-extras
-    smbclient
-    # For selenium
-    python-atspi
-    # For print-manager
-    cups cups-browsed system-config-printer
-    # For spectacle
-    opencv
-    # For fingerprint login
-    fprintd
-    # For DDC/CI external monitors brightness; https://wiki.archlinux.org/title/backlight
-    ddcutil
-    # For users KCM
-    accountsservice
+# Install build and runtime dependencies
+pacman --sync --refresh
+pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs glib2-devel
+# NOTE: plasma-workspace depends on phonon (to build integration plugins **for** phonon) but doesn't actually
+#   need a working backend so we build without vlc for now.
+# For discover backend
+pacman --sync --noconfirm fwupd
+# For kio-extras
+pacman --sync --noconfirm smbclient
+# For selenium
+pacman --sync --noconfirm python-atspi
+# For print-manager
+pacman --sync --noconfirm cups cups-browsed system-config-printer
+# For kdenetwork-filesharing
+pacman --sync --noconfirm samba
+# For spectacle
+pacman --sync --noconfirm opencv
+# For fingerprint login
+pacman --sync --noconfirm fprintd
+# For DDC/CI external monitors brightness; https://wiki.archlinux.org/title/backlight
+pacman --sync --noconfirm ddcutil
+# For users KCM
+pacman --sync --noconfirm accountsservice
 
-    # AUR packages from our repo
-    yay-bin snapd systemd-bootchart steam-devices-git
-
-    # KDE Builder
-    dbus-python python-yaml python-setproctitle
-)
-
-cat <<- EOF >> /etc/pacman.conf
-[aurto]
-SigLevel = Never
-Server = https://packages.lasath.dev/aurto
-EOF
-
-# Install build and runtime dependencies in parallel
-pacman --sync --refresh --noconfirm "${packages[@]}"
+# YAY Builder
+# https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
+pacman --sync --noconfirm go
+mkdir -p /tmp/yay-build
+useradd -m -G wheel builder && passwd -d builder
+chown -R builder:builder /tmp/yay-build
+echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/builder
+su - builder -c "git clone https://aur.archlinux.org/yay.git /tmp/yay-build/yay"
+su - builder -c "cd /tmp/yay-build/yay && makepkg --noconfirm"
+pacman --noconfirm --upgrade /tmp/yay-build/yay/*.pkg.tar.*
+pacman --noconfirm --sync libinih libnsl liburcu lzo python apparmor autoconf-archive go-tools python-docutils squashfs-tools xfsprogs
+# For build deps for systemd-bootchart
+pacman --noconfirm --sync intltool docbook-xsl
+su - builder -c "yay --noconfirm --sync --sudo /bin/true snapd steam-devices-git systemd-bootchart"
+pacman --noconfirm --upgrade /home/builder/.cache/yay/snapd/*.pkg.tar.*
+pacman --noconfirm --upgrade /home/builder/.cache/yay/steam-devices-git/*.pkg.tar.*
+pacman --noconfirm --upgrade /home/builder/.cache/yay/systemd-bootchart/*.pkg.tar.*
+touch /var/lib/snapd/apparmor/snap-confine/.keep # this has been gotten lost in the past for unknown reasons
+ln -s /snap /var/lib/snapd/snap # try to reconcile different default locations for snap mounts by making the arch path a symlink to the canonical one
+userdel --remove builder
+rm /etc/sudoers.d/builder
+rm -rf /home/builder
 
 # KDE Builder
 whoami
@@ -79,6 +89,7 @@ env
 KDE_BUILD_ROOT="$CHROOT_SRCDIR/kde-builder"
 
 export HOME=$KDE_BUILD_ROOT
+pacman --sync --noconfirm git dbus-python python-promise python-yaml python-setproctitle
 git clone https://invent.kde.org/sdk/kde-builder.git
 cd kde-builder
 #
