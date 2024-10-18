@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
 enable sddm.service
-enable avahi-daemon.service
+enable avahi-daemon.socket
 enable accounts-daemon.service
 enable NetworkManager.service
 enable snapd.socket
