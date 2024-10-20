@@ -15,7 +15,7 @@ if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --
     exit 1
 fi
 
-useradd --create-home live
+useradd --create-home --comment "Live User" live
 usermod --append --groups wheel live
 passwd --delete live
 
