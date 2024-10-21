@@ -129,8 +129,8 @@ global:
   # 2. num-cores-low-mem, which is set to the largest value that appears safe for
   #    particularly heavyweight projects based on total memory, intended for
   #    projects like qtwebengine.
-  num-cores: $(nproc)
-  num-cores-low-mem: $(nproc)
+  num-cores: "$(nproc)"
+  num-cores-low-mem: "$(nproc)"
 
   # Makes the built-from-source Plasma session accessible from the SDDM login screen.
   install-login-session: false
@@ -180,7 +180,7 @@ EOF
 # No packagekit support in discover please! We don't want discover talking about pacman things.
 pacman --remove --noconfirm packagekit libpackagekit-glib || true
 
-cat ~/.config/kdesrc-buildrc
+cat ~/.config/kde-builder.yaml
 # We want word splitting here because KDE_BUILDER_TARGET contains multiple things
 # shellcheck disable=SC2086
 ./kde-builder ${KDE_BUILDER_ARGS} ${KDE_BUILDER_TARGET}
