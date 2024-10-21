@@ -4,8 +4,33 @@
 stages:
   - start
 
-start:
+imaging:
   stage: start
+  tags:
+    - x86_64-image
+  rules:
+    - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'sitter/kde-linux'
+      when: always
+  allow_failure: false
+  image: archlinux:latest
+  script:
+    - ./in_docker.sh --force --debug
+  artifacts:
+    expire_in: 7 days
+    when: always
+    paths:
+      - 'kde-builder/kde/src/log/*'
+      - 'kde-builder/kde/log/*'
+      - 'systemdOS_*/kde-builder/kde/src/log/*'
+      - 'kdeos_*/kde-builder/kde/src/log/*'
+
+imaging+publish:
+  stage: start
+  tags:
+    - x86_64-image+publish
+  rules:
+    - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_DEFAULT_BRANCH == $CI_COMMIT_REF_NAME && $CI_PROJECT_PATH == 'sitter/kde-linux'
+      when: always
   allow_failure: false
   image: archlinux:latest
   script:
