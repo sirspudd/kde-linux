@@ -153,7 +153,7 @@ global:
   generate-qtcreator-project-config: false
 
   # Ignore packagekit-qt module
-  ignore-projects: [packagekit-qt]
+  ignore-projects: [packagekit-qt, gpgme]
 
 # With base options set, the remainder of the file is used to define projects to build, in the
 # desired order, and set any project-specific options.
