@@ -217,7 +217,10 @@ mkdir flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 # Do this separately, when used as part of remote-add it complains about GPG for unknown reasons
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
+
 flatpak install --noninteractive --assumeyes org.mozilla.firefox
+flatpak install --noninteractive --assumeyes org.kde.gwenview
+
 mv /var/lib/flatpak / # we'll extract this and later mount it into place
 
 # Enable samba usershare
