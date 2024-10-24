@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
@@ -21,28 +21,31 @@ mkdir -pv /efi/EFI/Linux
 rm -rfv /efi/
 
 # Install build and runtime dependencies
-pacman --sync --refresh
-pacman --sync --noconfirm git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs glib2-devel
+packages=(
+  git base-devel cmake yaml-cpp boost-libs boost dosfstools btrfs-progs glib2-devel
 # NOTE: plasma-workspace depends on phonon (to build integration plugins **for** phonon) but doesn't actually
 #   need a working backend so we build without vlc for now.
 # For discover backend
-pacman --sync --noconfirm fwupd
+  fwupd
 # For kio-extras
-pacman --sync --noconfirm smbclient
+  smbclient
 # For selenium
-pacman --sync --noconfirm python-atspi
+  python-atspi
 # For print-manager
-pacman --sync --noconfirm cups cups-browsed system-config-printer
+  cups cups-browsed system-config-printer
 # For kdenetwork-filesharing
-pacman --sync --noconfirm samba
+  samba
 # For spectacle
-pacman --sync --noconfirm opencv
+  opencv
 # For fingerprint login
-pacman --sync --noconfirm fprintd
+  fprintd
 # For DDC/CI external monitors brightness; https://wiki.archlinux.org/title/backlight
-pacman --sync --noconfirm ddcutil
+  ddcutil
 # For users KCM
-pacman --sync --noconfirm accountsservice
+  accountsservice
+)
+# Install in parallel to improve performance
+pacman --sync --refresh --noconfirm "${packages[@]}"
 
 # YAY Builder
 # https://preciselab.io/how-to-install-yay-on-pure-archlinux-image/
