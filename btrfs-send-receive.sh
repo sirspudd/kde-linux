@@ -18,6 +18,8 @@ EXPORT="$OUTPUT.export"
 
 cleanup() {
     [ -d "$EXPORT" ] && btrfs subvolume delete "$EXPORT"
+    btrfs filesystem show . || true
+    btrfs filesystem df . || true
     return 0
 }
 trap cleanup INT TERM EXIT
