@@ -95,7 +95,7 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     btrfs send --compressed-data -f "$OUTPUT.btrfs" "$OUTPUT.export"
     btrfs subvolume delete "$OUTPUT.export"
     SIZE=$(stat --format %s "$OUTPUT.btrfs") # the actual size of all data
-    SIZE=$((SIZE+268435456)) # 256M slack
+    SIZE=$((SIZE+1073741824)) # 1G slack
 else
     SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
 fi
