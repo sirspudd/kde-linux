@@ -95,12 +95,12 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     btrfs send --compressed-data -f "$OUTPUT.btrfs" "$OUTPUT.export"
     btrfs subvolume delete "$OUTPUT.export"
     SIZE=$(stat --format %s "$OUTPUT.btrfs") # the actual size of all data
-    SIZE=$((SIZE+1073741824)) # 1G slack
+    SIZE=$((SIZE+268435456)) # 256M slack
 else
     SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
 fi
 SIZE=$((SIZE+FLATPAK_SIZE)) # however much we need for flatpak
-SIZE=$((SIZE+314572800)) # 256M for btrfs metadata, 44M for system block
+SIZE=$((SIZE+851443712)) # 768M for btrfs metadata, 44M for system block
 SIZE=$((SIZE+536870912)) # 512M for ESP
 
 rm -f "$IMG" ./*.raw
