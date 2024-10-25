@@ -54,3 +54,7 @@ rm -rfv \
     /usr/share/applications/bvnc.desktop \
     /usr/share/applications/cups.desktop \
     /usr/share/applications/system-config-printer.desktop \
+
+## Remove documentation cruft. Offline documentation while neat is really not that useful in this day and age.
+rm -rfv \
+    /usr/share/doc/
