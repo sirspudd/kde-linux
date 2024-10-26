@@ -31,7 +31,7 @@ rm -rfv ./*
 btrfs subvolume sync . || true
 
 btrfs quota enable --simple .
-btrfs send "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
+btrfs send --compressed-data "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
 btrfs subvolume create @home
 btrfs subvolume create @root
 btrfs subvolume create @locale
