@@ -1,19 +1,23 @@
-#!/bin/env python
+#!/bin/bash
 
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
 
-import os
-import subprocess
-import shutil
+set -xe
 
-if __name__ == '__main__':
-    debugroot = '/tmp/debugroot'
+debugroot='/tmp/debugroot'
+mkdir -p "$debugroot"
 
-    extension_dir = f'{debugroot}/usr/lib/extension-release.d/'
-    os.makedirs(extension_dir)
-    shutil.copy2('/usr/lib/os-release', f'{extension_dir}/extension-release.debug')
+# The debug packages are not in a group, so we make 
+# pacman list every package in the banana-debug repo
+pacstrap "$debugroot" $(pacman --sync --list --quiet banana-debug)
 
-    tar = 'debug.tar'
-    subprocess.run(['tar', '-C', f'{debugroot}/', '-cf', tar, '.'])
-    subprocess.run(['zstd', '-T0', '--rm', tar])
+extension_dir="${debugroot}/usr/lib/extension-release.d/"
+mkdir -p "$extension_dir"
+
+cp /usr/lib/os-release "${extension_dir}/extension-release.debug"
+
+tar='debug.tar'
+tar --directory="$debugroot" --create --file="$tar" usr
+# threads 0 means autodetect the number of CPU cores
+zstd --threads=0 --rm "$tar"
