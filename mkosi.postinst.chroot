@@ -130,8 +130,8 @@ cat <<- EOF > /usr/lib/os-release
 NAME="KDE Linux"
 PRETTY_NAME="KDE Linux"
 ID=kdelinux
-VERSION_ID=$CI_COMMIT_SHORT_SHA
-BUILD_ID=$IMAGE_VERSION
+VERSION_ID=$IMAGE_VERSION
+BUILD_ID=$CI_COMMIT_SHORT_SHA
 ANSI_COLOR="38;2;61;174;233"
 HOME_URL="https://linux.kde.org/"
 DOCUMENTATION_URL="https://userbase.kde.org/KDELinux"
