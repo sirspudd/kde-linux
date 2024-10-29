@@ -56,5 +56,6 @@ rm -rfv \
     /usr/share/applications/system-config-printer.desktop \
 
 ## Remove documentation cruft. Offline documentation while neat is really not that useful in this day and age.
-rm -rfv \
+## Do not be verbose here, we'd blow right through the log limit.
+rm -rf \
     /usr/share/doc/
