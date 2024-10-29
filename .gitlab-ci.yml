@@ -9,7 +9,7 @@ imaging:
   tags:
     - x86_64-image
   rules:
-    - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'sitter/kde-linux'
+    - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'kde-linux/kde-linux'
       when: always
   allow_failure: false
   image: archlinux:latest
@@ -29,7 +29,7 @@ imaging+publish:
   tags:
     - x86_64-image+publish
   rules:
-    - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_DEFAULT_BRANCH == $CI_COMMIT_REF_NAME && $CI_PROJECT_PATH == 'sitter/kde-linux'
+    - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_DEFAULT_BRANCH == $CI_COMMIT_REF_NAME && $CI_PROJECT_PATH == 'kde-linux/kde-linux'
       when: always
   allow_failure: false
   image: archlinux:latest
