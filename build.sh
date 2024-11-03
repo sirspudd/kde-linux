@@ -63,7 +63,7 @@ fi
 mv -v "$OUTPUT/debug.tar.zst" "${OUTPUT}_debug-x86-64.tar.zst"
 
 FLATPAK_SIZE=""
-# Move flatpak out of the tree and into subvolume
+# Move /flatpak out of the tree and into subvolume
 if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     btrfs subvolume create "$OUTPUT.flatpak"
     cp -rf --reflink=always "$OUTPUT/flatpak/." "$OUTPUT.flatpak"
