@@ -21,7 +21,7 @@ images:
 sidebar: qml,top
 navigation: qml,bottom
 
-slideshow: "/calamares/slides/index.qml"
+slideshow: "/usr/calamares/slides/index.qml"
 slideshowAPI: 2
 
 style: # https://hig.kde.org/style/color/light.html

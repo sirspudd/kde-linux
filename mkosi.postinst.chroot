@@ -118,7 +118,7 @@ cd /tmp
 git clone --depth 1 https://github.com/calamares/calamares
 cmake -S calamares -B calamares/build -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_TESTING=OFF -DWITH_QT6=ON
 cmake --build calamares/build "-j$(nproc)"
-cmake --install calamares/build
+DESTDIR=/live/ cmake --install calamares/build
 
 cat <<- EOF > /usr/share/icons/default/index.theme
 [Icon Theme]

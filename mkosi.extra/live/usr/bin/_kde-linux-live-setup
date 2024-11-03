@@ -15,6 +15,10 @@ if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --
     exit 1
 fi
 
+mkdir --mode 0755 /run/extensions/
+ln -s /system/@live /run/extensions/live
+systemd-sysext refresh
+
 useradd --create-home --comment "Live User" live
 usermod --append --groups wheel live
 passwd --delete live

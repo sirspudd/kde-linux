@@ -75,6 +75,19 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     FLATPAK_SIZE=$(stat --format %s "$OUTPUT.btrfs.flatpak") # the actual size of all data
 fi
 
+LIVE_SIZE=""
+# Move /live out of the tree and into subvolume
+if $OUTPUT_IS_BTRFS_SUBVOLUME; then
+    btrfs subvolume create "$OUTPUT.live"
+    cp -rf --reflink=always "$OUTPUT/live/." "$OUTPUT.live"
+    rm -rf "$OUTPUT/live"
+    btrfs filesystem defrag -czstd -r "$OUTPUT.live"
+    btrfs subvolume snapshot -r "$OUTPUT.live" "$OUTPUT.export.live"
+    btrfs send --compressed-data -f "$OUTPUT.btrfs.live" "$OUTPUT.export.live"
+    btrfs subvolume delete "$OUTPUT.export.live"
+    LIVE_SIZE=$(stat --format %s "$OUTPUT.btrfs.live") # the actual size of all data
+fi
+
 # Cleanup
 rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
 rm -rf "${OUTPUT}/usr/share/doc/qt6/examples"
@@ -100,6 +113,7 @@ else
     SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
 fi
 SIZE=$((SIZE+FLATPAK_SIZE)) # however much we need for flatpak
+SIZE=$((SIZE+LIVE_SIZE)) # however much we need for live data
 SIZE=$((SIZE+851443712)) # 768M for btrfs metadata, 44M for system block
 SIZE=$((SIZE+536870912)) # 512M for ESP
 
