@@ -17,6 +17,7 @@ go -C ./upload-vacuum/ build -o upload-vacuum .
 ./upload-vacuum/upload-vacuum
 
 # For this script only
+export GNUPGHOME="$PWD/.secure_files/gpg"
 REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
 echo "files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6" >> ~/.ssh/known_hosts
 
@@ -29,5 +30,7 @@ sha256sum -- *.efi >> SHA256SUMS
 sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
 
+gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
+
 scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst "$REMOTE"
-scp -i "$SSH_IDENTITY" SHA256SUMS "$REMOTE" # upload as last artifact to finalize the upload
+scp -i "$SSH_IDENTITY" SHA256SUMS SHA256SUMS.gpg "$REMOTE" # upload as last artifact to finalize the upload

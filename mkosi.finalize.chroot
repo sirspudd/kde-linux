@@ -8,6 +8,14 @@ userdel --remove --force builder || true
 passwd --delete root
 passwd --lock root
 
+# Put our key into the systemd keyring
+export GNUPGHOME="$SRCDIR/.secure_files/gpg"
+KEYRING=/usr/lib/systemd/import-pubring.gpg
+rm -rf "$GNUPGHOME"
+mkdir "$GNUPGHOME"
+rm -f "$KEYRING"
+gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.key"
+
 rm -rfv /etc/pacman.d/gnupg
 
 # Remove all excess things we don't want in the final image
