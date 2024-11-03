@@ -7,7 +7,7 @@ set -eu
 # For the vacuum helper and this script
 export SSH_IDENTITY="$PWD/.secure_files/ssh.key"
 export SSH_USER=kdeos
-export SSH_HOST=files.kde.org
+export SSH_HOST=origin.files.kde.org
 export SSH_PATH=/home/kdeos/kde-linux
 export SSH_REALLY_DELETE=1
 
