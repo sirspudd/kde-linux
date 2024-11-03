@@ -35,8 +35,6 @@ cat <<- EOF > mkosi.conf.d/00-outputdirectory.conf
 OutputDirectory=${PWD}
 EOF
 
-env
-echo "from pathlib import Path; print(Path.cwd())" | python -
 mkosi \
     --distribution arch \
     --image-id "$NAME" \
@@ -44,7 +42,6 @@ mkosi \
     "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
-ls -lah
 rm -rfv "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi" ] || mkdir --mode 0700 "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi-template" ] || mkdir --mode 0700 "${OUTPUT}/efi-template"
