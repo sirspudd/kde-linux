@@ -14,7 +14,7 @@ KEYRING=/usr/lib/systemd/import-pubring.gpg
 rm -rf "$GNUPGHOME"
 mkdir "$GNUPGHOME"
 rm -f "$KEYRING"
-gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.key"
+gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.public.key"
 
 rm -rfv /etc/pacman.d/gnupg
 

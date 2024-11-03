@@ -18,6 +18,7 @@ go -C ./upload-vacuum/ build -o upload-vacuum .
 
 # For this script only
 export GNUPGHOME="$PWD/.secure_files/gpg"
+gpg --no-options --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.private.key"
 REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
 echo "files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6" >> ~/.ssh/known_hosts
 
