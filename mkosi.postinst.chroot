@@ -15,10 +15,7 @@ bootctl install
 echo 'timeout 5' >> "$SYSTEMD_ESP_PATH/loader/loader.conf"
 cp /usr/share/edk2-shell/x64/Shell.efi "$SYSTEMD_ESP_PATH/shellx64.efi"
 
-# Make sure our definitions are well formed
-mkdir -pv /efi/EFI/Linux
-/usr/lib/systemd/systemd-sysupdate --verify=no list # verify=no because we only care if the configs are valid
-rm -rfv /efi/
+# TODO: validate our sysupdate definitions are correct
 
 # Each time the kde-linux-packages pipeline runs, it will create a new repository
 # So we need to query GitLab to get the latest Job ID and artifacts path
