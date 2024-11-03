@@ -101,7 +101,7 @@ zstd -T0 --rm "$TAR"
 # Accurate sizing is a bit of a challenge. In the most ideal scenario we'll be working on btrfs and are able to
 # compress the entire subvolume into a file. This file size will then be more or less the DATA size in the filesystem.
 # On top of that we have the btrfs meta data and system data, these are kind of dependent on the actual partition size
-# but will generally be ~256M and <50M for partitions <50G.
+# but will generally be ~768M (this value entirely depends on how many files we have) and <50M for partitions <50G.
 if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     btrfs filesystem defrag -czstd -r "$OUTPUT"
     btrfs subvolume snapshot -r "$OUTPUT" "$OUTPUT.export"
