@@ -27,7 +27,7 @@ func connectToHost(user, host, identity string) (*ssh.Client, *ssh.Session, erro
 		log.Fatalf("unable to parse private key: %v", err)
 	}
 
-	// `ssh-keyscan origin.files.kde.org` to get the host key
+	// You can use `ssh-keyscan origin.files.kde.org` to get the host key
 	_, _, hostKey, _, _, err := ssh.ParseKnownHosts([]byte("origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6"))
 	if err != nil {
 		log.Fatalf("unable to parse host public key: %v", err)
