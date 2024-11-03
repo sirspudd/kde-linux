@@ -134,15 +134,16 @@ VERSION_ID=$IMAGE_VERSION
 BUILD_ID=$CI_COMMIT_SHORT_SHA
 ANSI_COLOR="38;2;61;174;233"
 HOME_URL="https://linux.kde.org/"
-DOCUMENTATION_URL="https://userbase.kde.org/KDELinux"
+DOCUMENTATION_URL="https://userbase.kde.org/KDE_Linux"
 SUPPORT_URL="https://kde.org/support/"
-BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=KDELinux"
+BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=kde-linux"
 PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
 LOGO=kde-symbolic
 IMAGE_VERSION=$IMAGE_VERSION
-KDEOS_COMMIT_SHA=$CI_COMMIT_SHA
-KDEOS_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA
-KDEOS_CI_URL=$CI_PIPELINE_URL
+# KDE Linux specific keys.
+KDE_LINUX_COMMIT_SHA=$CI_COMMIT_SHA
+KDE_LINUX_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA
+KDE_LINUX_CI_URL=$CI_PIPELINE_URL
 EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
