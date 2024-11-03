@@ -11,4 +11,4 @@ export KDE_SESSION_VERSION=6
 
 export QT_QPA_PLATFORMTHEME=kde
 
-exec /usr/bin/calamares -c /calamares/desktop "$@"
+exec /usr/bin/calamares -c /usr/calamares/desktop "$@"
