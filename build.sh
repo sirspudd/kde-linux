@@ -35,6 +35,9 @@ cat <<- EOF > mkosi.conf.d/00-outputdirectory.conf
 OutputDirectory=${PWD}
 EOF
 
+# Make sure permissions are sound
+./permission-fix.py
+
 mkosi \
     --distribution arch \
     --image-id "$NAME" \
