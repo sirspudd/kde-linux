@@ -5,11 +5,14 @@ package main
 
 import (
 	"errors"
+	"io"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
@@ -53,8 +56,66 @@ func connectToHost(user, host, identity string) (*ssh.Client, *ssh.Session, erro
 	return client, session, nil
 }
 
+func readSHA256(url string) string {
+	url = strings.Replace(url, os.Getenv("SSH_PATH"), "https://files.kde.org/kde-linux/", 1)
+
+	log.Println("Reading SHA256 from", url)
+	var err error
+	for i := 1; i <= 10; i++ {
+		if i > 1 {
+			time.Sleep(8 * time.Second)
+		}
+
+		var client http.Client
+		resp, err := client.Get(url)
+		if err != nil {
+			continue
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == http.StatusOK {
+			bodyBytes, err := io.ReadAll(resp.Body)
+			if err != nil {
+				continue
+			}
+			return string(bodyBytes)
+		}
+	}
+	log.Println("Failed to read SHA256. Last error was on url", url, err)
+	return ""
+}
+
 type release struct {
 	artifacts []string
+}
+
+func readSHA256s(toKeep []string, releases map[string]release) []string {
+	sha256s := []string{}
+	for _, key := range toKeep {
+		for _, artifact := range releases[key].artifacts {
+			sha256 := readSHA256(artifact + ".sha256")
+			if sha256 == "" {
+				log.Println("Failed to read SHA256 for", artifact)
+				os.Exit(1)
+			}
+			sha256s = append(sha256s, sha256)
+		}
+	}
+	return sha256s
+}
+
+func writeSHA256s(sha256s []string) {
+	file, err := os.Create("SHA256SUMS")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	for _, sha256 := range sha256s {
+		_, err := file.WriteString(sha256 + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func main() {
@@ -161,4 +222,7 @@ func main() {
 	for _, key := range toKeep {
 		log.Println("Keeping", key)
 	}
+
+	// Start the SHA256SUMS file. It will be completed by the upload script.
+	writeSHA256s(readSHA256s(toKeep, releases))
 }

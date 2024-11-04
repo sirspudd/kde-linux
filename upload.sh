@@ -23,8 +23,7 @@ REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
 # You can use `ssh-keyscan origin.files.kde.org` to get the host key
 echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6" >> ~/.ssh/known_hosts
 
-scp -i "$SSH_IDENTITY" "$REMOTE/SHA256SUMS" SHA256SUMS || true
-[ -f SHA256SUMS ] || touch SHA256SUMS
+# The initial SHA256SUMS file is created by the vacuum script based on what is left on the server. We append to it.
 
 # More readable this way, ignore shellcheck
 # shellcheck disable=SC2129
