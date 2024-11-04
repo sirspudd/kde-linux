@@ -87,6 +87,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer conn.Close()
 
 	// open an SFTP session over an existing ssh connection.
 	client, err := sftp.NewClient(conn)
