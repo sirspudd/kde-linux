@@ -130,6 +130,9 @@ fi
 cp -v "${OUTPUT}_live.efi" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=root "$IMG"
 
+# Finally rebuild the actual image file with appropriate partition sizing. In particular with squeezed btrfs.
+./part-rebuild.py "$IMG"
+
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 chmod go+r ./*.efi # efi images are 700, make them readable so the server can serve them
 ls -lah
