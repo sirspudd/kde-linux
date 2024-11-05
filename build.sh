@@ -17,7 +17,7 @@ _TIME=$(date --date="@$_EPOCH" +%H%M)
 DATETIME="${_DATE}${_TIME}"
 VERSION="$DATETIME"
 OUTPUT=${NAME}_$VERSION
-EFI=$OUTPUT.efi
+EFI=$OUTPUT+3.efi # +3 is the default boot number for systemd-boot
 TAR=${OUTPUT}_root-x86-64.tar
 IMG=$OUTPUT.raw
 
