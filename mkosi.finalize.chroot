@@ -25,6 +25,11 @@ rm -rf \
 
 # Remove all excess things we don't want in the final image
 
+## locale-gen doesn't work because /usr is read-only. Removing it means calamares won't attempt to use it.
+rm -rf \
+    /etc/locale.gen \
+    /usr/bin/locale-gen
+
 ## Multimedia players we only want for their libraries
 rm -rfv \
     /usr/share/applications/vlc.desktop \
