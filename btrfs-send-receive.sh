@@ -25,7 +25,7 @@ cleanup() {
 trap cleanup INT TERM EXIT
 cleanup
 
-mount -o remount,compress-force=zstd "$PWD"
+mount -o remount,compress-force=zstd:8 "$PWD"
 btrfs property set . compression zstd
 btrfs balance start --force -mconvert=single -dconvert=single .
 
