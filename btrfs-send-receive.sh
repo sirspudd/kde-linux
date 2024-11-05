@@ -44,6 +44,10 @@ btrfs subvolume snapshot -r "$EXPORT.live" "@live"
 btrfs subvolume delete "$EXPORT.live"
 rm -f "$OUTPUT_ABS.btrfs.live"
 
+# Sync before we start to mess with the filesystem again. Otherwise we might make it fall over.
+btrfs subvolume sync .
+btrfs filesystem sync .
+
 # Finally let's condense the data.
 btrfs filesystem usage .
 ## Use duperemove to deduplicate files.
