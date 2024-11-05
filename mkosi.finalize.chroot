@@ -31,14 +31,14 @@ rm -rf \
     /usr/bin/locale-gen
 
 ## Multimedia players we only want for their libraries
-rm -rfv \
+rm -rf \
     /usr/share/applications/vlc.desktop \
     /usr/bin/vlc \
     /usr/share/applications/mpv.desktop \
     /usr/bin/mpv
 
 ## Development tools that aren't useful even for the development edition
-rm -rfv \
+rm -rf \
     /usr/bin/assistant \
     /usr/bin/assistant-qt5 \
     /usr/share/applications/assistant.desktop \
@@ -56,14 +56,14 @@ rm -rfv \
     /usr/share/applications/qvidcap.desktop \
 
 ## HP device management apps that are useless even for 99% of HP device owners, and we have our own better stuff
-rm -rfv \
+rm -rf \
     /usr/share/applications/hp-uiscan.desktop \
     /usr/bin/hp-uiscan \
     /usr/share/applications/hplip.desktop \
     /usr/bin/hp-toolbox
 
 ## Miscellaneous application entries that have zero value because we either have better stuff or they're for terminal applications
-rm -rfv \
+rm -rf \
     /usr/share/applications/avahi-discover.desktop \
     /usr/share/applications/vim.desktop \
     /usr/share/applications/htop.desktop \
