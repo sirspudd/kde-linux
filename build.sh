@@ -99,7 +99,9 @@ zstd -T0 --rm "$TAR"
 # On top of that we have the btrfs meta data and system data, these are kind of dependent on the actual partition size
 # but will generally be ~768M (this value entirely depends on how many files we have) and <50M for partitions <50G.
 if $OUTPUT_IS_BTRFS_SUBVOLUME; then
+    compsize "$OUTPUT"
     btrfs filesystem defrag -czstd -r "$OUTPUT"
+    compsize "$OUTPUT"
     btrfs subvolume snapshot -r "$OUTPUT" "$OUTPUT.export"
     btrfs send --compressed-data -f "$OUTPUT.btrfs" "$OUTPUT.export"
     btrfs subvolume delete "$OUTPUT.export"
