@@ -130,8 +130,8 @@ fi
 cp -v "${OUTPUT}_live.efi" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=root "$IMG"
 
-# # Finally rebuild the actual image file with appropriate partition sizing. In particular with squeezed btrfs.
-# ./part-rebuild.py "$IMG"
+# Finally rebuild the actual image file with appropriate partition sizing. In particular with squeezed btrfs.
+./part-rebuild.py "$IMG"
 
 # Create a torrent for the image
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
