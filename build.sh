@@ -88,10 +88,6 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     LIVE_SIZE=$(stat --format %s "$OUTPUT.btrfs.live") # the actual size of all data
 fi
 
-# Cleanup
-rm -f "${OUTPUT}/var/cache/pacman/pkg/*"
-rm -rf "${OUTPUT}/usr/share/doc/qt6/examples"
-
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
 rm -rf "$TAR" ./*.tar
 tar -C "${OUTPUT}"/ -cf "$TAR" .

@@ -18,7 +18,10 @@ if [ -f "$SRCDIR/.secure_files/gpg.public.key" ]; then # only useful and availab
     gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.public.key"
 fi
 
-rm -rfv /etc/pacman.d/gnupg
+# De-initialize pacman
+rm -rf \
+    /etc/pacman.d/gnupg \
+    /var/cache/pacman
 
 # Remove all excess things we don't want in the final image
 
