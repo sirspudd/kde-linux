@@ -37,4 +37,4 @@ for index, partition in enumerate(partitions):
 
 # Then reassemble them into a new image using those squeezed partition images.
 open(RAW, "w").close()
-subprocess.run(["systemd-repart", "--empty=allow", "--dry-run=no", "--definitions=mkosi.repart-rebuild", "--root", os.getcwd(), RAW], check=True)
+subprocess.run(["systemd-repart", "--size=auto", "--empty=allow", "--dry-run=no", "--definitions=mkosi.repart-rebuild", "--root", os.getcwd(), RAW], check=True)
