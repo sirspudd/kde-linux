@@ -3,6 +3,9 @@
 
 enable sddm.service
 enable avahi-daemon.socket
+# Note that both avahi socket and service are needed. Client software on the system may only talk to the daemon but
+# fail to do so if the daemon is not up (avahi-browse for example just errors out instead of dbus-activating)
+enable avahi-daemon.service
 enable accounts-daemon.service
 enable NetworkManager.service
 enable snapd.socket
