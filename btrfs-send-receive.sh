@@ -48,7 +48,7 @@ rm -f "$OUTPUT_ABS.btrfs.live"
 btrfs filesystem usage .
 ## Use duperemove to deduplicate files.
 ## I would also love to use bees here as it works on extents but we don't know when it is done :( https://github.com/Zygo/bees/issues/279
-duperemove -dr .
+duperemove -dr . > /dev/null
 ## Balance the filesystem with ever increasing chunk sizes to maximize space efficiency.
 btrfs balance start --force -mconvert=single -dconvert=single .
 btrfs balance start --force -dusage=16 .
