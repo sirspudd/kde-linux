@@ -9,6 +9,7 @@
 # resize starts failing.
 
 import json
+import os
 import subprocess
 from subprocess import check_output
 
@@ -35,6 +36,7 @@ while True:
         print(e)
         break
 
-with open("btrfs.json", "w") as file:
+script_dir = os.path.dirname(os.path.realpath(__file__))
+with open(f"{script_dir}/btrfs.json", "w") as file:
     # Writing data to a file
     file.write(json.dumps({"size": size}))

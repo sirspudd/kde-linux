@@ -60,7 +60,6 @@ btrfs balance start --force -dusage=32 .
 btrfs balance start --force -dusage=64 .
 ## And to finish things off we shrink the filesystem to the minimum size.
 "$(dirname "$OUTPUT_ABS")/btrfs-shrink.py"
-mv btrfs.json "$(dirname "$OUTPUT_ABS")/btrfs.json"
 ## Sync changes to disk.
 btrfs filesystem sync .
 # Final report.
