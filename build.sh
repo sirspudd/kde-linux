@@ -69,7 +69,7 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     cp -rf --reflink=always "$OUTPUT/flatpak/." "$OUTPUT.flatpak"
     rm -rf "$OUTPUT/flatpak"
     # Note that compression is applied on a mount-level via the host system.
-    compsize "$OUTPUT"
+    compsize "$OUTPUT.flatpak"
     btrfs subvolume snapshot -r "$OUTPUT.flatpak" "$OUTPUT.export.flatpak"
     btrfs send --compressed-data -f "$OUTPUT.btrfs.flatpak" "$OUTPUT.export.flatpak"
     btrfs subvolume delete "$OUTPUT.export.flatpak"
@@ -83,7 +83,7 @@ if $OUTPUT_IS_BTRFS_SUBVOLUME; then
     cp -rf --reflink=always "$OUTPUT/live/." "$OUTPUT.live"
     rm -rf "$OUTPUT/live"
     # Note that compression is applied on a mount-level via the host system.
-    compsize "$OUTPUT"
+    compsize "$OUTPUT.live"
     btrfs subvolume snapshot -r "$OUTPUT.live" "$OUTPUT.export.live"
     btrfs send --compressed-data -f "$OUTPUT.btrfs.live" "$OUTPUT.export.live"
     btrfs subvolume delete "$OUTPUT.export.live"
