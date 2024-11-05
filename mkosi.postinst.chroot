@@ -107,6 +107,12 @@ cd kde-builder
 # https://invent.kde.org/sysadmin/repo-metadata/-/issues/12
 ./kde-builder --install-distro-packages --prompt-answer yes
 
+# Meanwhile cleanup a bit
+## Unnecessary for us
+pacman --remove --noconfirm qt6-doc qt6-examples || true
+## Rust gets static compiled anyway. No need to have it in the image
+pacman --remove --noconfirm corrosion rust || true
+
 # No packagekit support in discover please! We don't want discover talking about pacman things.
 pacman --remove --noconfirm packagekit libpackagekit-glib || true
 
