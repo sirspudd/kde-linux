@@ -154,6 +154,9 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 # Do this separately, when used as part of remote-add it complains about GPG for unknown reasons
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 
+# Only check out en. We don't really support other languages on the live image at this time.
+flatpak config --set languages en
+
 flatpak install --noninteractive --assumeyes \
   org.kde.dolphin \
   org.kde.gwenview \
@@ -165,6 +168,9 @@ flatpak install --noninteractive --assumeyes \
   org.kde.ark \
   org.mozilla.firefox \
   org.videolan.VLC
+
+# And restore default
+flatpak config --unset languages
 
 mv /var/lib/flatpak / # we'll extract this and later mount it into place
 
