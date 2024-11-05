@@ -25,7 +25,7 @@ cleanup() {
 trap cleanup INT TERM EXIT
 cleanup
 
-mount -o remount,compress-force=zstd:8 "$PWD"
+mount -o remount,compress-force=zstd:15 "$PWD"
 btrfs property set . compression zstd
 btrfs balance start --force -mconvert=single -dconvert=single .
 
@@ -43,5 +43,23 @@ btrfs receive -f "$OUTPUT_ABS.btrfs.live" .
 btrfs subvolume snapshot -r "$EXPORT.live" "@live"
 btrfs subvolume delete "$EXPORT.live"
 rm -f "$OUTPUT_ABS.btrfs.live"
+
+# Finally let's condense the data.
+btrfs filesystem usage .
+## Use duperemove to deduplicate files.
+## I would also love to use bees here as it works on extents but we don't know when it is done :( https://github.com/Zygo/bees/issues/279
+duperemove -dr .
+## Balance the filesystem with ever increasing chunk sizes to maximize space efficiency.
+btrfs balance start --force -mconvert=single -dconvert=single .
+btrfs balance start --force -dusage=16 .
+btrfs balance start --force -dusage=32 .
+btrfs balance start --force -dusage=64 .
+## And to finish things off we shrink the filesystem to the minimum size.
+./btrfs-shrink.py
+mv btrfs.json "$(dirname "$OUTPUT_ABS")/btrfs.json"
+## Sync changes to disk.
+btrfs filesystem sync .
+# Final report.
+btrfs filesystem usage .
 
 ln -svf "@$OUTPUT" "$ID"
