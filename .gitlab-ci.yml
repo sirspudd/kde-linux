@@ -23,6 +23,7 @@ imaging:
       - 'kde-builder/kde/log/*'
       - 'systemdOS_*/kde-builder/kde/src/log/*'
       - 'kdeos_*/kde-builder/kde/src/log/*'
+      - 'dmesg.log'
 
 imaging+publish:
   stage: start

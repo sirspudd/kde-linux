@@ -14,12 +14,14 @@ ID=$3
 [ "$OUTPUT" = "" ] && exit 1
 [ "$ID" = "" ] && exit 1
 
+OUTPUT_DIR=$(dirname "$OUTPUT_ABS")
 EXPORT="$OUTPUT.export"
 
 cleanup() {
     [ -d "$EXPORT" ] && btrfs subvolume delete "$EXPORT"
     btrfs filesystem show . || true
     btrfs filesystem df . || true
+    dmesg > "$OUTPUT_DIR/dmesg.log"
     return 0
 }
 trap cleanup INT TERM EXIT
@@ -61,7 +63,7 @@ btrfs balance start --force -dusage=64 .
 btrfs subvolume sync .
 btrfs filesystem sync .
 ## And to finish things off we shrink the filesystem to the minimum size.
-"$(dirname "$OUTPUT_ABS")/btrfs-shrink.py"
+$OUTPUT_DIR/btrfs-shrink.py
 ## Sync changes to disk.
 btrfs filesystem sync .
 # Final report.
