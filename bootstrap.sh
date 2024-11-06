@@ -16,8 +16,8 @@ pacman-key --init
 # is the case for it being here.
 # pacman-key --refresh-keys
 pacman --sync --refresh --noconfirm --sysupgrade
-pacman --sync --refresh --noconfirm mkosi git base-devel ukify vim cpio tree \
-    rsync btrfs-progs s3cmd dosfstools qemu-img erofs-utils squashfs-tools go openssh \
+pacman --sync --refresh --noconfirm mkosi git base-devel ukify cpio tree \
+    rsync btrfs-progs dosfstools qemu-img erofs-utils squashfs-tools go openssh \
     compsize duperemove ruby ruby-nokogiri transmission-cli
 
 # Use mkosi from git to not have to wait for releases when things break.
