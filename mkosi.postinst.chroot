@@ -164,14 +164,14 @@ flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak config --set languages en
 
 flatpak install --noninteractive --assumeyes \
+  org.kde.ark \
   org.kde.dolphin \
   org.kde.gwenview \
-  org.kde.okular \
-  org.kde.konsole \
   org.kde.kate \
-  org.kde.kwrite \
+  org.kde.konsole \
   org.kde.kwalletmanager5 \
-  org.kde.ark \
+  org.kde.kwrite \
+  org.kde.okular \
   org.mozilla.firefox \
   org.videolan.VLC
 
