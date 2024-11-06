@@ -58,6 +58,8 @@ btrfs balance start --force -mconvert=single -dconvert=single .
 btrfs balance start --force -dusage=16 .
 btrfs balance start --force -dusage=32 .
 btrfs balance start --force -dusage=64 .
+btrfs subvolume sync .
+btrfs filesystem sync .
 ## And to finish things off we shrink the filesystem to the minimum size.
 "$(dirname "$OUTPUT_ABS")/btrfs-shrink.py"
 ## Sync changes to disk.

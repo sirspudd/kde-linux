@@ -31,6 +31,7 @@ extent_size = 128 * 1024
 while True:
     try:
         subprocess.run(["btrfs", "filesystem", "resize", f"-{extent_size}", "."], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL, check=True)
+        subprocess.run(["btrfs", "filesystem", "sync", "."], check=True)
         size -= extent_size
     except subprocess.CalledProcessError as e:
         print(e)
