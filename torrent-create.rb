@@ -36,7 +36,7 @@ base_args = %w[transmission-create
   --tracker udp://explodie.org:6969/announce]
 
 webseed_args = mirror_list.map do |url|
-  ["--webseed", "#{url}kde-linux/#{File.basename(OUTPUT)}"]
+  ["--webseed", "#{url}kde-linux/#{File.basename(RAW)}"]
 end.flatten
 
 args = base_args + webseed_args
