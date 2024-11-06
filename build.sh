@@ -133,6 +133,9 @@ systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPU
 # # Finally rebuild the actual image file with appropriate partition sizing. In particular with squeezed btrfs.
 # ./part-rebuild.py "$IMG"
 
+# Create a torrent for the image
+./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
+
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 chmod go+r ./*.efi # efi images are 700, make them readable so the server can serve them
 ls -lah

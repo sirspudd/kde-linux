@@ -30,8 +30,9 @@ echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUk
 sha256sum -- *.efi >> SHA256SUMS
 sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
+sha256sum -- *.torrent >> SHA256SUMS
 
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 
-scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst "$REMOTE"
+scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst ./*.torrent "$REMOTE"
 scp -i "$SSH_IDENTITY" SHA256SUMS SHA256SUMS.gpg "$REMOTE" # upload as last artifact to finalize the upload
