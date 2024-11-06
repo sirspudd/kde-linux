@@ -137,5 +137,7 @@ systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPU
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
 
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
-chmod go+r ./*.efi # efi images are 700, make them readable so the server can serve them
+
+# efi images and torrents are 700, make them readable so the server can serve them
+chmod go+r ./"$OUTPUT".* ./*.efi ./*.torrent
 ls -lah
