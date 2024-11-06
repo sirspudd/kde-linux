@@ -10,6 +10,7 @@
 
 import json
 import os
+import math
 import subprocess
 from subprocess import check_output
 
@@ -21,8 +22,8 @@ size = 0
 for block_group in df:
     size += block_group["total"]
 
-# Give 512MiB of buffer space. We'll shrink from there in smaller steps.
-size += 512 * 1024 * 1024
+# Give 10% buffer space. We'll shrink from there in smaller steps.
+size = max(512 * 1024 * 1024, math.ceil(size * 1.1))
 
 subprocess.run(["btrfs", "filesystem", "resize", str(size), "."], check=True)
 
