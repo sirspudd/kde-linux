@@ -24,7 +24,7 @@ for block_group in df:
 # Give 512MiB of buffer space. We'll shrink from there in smaller steps.
 size += 512 * 1024 * 1024
 
-subprocess.run(["btrfs", "filesystem", "resize", str(size), "."])
+subprocess.run(["btrfs", "filesystem", "resize", str(size), "."], check=True)
 
 # With compression one extent is always 128KiB as per btrfs documentation.
 extent_size = 128 * 1024
