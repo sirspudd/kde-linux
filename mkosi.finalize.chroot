@@ -21,7 +21,8 @@ fi
 # De-initialize pacman
 rm -rf \
     /etc/pacman.d/gnupg \
-    /var/cache/pacman
+    /var/cache/pacman \
+    /var/lib/pacman
 
 # Remove all excess things we don't want in the final image
 
@@ -77,3 +78,10 @@ rm -rf \
 ## Do not be verbose here, we'd blow right through the log limit.
 rm -rf \
     /usr/share/doc/
+
+## /boot is not necessary. We've already created our initrd.
+# shellcheck disable=SC2114
+rm -rf /boot
+
+## Not sure where this comes from, but it's not useful.
+rm -rf /.cache
