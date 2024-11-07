@@ -16,6 +16,7 @@ import (
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
+	"gopkg.in/yaml.v2"
 )
 
 func connectToHost(user, host, identity string) (*ssh.Client, *ssh.Session, error) {
@@ -118,7 +119,33 @@ func writeSHA256s(sha256s []string) {
 	}
 }
 
-func loadReleases(client *sftp.Client, path string) (map[string]release, error) {
+type config struct {
+	TombstoneImages []string `yaml:"tombstone_images"`
+	GoldImages      []string `yaml:"gold_images"`
+}
+
+func readConfig(client *sftp.Client, path string) (*config, error) {
+	configFile, err := client.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer configFile.Close()
+
+	data, err := io.ReadAll(configFile)
+	if err != nil {
+		return nil, err
+	}
+
+	var config config
+	err = yaml.Unmarshal(data, config)
+	if err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
+func loadReleases(client *sftp.Client, path string, config *config) (map[string]release, error) {
 	releases := map[string]release{}
 
 	w := client.Walk(path + "/") // The terminal / is important otherwise we'll walk the symlink
@@ -128,6 +155,7 @@ func loadReleases(client *sftp.Client, path string) (map[string]release, error) 
 		}
 
 		name := w.Stat().Name()
+		// NOTE: we want to keep the legacy kdeos_ prefix for as long as we have relevant tombstones around. Which is possibly forever.
 		if !strings.HasPrefix(name, "kdeos_") && !strings.HasPrefix(name, "kde-linux_") {
 			continue
 		}
@@ -190,9 +218,29 @@ func main() {
 	}
 	defer client.Close()
 
-	releases, err := loadReleases(client, path)
+	config, err := readConfig(client, path+"/vacuum.yaml")
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	releases, err := loadReleases(client, path, config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(releases) == 0 {
+		log.Println("No releases found")
+		return
+	}
+
+	for _, tombstone := range config.TombstoneImages {
+		log.Println("Ignoring (keeping) tombstone image", tombstone)
+		delete(releases, tombstone)
+	}
+
+	for _, gold := range config.GoldImages {
+		log.Println("Ignoring (keeping) golden image", gold)
+		delete(releases, gold)
 	}
 
 	// Sort releases by key
@@ -201,11 +249,6 @@ func main() {
 		toKeep = append(toKeep, key)
 	}
 	sort.Sort(sort.Reverse(sort.StringSlice(toKeep)))
-
-	if len(toKeep) == 0 {
-		log.Println("No releases found")
-		return
-	}
 
 	var toDelete []string
 	for len(toKeep) > 4 {
