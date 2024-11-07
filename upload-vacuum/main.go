@@ -137,7 +137,7 @@ func readConfig(client *sftp.Client, path string) (*config, error) {
 	}
 
 	var config config
-	err = yaml.Unmarshal(data, config)
+	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		return nil, err
 	}
