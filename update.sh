@@ -14,6 +14,15 @@ set -e
 # TODO file bug that sysupdate doesn't do that.
 stat /efi/EFI
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 export TAR_OPTIONS="--zstd"
 # FIXME set up signing shebang so we can run with verify
-exec systemd-inhibit --what=sleep:shutdown --mode=block --who="KDE Linux Updater" --why="Updating System" /usr/lib/systemd/systemd-sysupdate --verify=no "$@"
+exec systemd-inhibit \
+  --what=sleep:shutdown \
+  --mode=block \
+  --who="KDE Linux Updater" \
+  --why="Updating System" \
+  /usr/lib/systemd/systemd-sysupdate \
+    --definitions="$SCRIPT_DIR/mkosi.extra/usr/lib/sysupdate.d" \
+    --verify=no \
+    "$@"
