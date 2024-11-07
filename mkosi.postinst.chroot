@@ -6,7 +6,7 @@ set -ex
 
 env
 
-mkdir --mode 0700 /system # for the kdeos-overlay.service
+mkdir --mode 0700 /system # for the kde-linux-overlay.service
 mkdir /snap               # for snapd (will get a subvolume mounted into that snapd then mounts the snaps into)
 
 export SYSTEMD_ESP_PATH="$BOOT_MNT"
@@ -83,7 +83,7 @@ packages=(
   # kde-builder dependencies
   dbus-python python-yaml python-setproctitle
 
-  # for _kdeos-make-debug-archive
+  # for _kde-linux-make-debug-archive
   arch-install-scripts
 )
 
@@ -132,7 +132,7 @@ EOF
 cat <<- EOF > /usr/lib/os-release
 NAME="KDE Linux"
 PRETTY_NAME="KDE Linux"
-ID=kdelinux
+ID=kde-linux
 VERSION_ID=$IMAGE_VERSION
 BUILD_ID=$CI_COMMIT_SHORT_SHA
 ANSI_COLOR="38;2;61;174;233"
@@ -153,7 +153,7 @@ cat /usr/lib/os-release
 
 # Generate the debug archive after the os-release so we can easily turn it into a systemd-sysext
 cd /
-_kdeos-make-debug-archive
+_kde-linux-make-debug-archive
 
 mkdir flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -192,5 +192,5 @@ EOF
 plymouth-set-default-theme breeze-bgrt
 
 cd /tmp
-/usr/bin/_kdeos-rebuild-efi
+/usr/bin/_kde-linux-rebuild-efi
 mv -v ./*.efi /

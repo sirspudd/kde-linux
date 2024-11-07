@@ -18,5 +18,5 @@ After=modprobe@overlay.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/_kdeos-overlay
+ExecStart=/usr/bin/_kde-linux-overlay
 Restart=no

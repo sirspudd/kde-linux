@@ -5,11 +5,11 @@
     SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
   -->
   <os id="http://kde.org/os">
-    <short-id>kdeos</short-id>
-    <name>KDE OS</name>
+    <short-id>kde-linux</short-id>
+    <name>KDE Linux</name>
     <vendor>KDE</vendor>
     <family>linux</family>
-    <distro>kdeos</distro>
+    <distro>kde-linux</distro>
     <release-status>rolling</release-status>
     <firmware arch="x86_64" type="bios" supported="false"/>
     <firmware arch="x86_64" type="efi" supported="true"/>

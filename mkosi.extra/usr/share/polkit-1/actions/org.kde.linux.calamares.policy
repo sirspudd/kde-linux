@@ -10,7 +10,7 @@
  <vendor>KDE</vendor>
  <vendor_url>https://kde.org</vendor_url>
 
- <action id="org.kde.os.calamares.pkexec.run">
+ <action id="org.kde.linux.calamares.pkexec.run">
     <description>Run Installer</description>
     <message>Authentication is required to run the installation program</message>
     <icon_name>drive-harddisk</icon_name>

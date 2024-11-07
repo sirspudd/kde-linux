@@ -3,8 +3,8 @@
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
 
 # Bless Session.
-# Also see _kdeos-bless-userspace
+# Also see _kde-linux-bless-userspace
 
 set -ex
 
-touch "${XDG_RUNTIME_DIR}/kdeos-bless-session"
+touch "${XDG_RUNTIME_DIR}/kde-linux-bless-session"

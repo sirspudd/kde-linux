@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
 
 # Bless userspace.
-# Blessing of a boot on KDEOS is a three step process.
+# Blessing of a boot on KDE Linux is a three step process.
 # 1) the userspace gets blessed here via a /run marker (means system-wide middleware services are up - such as networkmanager)
 # 2) the user logs in and a complete session startup blesses the session
 # 3) when all requirements are met the boot gets actually blessed
@@ -15,4 +15,4 @@ systemctl daemon-reload
 
 /usr/lib/systemd/systemd-bless-boot indeterminate
 
-touch /run/kdeos-bless-userspace
+touch /run/kde-linux-bless-userspace

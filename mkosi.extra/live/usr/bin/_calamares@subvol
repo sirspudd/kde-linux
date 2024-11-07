@@ -49,7 +49,7 @@ mount -t tmpfs tmpfs "$ROOT/run"
 mkdir "$ROOT/run/udev"
 mount -o bind /run/udev "$ROOT/run/udev"
 mount -t efivarfs efivarfs "$ROOT/sys/firmware/efi/efivars"
-_kdeos-overlay "$device" "$ROOT"
+_kde-linux-overlay "$device" "$ROOT"
 
 # ESP is a bit tricky. Find the block device of the root partition and then we'll ask systemd for an ESP on that device.
 # ... and luks devices are even more tricky because we need to get the real device first
@@ -61,7 +61,7 @@ if [ -r "/sys/block/$realdevice/dm/" ]; then
     done
 fi
 blockdev=/dev/$(basename "$(readlink --canonicalize "/sys/class/block/$realdevice/..")")
-espdev=$(_kdeos-find-esp "$blockdev")
+espdev=$(_kde-linux-find-esp "$blockdev")
 mount "$espdev" "$ROOT/efi"
 
 # Once everything is in place we'll shove some extra data into the overlays.

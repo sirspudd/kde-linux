@@ -6,11 +6,11 @@ Description=Check if Userspace is in a Good State
 Requires=boot-complete.target display-manager.service user.slice
 Conflicts=shutdown.target
 Before=shutdown.target systemd-bless-boot.service
-Wants=kdeos-bless-boot.path
+Wants=kde-linux-bless-boot.path
 
 [Service]
 Type=oneshot
-ExecStart=/bin/_kdeos-bless-userspace
+ExecStart=/bin/_kde-linux-bless-userspace
 
 [Install]
 RequiredBy=systemd-bless-boot.service

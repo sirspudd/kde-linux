@@ -5,5 +5,5 @@
 Description=Mark the Current Boot Loader Entry as Good
 
 [Path]
-PathExistsGlob=/run/kdeos-bless-userspace
-PathExistsGlob=/run/user/*/kdeos-bless-session
+PathExistsGlob=/run/kde-linux-bless-userspace
+PathExistsGlob=/run/user/*/kde-linux-bless-session
