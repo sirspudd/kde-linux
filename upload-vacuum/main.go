@@ -118,6 +118,39 @@ func writeSHA256s(sha256s []string) {
 	}
 }
 
+func loadReleases(client *sftp.Client, path string) (map[string]release, error) {
+	releases := map[string]release{}
+
+	w := client.Walk(path + "/") // The terminal / is important otherwise we'll walk the symlink
+	for w.Step() {
+		if w.Err() != nil {
+			return releases, errors.New("Failed to walk path: " + w.Err().Error())
+		}
+
+		name := w.Stat().Name()
+		if !strings.HasPrefix(name, "kdeos_") && !strings.HasPrefix(name, "kde-linux_") {
+			continue
+		}
+		name = strings.TrimPrefix(name, "kdeos_")
+		name = strings.TrimPrefix(name, "kde-linux_")
+		name = strings.SplitN(name, ".", 2)[0]
+		name = strings.SplitN(name, "_", 2)[0]
+
+		if _, ok := releases[name]; !ok {
+			releases[name] = release{}
+		}
+		_, err := strconv.Atoi(name)
+		if err != nil {
+			return releases, errors.New("Failed to parse release number: " + name)
+		}
+		release := releases[name]
+		release.artifacts = append(releases[name].artifacts, w.Path())
+		releases[name] = release
+	}
+
+	return releases, nil
+}
+
 func main() {
 	identity := os.Getenv("SSH_IDENTITY")
 	host := os.Getenv("SSH_HOST")
@@ -157,32 +190,9 @@ func main() {
 	}
 	defer client.Close()
 
-	releases := map[string]release{}
-
-	w := client.Walk(path + "/") // The terminal / is important otherwise we'll walk the symlink
-	for w.Step() {
-		if w.Err() != nil {
-			continue
-		}
-		name := w.Stat().Name()
-		if !strings.HasPrefix(name, "kdeos_") && !strings.HasPrefix(name, "kde-linux_") {
-			continue
-		}
-		name = strings.TrimPrefix(name, "kdeos_")
-		name = strings.TrimPrefix(name, "kde-linux_")
-		name = strings.SplitN(name, ".", 2)[0]
-		name = strings.SplitN(name, "_", 2)[0]
-		if _, ok := releases[name]; !ok {
-			releases[name] = release{}
-		}
-		_, err := strconv.Atoi(name)
-		if err != nil {
-			log.Fatal("Bad release name: ", name)
-			continue
-		}
-		release := releases[name]
-		release.artifacts = append(releases[name].artifacts, w.Path())
-		releases[name] = release
+	releases, err := loadReleases(client, path)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// Sort releases by key
