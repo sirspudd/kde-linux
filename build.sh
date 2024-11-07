@@ -10,7 +10,7 @@
 
 set -ex
 
-NAME=kdeos
+NAME=kde-linux
 _EPOCH=$(date +%s)
 _DATE=$(date --date="@$_EPOCH" +%Y%m%d)
 _TIME=$(date --date="@$_EPOCH" +%H%M)

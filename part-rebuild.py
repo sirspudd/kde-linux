@@ -24,7 +24,7 @@ partitions = partitiontable["partitions"]
 # Find the root partition
 root_partition = None
 for index, partition in enumerate(partitions):
-    if partition["name"] == "KDEOSLive":
+    if partition["name"] == "KDELinuxLive":
         root_partition = partition
 
 # Update its size to what it actually is on the filesystem level

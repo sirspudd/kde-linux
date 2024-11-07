@@ -4,7 +4,7 @@
 [Unit]
 Description=Configuring Root Filesystem
 # live has an overlayed /, don't try to fiddle with it
-ConditionKernelCommandLine=!kdeos.live=1
+ConditionKernelCommandLine=!kde-linux.live=1
 
 [Service]
 ExecStartPre=/usr/bin/btrfs quota enable --simple /system

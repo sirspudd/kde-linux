@@ -4,10 +4,12 @@
 
 set -ex
 
-rootdisk=/dev/disk/by-partlabel/KDEOS
+rootdisk=/dev/disk/by-partlabel/KDELinux
 if [ -b /dev/gpt-auto-root ]; then
     # When the partition was auto detected we can just use the auto-root device
     rootdisk=/dev/gpt-auto-root
+elif [ -b /dev/disk/by-partlabel/KDEOS ]; then
+    rootdisk=/dev/disk/by-partlabel/KDEOS # Fallback for older images
 fi
 rootdisk=${1:-$rootdisk}
 sysroot=${2:-/sysroot}

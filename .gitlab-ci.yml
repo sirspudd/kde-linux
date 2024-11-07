@@ -19,10 +19,6 @@ imaging:
     expire_in: 7 days
     when: always
     paths:
-      - 'kde-builder/kde/src/log/*'
-      - 'kde-builder/kde/log/*'
-      - 'systemdOS_*/kde-builder/kde/src/log/*'
-      - 'kdeos_*/kde-builder/kde/src/log/*'
       - 'dmesg.log'
 
 imaging+publish:
@@ -43,7 +39,4 @@ imaging+publish:
     expire_in: 7 days
     when: always
     paths:
-      - 'kde-builder/kde/src/log/*'
-      - 'kde-builder/kde/log/*'
-      - 'systemdOS_*/kde-builder/kde/src/log/*'
-      - 'kdeos_*/kde-builder/kde/src/log/*'
+      - 'dmesg.log'

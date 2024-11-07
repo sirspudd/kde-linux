@@ -31,7 +31,7 @@ rm -rfv ./*
 btrfs subvolume sync . || true
 
 btrfs quota enable --simple .
-btrfs send --compressed-data "/system/@kdeos_$IMAGE_VERSION" | btrfs receive .
+btrfs send --compressed-data "/system/@kde-linux_$IMAGE_VERSION" | btrfs receive .
 btrfs subvolume create @home
 btrfs subvolume create @root
 btrfs subvolume create @locale
@@ -41,7 +41,7 @@ btrfs subvolume create @etc-overlay
 mkdir @var-overlay/upper @var-overlay/work @etc-overlay/upper @etc-overlay/work
 
 # Overmount calamares' mount with the subvol mount
-mount -o "subvol=@kdeos_$IMAGE_VERSION" "$device" "$ROOT"
+mount -o "subvol=@kde-linux_$IMAGE_VERSION" "$device" "$ROOT"
 mount -t proc proc "$ROOT/proc"
 mount -t sysfs sys "$ROOT/sys"
 mount -o bind /dev "$ROOT/dev"

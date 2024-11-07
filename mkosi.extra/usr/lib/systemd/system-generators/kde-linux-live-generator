@@ -12,13 +12,13 @@ early_dir=$2
 # shellcheck disable=SC2034
 late_dir=$3
 
-if ! grep "kdeos.live=1" /proc/cmdline; then
-    echo "kdeos.live=1 not in cmdline"
+if ! grep "kde-linux.live=1" /proc/cmdline; then
+    echo "kde-linux.live=1 not in cmdline"
     exit 1
 fi
 
-if [ "$(readlink --canonicalize /dev/disk/by-label/KDEOSLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
-    echo "gpt-auto-root is not KDEOSLive"
+if [ "$(readlink --canonicalize /dev/disk/by-label/KDELinuxLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
+    echo "gpt-auto-root is not KDELinuxLive"
     exit 1
 fi
 
@@ -28,7 +28,7 @@ cat <<- EOF > "$normal_dir/system.mount"
 Description=Mount unit for /system
 
 [Mount]
-What=/dev/disk/by-label/KDEOSLive
+What=/dev/disk/by-label/KDELinuxLive
 Where=/system
 Type=btrfs
 Options=rw,subvol=/
@@ -47,7 +47,7 @@ Description=Mount unit for /var/lib/flatpak
 Before=kde-linux-volatile-var-lib-flatpak.service
 
 [Mount]
-What=/dev/disk/by-label/KDEOSLive
+What=/dev/disk/by-label/KDELinuxLive
 Where=/var/lib/flatpak
 Type=btrfs
 Options=rw,subvol=@flatpak

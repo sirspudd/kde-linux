@@ -20,7 +20,7 @@ Before=systemd-sysext.service
 After=var.mount
 
 [Mount]
-What=/system/@kdeos_debug_${BUILD_ID}
+What=/system/@kde-linux_debug_${BUILD_ID}
 Where=/var/lib/extensions/debug
 Type=none
 Options=bind,nodev,x-gdu.hide,x-gvfs-hide
