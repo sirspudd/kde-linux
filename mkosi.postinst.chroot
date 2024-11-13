@@ -80,9 +80,6 @@ packages=(
   # AUR packages
   snapd steam-devices-git systemd-bootchart
 
-  # kde-builder dependencies
-  dbus-python python-yaml python-setproctitle
-
   # for _kde-linux-make-debug-archive
   arch-install-scripts
 )
@@ -90,22 +87,6 @@ packages=(
 # Install in parallel to improve performance
 # --noconfirm won't replace conflicts so we use `yes`
 yes | pacman --sync --refresh --needed "${packages[@]}"
-
-# KDE Builder
-whoami
-cd /opt
-echo "$PWD"
-env
-
-KDE_BUILD_ROOT="$CHROOT_SRCDIR/kde-builder"
-
-export HOME=$KDE_BUILD_ROOT
-git clone https://invent.kde.org/sdk/kde-builder.git
-cd kde-builder
-
-# Still need this until the following issue is resolved:
-# https://invent.kde.org/sysadmin/repo-metadata/-/issues/12
-./kde-builder --install-distro-packages --prompt-answer yes
 
 # Meanwhile cleanup a bit
 ## Unnecessary for us
