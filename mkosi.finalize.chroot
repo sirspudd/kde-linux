@@ -85,3 +85,6 @@ rm -rf /boot
 
 ## Not sure where this comes from, but it's not useful.
 rm -rf /.cache
+
+## Don't expose any X11 sessions; we're all-in on Wayland.
+rm -rf /usr/share/xsessions/
