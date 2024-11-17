@@ -92,7 +92,7 @@ fi
 
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
 rm -rf "$TAR" ./*.tar
-tar -C "${OUTPUT}"/ -cf "$TAR" .
+tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$TAR" .
 SIZE=$(stat --format %s "$TAR") # the apparent size of all data
 zstd -T0 --rm "$TAR"
 
