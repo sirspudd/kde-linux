@@ -21,8 +21,7 @@ fi
 # De-initialize pacman
 rm -rf \
     /etc/pacman.d/gnupg \
-    /var/cache/pacman \
-    /var/lib/pacman
+    /var/cache/pacman 
 
 # Remove all excess things we don't want in the final image
 
