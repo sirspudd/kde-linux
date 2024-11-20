@@ -147,6 +147,7 @@ flatpak config --set languages en
 flatpak install --noninteractive --assumeyes \
   org.kde.ark \
   org.kde.dolphin \
+  org.kde.elisa \
   org.kde.gwenview \
   org.kde.kate \
   org.kde.konsole \
