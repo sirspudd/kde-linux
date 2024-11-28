@@ -1,26 +1,48 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2024 Bruno Pajdek <brupaj@proton.me>
 
-# For bootstrapping of a basic arch system so it can build stuff.
+# Bootstraps an Arch Linux Docker container to be ready for building KDE Linux.
 
+# Exit immediately if any command fails and print all commands before they are executed.
 set -ex
 
-echo 'https://mirror.23m.com/archlinux/' > /etc/pacman.d/mirrorlist.new
-cat /etc/pacman.d/mirrorlist >> /etc/pacman.d/mirrorlist.new
-mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist
-
-pacman --sync --refresh --noconfirm archlinux-keyring
+# From https://hub.docker.com/_/archlinux/:
+#
+# "For Security Reasons, these images strip the pacman lsign key.
+# This is because the same key would be spread to all containers of the same image,
+# allowing for malicious actors to inject packages (via, for example, a man-in-the-middle).
+# In order to create a lsign-key run pacman-key --init on the first execution,
+# but be careful to not redistribute that key."
+#
 pacman-key --init
-# Unclear if we need this, should the keys run out of date we probably need to run this manually. Add a comment if that
-# is the case for it being here.
-# pacman-key --refresh-keys
-pacman --sync --refresh --noconfirm --sysupgrade
-pacman --sync --refresh --noconfirm mkosi git base-devel ukify cpio tree \
-    rsync btrfs-progs dosfstools qemu-img erofs-utils squashfs-tools go openssh \
-    compsize duperemove ruby ruby-nokogiri transmission-cli
 
-# Use mkosi from git to not have to wait for releases when things break.
-# OTOH things may break in git. So which version is used may change over time.
-git clone https://github.com/systemd/mkosi /tmp/mkosi
-ln -s "/tmp/mkosi/bin/mkosi" /usr/local/bin/mkosi
+# Update the system and install packages we'll need for building KDE Linux.
+# Even though we use mkosi from Git, we'll grab the package,
+# to make sure all the dependencies are properly pulled.
+pacman --sync --refresh --noconfirm --sysupgrade \
+    mkosi \
+    base-devel \
+    btrfs-progs \
+    compsize \
+    cpio \
+    dosfstools \
+    duperemove \
+    erofs-utils \
+    git \
+    go \
+    openssh \
+    qemu-img \
+    rsync \
+    ruby \
+    ruby-nokogiri \
+    squashfs-tools \
+    transmission-cli \
+    tree \
+    ukify
+
+# Use mkosi from Git so we don't have to wait for releases when things break.
+# OTOH, things may break in Git. Therefore, which version is used may change over time.
+git clone https://github.com/systemd/mkosi.git /tmp/mkosi
+ln --symbolic /tmp/mkosi/bin/mkosi /usr/local/bin/mkosi
