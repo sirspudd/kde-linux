@@ -56,7 +56,7 @@ packages=(
   accountsservice
 
   # All the KDE we plan to include in the base image
-  $(pacman --sync --list --quiet kde-linux)
+  $(pacman --sync --groups --quiet kde-linux)
 
   # AUR packages
   snapd steam-devices-git systemd-bootchart
