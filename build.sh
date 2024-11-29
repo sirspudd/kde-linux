@@ -1,12 +1,11 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2024 Bruno Pajdek <brupaj@proton.me>
 
 # Build image using mkosi, well, somewhat. mkosi is actually a bit too inflexible for our purposes so we generate a OS
 # tree using mkosi and then construct shipable raw images (for installation) and tarballs (for systemd-sysupdate)
 # ourselves.
-
-# TODO port to ruby or python or something. it's getting too long for sh
 
 set -ex
 
@@ -23,25 +22,16 @@ IMG=$OUTPUT.raw
 
 export SYSTEMD_LOG_LEVEL=debug
 
-cat <<- EOF > mkosi.conf.d/00-environment.conf
-[Content]
-@Environment=CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}
-@Environment=CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}
-@Environment=CI_PIPELINE_URL=${CI_PIPELINE_URL:-htts://invent.kde.org}
-EOF
-
-cat <<- EOF > mkosi.conf.d/00-outputdirectory.conf
-[Output]
-OutputDirectory=${PWD}
-EOF
-
 # Make sure permissions are sound
 ./permission-fix.py
 
 mkosi \
-    --distribution arch \
-    --image-id "$NAME" \
-    --image-version "$VERSION" \
+    --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
+    --environment="CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}" \
+    --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
+    --image-id="$NAME" \
+    --image-version="$VERSION" \
+    --output-directory=.
     "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
