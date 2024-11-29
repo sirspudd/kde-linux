@@ -31,7 +31,7 @@ mkosi \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
     --image-id="$NAME" \
     --image-version="$VERSION" \
-    --output-directory=.
+    --output-directory=. \
     "$@"
 
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
