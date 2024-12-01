@@ -143,6 +143,11 @@ flatpak config --unset languages
 
 mv /var/lib/flatpak / # we'll extract this and later mount it into place
 
+# Fetch latest distrobox config from the kde-linux-containers repo
+mkdir -p /usr/share/distrobox
+curl --output /usr/share/distrobox/distrobox.conf \
+  'https://invent.kde.org/api/v4/projects/19899/repository/files/distrobox.conf/raw'
+
 # Enable samba usershare
 cat <<- EOF >> /etc/samba/smb.conf
 [global]
