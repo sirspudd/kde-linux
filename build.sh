@@ -23,7 +23,7 @@ IMG=$OUTPUT.raw
 export SYSTEMD_LOG_LEVEL=debug
 
 # Make sure permissions are sound
-./permission-fix.py
+./permission-fix.sh
 
 mkosi \
     --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
