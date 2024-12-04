@@ -61,6 +61,11 @@ packages=(
   # AUR packages
   snapd steam-devices-git systemd-bootchart
 
+  systemd-git
+  systemd-resolvconf-git
+  systemd-sysvcompat-git
+  systemd-ukify-git
+
   # for _kde-linux-make-debug-archive
   arch-install-scripts
 )
