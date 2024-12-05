@@ -9,16 +9,22 @@
 
 set -ex
 
-NAME=kde-linux
-_EPOCH=$(date +%s)
-_DATE=$(date --date="@$_EPOCH" +%Y%m%d)
-_TIME=$(date --date="@$_EPOCH" +%H%M)
-DATETIME="${_DATE}${_TIME}"
-VERSION="$DATETIME"
-OUTPUT=${NAME}_$VERSION
-EFI=$OUTPUT+3.efi # +3 is the default boot number for systemd-boot
-TAR=${OUTPUT}_root-x86-64.tar
-IMG=$OUTPUT.raw
+VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
+OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
+
+# Canonicalize the path in $OUTPUT to avoid any possible path issues.
+OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
+
+MAIN_UKI=${OUTPUT}.efi                   # Output main UKI path
+LIVE_UKI=${OUTPUT}_live.efi              # Output live UKI path
+DEBUG_TAR=${OUTPUT}_debug-x86-64.tar.zst # Output debug archive path
+ROOTFS_TAR=${OUTPUT}_root-x86-64.tar     # Output rootfs tarball path (.zst will be added)
+IMG=${OUTPUT}.raw                        # Output raw image path
+
+EFI=kde-linux_${VERSION}+3.efi # Name of primary UKI in the image's ESP
+
+# Clean up old build artifacts.
+rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
 export SYSTEMD_LOG_LEVEL=debug
 
@@ -29,7 +35,6 @@ mkosi \
     --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
     --environment="CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}" \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
-    --image-id="$NAME" \
     --image-version="$VERSION" \
     --output-directory=. \
     "$@"
@@ -40,88 +45,133 @@ rm -rfv "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi-template" ] || mkdir --mode 0700 "${OUTPUT}/efi-template"
 [ -d "${OUTPUT}/efi-template/EFI" ] || mkdir --mode 0700 "${OUTPUT}/efi-template/EFI"
 [ -d "${OUTPUT}/efi-template/EFI/Linux" ] || mkdir --mode 0700 "${OUTPUT}/efi-template/EFI/Linux"
-cp -v "${OUTPUT}"/${NAME}*.efi "$OUTPUT.efi"
-mv -v "${OUTPUT}"/${NAME}*.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
-mv -v "${OUTPUT}"/live.efi "${OUTPUT}_live.efi"
-
-OUTPUT_IS_BTRFS_SUBVOLUME=false
-if [ "$(stat --file-system --format %T "$OUTPUT")" = "btrfs" ] && [ "$(stat --format %i "$OUTPUT")" = "256" ]; then
-    OUTPUT_IS_BTRFS_SUBVOLUME=true
-fi
+cp -v "${OUTPUT}"/kde-linux.efi "$MAIN_UKI"
+mv -v "${OUTPUT}"/kde-linux.efi "${OUTPUT}/efi-template/EFI/Linux/$EFI"
+mv -v "${OUTPUT}"/live.efi "$LIVE_UKI"
 
 # Move debug tarball out of the tree
-mv -v "$OUTPUT/debug.tar.zst" "${OUTPUT}_debug-x86-64.tar.zst"
+mv -v "$OUTPUT/debug.tar.zst" "$DEBUG_TAR"
 
-FLATPAK_SIZE=""
-# Move /flatpak out of the tree and into subvolume
-if $OUTPUT_IS_BTRFS_SUBVOLUME; then
-    btrfs subvolume create "$OUTPUT.flatpak"
-    cp -rf --reflink=always "$OUTPUT/flatpak/." "$OUTPUT.flatpak"
-    rm -rf "$OUTPUT/flatpak"
-    # Note that compression is applied on a mount-level via the host system.
-    compsize "$OUTPUT.flatpak"
-    btrfs subvolume snapshot -r "$OUTPUT.flatpak" "$OUTPUT.export.flatpak"
-    btrfs send --compressed-data -f "$OUTPUT.btrfs.flatpak" "$OUTPUT.export.flatpak"
-    btrfs subvolume delete "$OUTPUT.export.flatpak"
-    FLATPAK_SIZE=$(stat --format %s "$OUTPUT.btrfs.flatpak") # the actual size of all data
-fi
+# Now let's actually build a live raw image. First, the ESP.
+# We use kde-linux.cache instead of /tmp as usual because we'll probably run out of space there.
 
-LIVE_SIZE=""
-# Move /live out of the tree and into subvolume
-if $OUTPUT_IS_BTRFS_SUBVOLUME; then
-    btrfs subvolume create "$OUTPUT.live"
-    cp -rf --reflink=always "$OUTPUT/live/." "$OUTPUT.live"
-    rm -rf "$OUTPUT/live"
-    # Note that compression is applied on a mount-level via the host system.
-    compsize "$OUTPUT.live"
-    btrfs subvolume snapshot -r "$OUTPUT.live" "$OUTPUT.export.live"
-    btrfs send --compressed-data -f "$OUTPUT.btrfs.live" "$OUTPUT.export.live"
-    btrfs subvolume delete "$OUTPUT.export.live"
-    LIVE_SIZE=$(stat --format %s "$OUTPUT.btrfs.live") # the actual size of all data
-fi
+# Since we're building a live image, replace the main UKI with the live one.
+cp "$LIVE_UKI" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
+
+# Change to kde-linux.cache since we'll be working there.
+cd kde-linux.cache
+
+# Create a 260M large FAT32 filesystem inside of esp.raw.
+fallocate -l 260M esp.raw
+mkfs.fat -F 32 esp.raw
+
+# Mount it to esp.raw.mnt.
+mkdir esp.raw.mnt
+mount esp.raw esp.raw.mnt
+
+# Copy everything from /efi-template into esp.raw.mnt.
+cp --archive --recursive "${OUTPUT}/efi-template/." esp.raw.mnt
+
+# We're done, unmount esp.raw.mnt.
+umount esp.raw.mnt
+
+# Now, the root.
+
+# Copy back the main UKI for the root.
+cp "$MAIN_UKI" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
+
+# Create an 8G large btrfs filesystem inside of root.raw.
+# Don't fret, we'll shrink this down to however much we actually need later.
+fallocate -l 8G root.raw
+mkfs.btrfs -L KDELinuxLive root.raw
+
+# Mount it to root.raw.mnt.
+mkdir root.raw.mnt
+mount -o compress-force=zstd:15 root.raw root.raw.mnt
+
+# Change to root.raw.mnt since we'll be working there.
+cd root.raw.mnt
+
+# Enable compression filesystem-wide.
+btrfs property set . compression zstd:15
+
+# Store both data and metadata only once for more compactness.
+btrfs balance start --force -mconvert=single -dconvert=single .
+
+# Create all the subvolumes we need.
+btrfs subvolume create \
+    @home \
+    @root \
+    @locale \
+    @snap \
+    @etc-overlay \
+    @var-overlay \
+    @live \
+    @flatpak \
+    "@kde-linux_$VERSION"
+
+mkdir @etc-overlay/upper \
+    @etc-overlay/work \
+    @var-overlay/upper \
+    @var-overlay/work
+
+# Create read-only subvolumes from /live, /flatpak and /.
+cp --archive --recursive "${OUTPUT}/live/." @live
+cp --archive --recursive "${OUTPUT}/flatpak/." @flatpak
+rm --recursive "${OUTPUT}/live"
+rm --recursive "${OUTPUT}/flatpak"
+cp --archive --recursive "${OUTPUT}/." "@kde-linux_$VERSION"
+btrfs property set @live ro true
+btrfs property set @flatpak ro true
+btrfs property set "@kde-linux_$VERSION" ro true
+
+# Make a symlink called @kde-linux to the rootfs subvolume.
+ln --symbolic "@kde-linux_$VERSION" @kde-linux
+
+# Make sure everything is written before we continue.
+btrfs filesystem sync .
+
+# Optimize the filesystem for better shrinking/performance.
+btrfs filesystem defragment -r .
+btrfs filesystem sync .
+duperemove -rdq .
+btrfs filesystem sync .
+btrfs balance start --full-balance --enqueue .
+btrfs filesystem sync .
+
+# How much we'll keep shrinking the filesystem by, in bytes.
+# Too large = too imprecise, too small = shrink is too slow.
+# One mebibyte seems good for now.
+SHRINK_AMOUNT=1048576
+
+# Repeatedly shrink the filesystem by $SHRINK_AMOUNT until we get an error.
+# Store the size it has been successfully shrunk by in $SHRINK_SIZE.
+SHRINK_SIZE=0
+while true; do
+  btrfs filesystem resize -$SHRINK_AMOUNT . || break
+  SHRINK_SIZE=$((SHRINK_SIZE + SHRINK_AMOUNT))
+  btrfs filesystem sync .
+done
+
+# Back out to kde-linux.cache, then unmount root.raw.mnt.
+cd ..
+umount root.raw.mnt
+
+# We shrunk the filesystem, but root.raw as a file itself is still 8G.
+# Let's safely truncate it by the previously stored $SHRINK_SIZE.
+truncate --size=-$SHRINK_SIZE root.raw
+
+# We're done, back out of kde-linux.cache into the root.
+cd ..
 
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
-rm -rf "$TAR" ./*.tar
-tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$TAR" .
-SIZE=$(stat --format %s "$TAR") # the apparent size of all data
-zstd -T0 --rm "$TAR"
+rm -rf "$ROOTFS_TAR" ./*.tar
+tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
+zstd -T0 --rm "$ROOTFS_TAR"
 
-# Accurate sizing is a bit of a challenge. In the most ideal scenario we'll be working on btrfs and are able to
-# compress the entire subvolume into a file. This file size will then be more or less the DATA size in the filesystem.
-# On top of that we have the btrfs meta data and system data, these are kind of dependent on the actual partition size
-# but will generally be ~768M (this value entirely depends on how many files we have) and <50M for partitions <50G.
-if $OUTPUT_IS_BTRFS_SUBVOLUME; then
-    # Note that compression is applied on a mount-level via the host system.
-    compsize "$OUTPUT"
-    btrfs subvolume snapshot -r "$OUTPUT" "$OUTPUT.export"
-    btrfs send --compressed-data -f "$OUTPUT.btrfs" "$OUTPUT.export"
-    btrfs subvolume delete "$OUTPUT.export"
-    SIZE=$(stat --format %s "$OUTPUT.btrfs") # the actual size of all data
-    SIZE=$((SIZE+2147483648)) # 2G slack -- this needs to be sufficient for our deduplication and balancing run. We'll shrink this way down later.
-else
-    SIZE=$((SIZE+4294967296)) # 4G slack (our guess is less precise without btrfs)
-fi
-SIZE=$((SIZE+FLATPAK_SIZE)) # however much we need for flatpak
-SIZE=$((SIZE+LIVE_SIZE)) # however much we need for live data
-SIZE=$((SIZE+851443712)) # 768M for btrfs metadata, 44M for system block
-SIZE=$((SIZE+536870912)) # 512M for ESP
-
-rm -f "$IMG" ./*.raw
+# Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
 touch "$IMG"
-# The root partition contains the shipable efi image for use on the installed system.
-systemd-repart --no-pager --empty=allow --size="$SIZE" --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=esp "$IMG"
-if $OUTPUT_IS_BTRFS_SUBVOLUME; then # btrfs subvolume
-    systemd-dissect --with "$IMG" "$(pwd)/btrfs-send-receive.sh" "$PWD/$OUTPUT" "$OUTPUT" "@$NAME"
-else # do a raw copy
-    systemd-dissect --with "$IMG" "$(pwd)/btrfs-copy.sh" "$PWD/$OUTPUT" "$OUTPUT" "@$NAME"
-fi
-# The esp of the image contains the live efi image (divergent cmdline).
-# We copy into efi-template for convenience, it won't actually be used from there, just copied by systemd-repart.
-cp -v "${OUTPUT}_live.efi" "${OUTPUT}/efi-template/EFI/Linux/$EFI"
-systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPUT}" --definitions=mkosi.repart --defer-partitions=root "$IMG"
-
-# Finally rebuild the actual image file with appropriate partition sizing. In particular with squeezed btrfs.
-./part-rebuild.py "$IMG"
+systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=kde-linux.cache --definitions=mkosi.repart "$IMG"
 
 # Create a torrent for the image
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
@@ -129,5 +179,5 @@ systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root="${OUTPU
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 
 # efi images and torrents are 700, make them readable so the server can serve them
-chmod go+r ./"$OUTPUT".* ./*.efi ./*.torrent
+chmod go+r "$OUTPUT".* ./*.efi ./*.torrent
 ls -lah
