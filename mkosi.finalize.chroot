@@ -78,9 +78,11 @@ rm -rf \
 rm -rf \
     /usr/share/doc/
 
-## /boot is not necessary. We've already created our initrd.
+## /boot is now the preferred mount point for systemd and BLS:
+## https://uapi-group.org/specifications/specs/boot_loader_specification/#mount-points
+## However, its content are no longer necessary, since we've already created our initrd.
 # shellcheck disable=SC2114
-rm -rf /boot
+rm -rf /boot/*
 
 ## Not sure where this comes from, but it's not useful.
 rm -rf /.cache
