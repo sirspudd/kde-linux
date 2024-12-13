@@ -54,6 +54,7 @@ if [ "$CONTAINER_RUNTIME" = "podman" ]; then
   # podman requires the volume mount points to exist already
   mkdir -p "${SCRIPT_DIR}/kde-linux.cache/pacman"
   mkdir -p "${SCRIPT_DIR}/kde-linux.cache/mkosi.pacman"
+  mkdir -p "${SCRIPT_DIR}/kde-linux.cache/flatpak"
 fi
 
 # Exit if Docker or Podman are not available.
@@ -119,6 +120,7 @@ $CONTAINER_RUNTIME run \
   --volume="${SCRIPT_DIR}:/workspace" \
   --volume="${SCRIPT_DIR}/kde-linux.cache/pacman:/var/cache/pacman/pkg" \
   --volume="${SCRIPT_DIR}/kde-linux.cache/mkosi.pacman:/var/cache/mkosi.pacman" \
+  --volume="${SCRIPT_DIR}/kde-linux.cache/flatpak:/var/lib/flatpak" \
   --volume="/dev:/dev" \
   --workdir="/workspace" \
   --rm \

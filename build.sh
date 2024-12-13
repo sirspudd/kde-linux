@@ -30,6 +30,37 @@ make_debug_archive () {
   zstd --threads=0 --rm -15 "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
 
+download_flatpaks() {
+    [ -f /usr/lib/os-release ] || false
+    cat /usr/lib/os-release
+
+    mkdir flatpak
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    # Do this separately, when used as part of remote-add it complains about GPG for unknown reasons
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+
+    # Only check out en. We don't really support other languages on the live image at this time.
+    flatpak config --set languages en
+
+    flatpak install --noninteractive --assumeyes \
+        org.kde.ark \
+        org.kde.dolphin \
+        org.kde.elisa \
+        org.kde.gwenview \
+        org.kde.kate \
+        org.kde.haruna \
+        org.kde.konsole \
+        org.kde.kwalletmanager5 \
+        org.kde.kwrite \
+        org.kde.okular \
+        org.mozilla.firefox
+
+    # And restore default
+    flatpak config --unset languages
+}
+
+
+
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
 OUTPUT=mkosi.output/kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
@@ -135,11 +166,13 @@ mkdir @etc-overlay/upper \
     @var-overlay/upper \
     @var-overlay/work
 
-# Create read-only subvolumes from /live, /flatpak and /.
+download_flatpaks
+
+# Create read-only subvolumes from chroot's /live and /.
+# and from the container's /var/lib/flatpak.
 cp --archive --recursive "${OUTPUT}/live/." @live
-cp --archive --recursive "${OUTPUT}/flatpak/." @flatpak
+cp --archive --recursive "/var/lib/flatpak/." @flatpak
 rm --recursive "${OUTPUT}/live"
-rm --recursive "${OUTPUT}/flatpak"
 cp --archive --recursive "${OUTPUT}/." "@kde-linux_$VERSION"
 btrfs property set @live ro true
 btrfs property set @flatpak ro true

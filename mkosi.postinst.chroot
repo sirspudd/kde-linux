@@ -59,32 +59,6 @@ EOF
 [ -f /usr/lib/os-release ] || false
 cat /usr/lib/os-release
 
-mkdir flatpak
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-# Do this separately, when used as part of remote-add it complains about GPG for unknown reasons
-flatpak remote-modify --collection-id=org.flathub.Stable flathub
-
-# Only check out en. We don't really support other languages on the live image at this time.
-flatpak config --set languages en
-
-flatpak install --noninteractive --assumeyes \
-  org.kde.ark \
-  org.kde.dolphin \
-  org.kde.elisa \
-  org.kde.gwenview \
-  org.kde.kate \
-  org.kde.haruna \
-  org.kde.konsole \
-  org.kde.kwalletmanager5 \
-  org.kde.kwrite \
-  org.kde.okular \
-  org.mozilla.firefox
-
-# And restore default
-flatpak config --unset languages
-
-mv /var/lib/flatpak / # we'll extract this and later mount it into place
-
 # Fetch latest distrobox config from the kde-linux-containers repo
 mkdir -p /usr/share/distrobox
 curl --output /usr/share/distrobox/distrobox.conf \

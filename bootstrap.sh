@@ -59,6 +59,7 @@ pacman --sync --refresh --noconfirm --sysupgrade \
     dosfstools \
     duperemove \
     erofs-utils \
+    flatpak \
     git \
     go \
     openssh \
