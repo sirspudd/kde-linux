@@ -32,12 +32,12 @@ cp /etc/pacman.conf mkosi.sandbox/etc
 pacman-key --init
 
 
-# Insert a fallback for starters
-# shellcheck disable=SC2016
-echo 'Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-# Then use fastest servers we can find
-pacman --sync --refresh --noconfirm reflector
 if [ ! -f mkosi.sandbox/etc/pacman.d/mirrorlist ]; then
+  # Insert a fallback for starters
+  # shellcheck disable=SC2016
+  echo 'Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+  # Then use fastest servers we can find
+  pacman --sync --refresh --noconfirm reflector
   reflector --protocol https --country ${MIRRORS_COUNTRY:-de} --score 10 --fastest 3 >mkosi.sandbox/etc/pacman.d/mirrorlist
 fi
 PARALLEL_DOWNLOADS=${PARALLEL_DOWNLOADS:-5}
