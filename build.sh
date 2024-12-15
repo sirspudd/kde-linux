@@ -9,17 +9,38 @@
 
 set -ex
 
+# Creates an archive containing the data from just the kde-linux-debug repository packages,
+# essentially the debug symbols for KDE apps, to be used as a sysext.
+make_debug_archive () {
+  # Create an empty directory at /tmp/debugroot to install the packages to before compressing.
+  rm --recursive --force /tmp/debugroot
+  mkdir --parents /tmp/debugroot
+
+  # Install all packages in the kde-linux-debug repository to /tmp/debugroot.
+  pacstrap -c /tmp/debugroot $(pacman --sync --list --quiet kde-linux-debug)
+
+  # systemd-sysext uses the os-release in extension-release.d to verify the sysext matches the base OS,
+  # and can therefore be safely installed. Copy the base OS' os-release there.
+  mkdir --parents /tmp/debugroot/usr/lib/extension-release.d/
+  cp "${OUTPUT}/usr/lib/os-release" /tmp/debugroot/usr/lib/extension-release.d/extension-release.debug
+
+  # Finally compress /tmp/debugroot/usr into a zstd tarball at $DEBUG_TAR.
+  # We actually only need usr because that's where all the relevant stuff lays anyways.
+  tar --directory=/tmp/debugroot --create --file="$DEBUG_TAR" usr
+  zstd --threads=0 --rm -15 "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
+}
+
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
 OUTPUT=mkosi.output/kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
 OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
 
-MAIN_UKI=${OUTPUT}.efi                   # Output main UKI path
-LIVE_UKI=${OUTPUT}_live.efi              # Output live UKI path
-DEBUG_TAR=${OUTPUT}_debug-x86-64.tar.zst # Output debug archive path
-ROOTFS_TAR=${OUTPUT}_root-x86-64.tar     # Output rootfs tarball path (.zst will be added)
-IMG=${OUTPUT}.raw                        # Output raw image path
+MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
+LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
+DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
+ROOTFS_TAR=${OUTPUT}_root-x86-64.tar # Output rootfs tarball path (.zst will be added)
+IMG=${OUTPUT}.raw                    # Output raw image path
 
 EFI=kde-linux_${VERSION}+3.efi # Name of primary UKI in the image's ESP
 
@@ -49,11 +70,7 @@ cp "${OUTPUT}/kde-linux.efi" "$MAIN_UKI"
 mv "${OUTPUT}/kde-linux.efi" "${OUTPUT}/efi/EFI/Linux/$EFI"
 mv "${OUTPUT}/live.efi" "$LIVE_UKI"
 
-
-# TODO this is clearly a goofy way to go about it:
-cp ${OUTPUT}/usr/lib/os-release /usr/lib/os-release
-mkosi.extra/usr/bin/_kde-linux-make-debug-archive
-mv -v "debug.tar.zst" "$DEBUG_TAR"
+make_debug_archive
 
 # Now let's actually build a live raw image. First, the ESP.
 # We use kde-linux.cache instead of /tmp as usual because we'll probably run out of space there.
