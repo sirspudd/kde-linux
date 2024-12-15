@@ -15,11 +15,6 @@ imaging:
   image: archlinux:latest
   script:
     - ./in_docker.sh --force --debug
-  artifacts:
-    expire_in: 7 days
-    when: always
-    paths:
-      - 'dmesg.log'
 
 imaging+publish:
   stage: start
@@ -35,8 +30,3 @@ imaging+publish:
     - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
     - ./in_docker.sh --force --debug
     - ./upload.sh
-  artifacts:
-    expire_in: 7 days
-    when: always
-    paths:
-      - 'dmesg.log'
