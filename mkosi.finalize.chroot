@@ -23,6 +23,10 @@ rm -rf \
     /etc/pacman.d/gnupg \
     /var/cache/pacman 
 
+## Pacman being present confuses users into thinking they can use it to install packages.
+## Rename it to kde-linux-readonly-pacman so they're less likely to find it.
+mv /usr/bin/{,_kde-linux-readonly-}pacman
+
 # Remove all excess things we don't want in the final image
 
 ## locale-gen doesn't work because /usr is read-only. Removing it means calamares won't attempt to use it.
