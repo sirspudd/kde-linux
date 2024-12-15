@@ -1,10 +1,8 @@
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileCopyrightText: none
+
 /image/
 /version
-/*.raw
-/*.tar
-/*.efi
 /pacman-cache/
 /systemdOS_*/
 /kde-builder/
@@ -13,7 +11,6 @@
 /upload-vacuum/vendor/
 
 mkosi.local.conf
-
-kde-linux_*
-/mkosi.sandbox/etc/pacman.conf
-/mkosi.sandbox/etc/pacman.d/mirrorlist
+mkosi.output
+mkosi.sandbox/etc/pacman.conf
+mkosi.sandbox/etc/pacman.d/mirrorlist

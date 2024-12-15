@@ -10,7 +10,7 @@
 set -ex
 
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
-OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
+OUTPUT=mkosi.output/kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
 OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
@@ -24,7 +24,8 @@ IMG=${OUTPUT}.raw                        # Output raw image path
 EFI=kde-linux_${VERSION}+3.efi # Name of primary UKI in the image's ESP
 
 # Clean up old build artifacts.
-rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
+rm --recursive --force mkosi.output kde-linux.cache/*.raw kde-linux.cache/*.mnt
+mkdir mkosi.output
 
 export SYSTEMD_LOG_LEVEL=debug
 
@@ -37,7 +38,6 @@ mkosi \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
     --image-version="$VERSION" \
     --package-cache-dir=/var/cache/mkosi.pacman \
-    --output-directory=. \
     "$@"
 
 # Create a directory structure for the UKIs.
@@ -168,7 +168,7 @@ truncate --size=-$SHRINK_SIZE root.raw
 cd ..
 
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
-rm -rf "$ROOTFS_TAR" ./*.tar
+rm -rf "$ROOTFS_TAR"
 tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
 zstd -T0 --rm "$ROOTFS_TAR"
 
@@ -182,5 +182,5 @@ systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=kde-linu
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 
 # efi images and torrents are 700, make them readable so the server can serve them
-chmod go+r "$OUTPUT".* ./*.efi ./*.torrent
-ls -lah
+chmod go+r "$OUTPUT"
+ls -lah . mkosi.output
