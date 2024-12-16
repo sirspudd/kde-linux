@@ -13,4 +13,3 @@
 mkosi.local.conf
 mkosi.output
 mkosi.sandbox/etc/pacman.conf
-mkosi.sandbox/etc/pacman.d/mirrorlist
