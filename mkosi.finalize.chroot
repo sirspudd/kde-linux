@@ -16,6 +16,7 @@ if [ -f "$SRCDIR/.secure_files/gpg.public.key" ]; then # only useful and availab
     mkdir "$GNUPGHOME"
     rm -f "$KEYRING"
     gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.public.key"
+    gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" gpg --edit-key 15AB3EE61CE450CFED1407BF4121B5F4EAEB53CA trust 6
 fi
 
 # De-initialize pacman
