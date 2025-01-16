@@ -116,7 +116,7 @@ fallocate -l 260M esp.raw
 mkfs.fat -F 32 esp.raw
 
 # Mount it to esp.raw.mnt.
-mkdir esp.raw.mnt
+mkdir -p esp.raw.mnt # The -p prevents failure if directory already exists
 mount esp.raw esp.raw.mnt
 
 # Copy everything from /efi into esp.raw.mnt.
@@ -136,7 +136,7 @@ fallocate -l 8G root.raw
 mkfs.btrfs -L KDELinuxLive root.raw
 
 # Mount it to root.raw.mnt.
-mkdir root.raw.mnt
+mkdir -p root.raw.mnt # The -p prevents failure if directory already exists
 mount -o compress-force=zstd:15 root.raw root.raw.mnt
 
 # Change to root.raw.mnt since we'll be working there.
