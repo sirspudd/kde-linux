@@ -62,7 +62,7 @@ if [ -r "/sys/block/$realdevice/dm/" ]; then
 fi
 blockdev=/dev/$(basename "$(readlink --canonicalize "/sys/class/block/$realdevice/..")")
 espdev=$(_kde-linux-find-esp "$blockdev")
-mount "$espdev" "$ROOT/efi"
+mount "$espdev" "$ROOT/boot"
 
 # Once everything is in place we'll shove some extra data into the overlays.
 # We notably don't want to carry flatpaks in the rootfs but for purposes of the image file they must be shipped somehow.
