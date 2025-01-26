@@ -10,9 +10,24 @@ fi
 
 set -e
 
-# Trigger mount of ESP by accessing it.
-# TODO file bug that sysupdate doesn't do that.
-stat /efi/EFI 2>&1 > /dev/null
+# Older installations may need ESP mounted in /efi to upgrade properly
+if [ -d /efi ]; then
+  # Trigger mount of ESP by accessing it.
+  # TODO file bug that sysupdate doesn't do that.
+  stat /efi/EFI 2>&1 > /dev/null || true
+  if [ ! -d /efi/EFI ]; then
+    rootdisk=/dev/disk/by-partlabel/KDELinux
+    if [ -b /dev/gpt-auto-root ]; then
+        # When the partition was auto detected we can just use the auto-root device
+        rootdisk=/dev/gpt-auto-root
+    elif [ -b /dev/disk/by-partlabel/KDEOS ]; then
+        rootdisk=/dev/disk/by-partlabel/KDEOS # Fallback for older images
+    fi
+
+    espdev=$(_kde-linux-find-esp "$rootdisk")
+    mount "$espdev" "$ROOT/efi"
+  fi
+fi
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 export TAR_OPTIONS="--zstd"
