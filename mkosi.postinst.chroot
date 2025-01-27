@@ -50,6 +50,7 @@ SUPPORT_URL="https://kde.org/support/"
 BUG_REPORT_URL="https://bugs.kde.org/enter_bug.cgi?product=kde-linux"
 PRIVACY_POLICY_URL="https://kde.org/privacypolicy-apps/"
 LOGO=kde-symbolic
+IMAGE_ID=kde-linux
 IMAGE_VERSION=$IMAGE_VERSION
 # KDE Linux specific keys.
 KDE_LINUX_COMMIT_SHA=$CI_COMMIT_SHA
