@@ -76,6 +76,7 @@ rm -rf \
     /usr/share/applications/bvnc.desktop \
     /usr/share/applications/cups.desktop \
     /usr/share/applications/system-config-printer.desktop \
+    /usr/share/applications/nvtop.desktop \
 
 ## Remove documentation cruft. Offline documentation while neat is really not that useful in this day and age.
 ## Do not be verbose here, we'd blow right through the log limit.
