@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
+
+set -ex
+
+if [ "$1" = "final" ]; then
+    # Generate all locales. Because /usr/lib is not writable in the target system we need to ship all locales pre-generated.
+    # Sucks. But oh well.
+    # We can at least limit to UTF-8 variants because nobody uses the rest and Qt doesn't even work with them.
+    grep UTF-8 /usr/share/i18n/SUPPORTED > /etc/locale.gen
+
+    # Also allow overriding the list by setting a LOCALE_GEN environment variable
+    # in mkosi.local.conf or command line parameters for local builds
+    if [ -n "$LOCALE_GEN" ]; then
+        echo "$LOCALE_GEN" > /etc/locale.gen
+    fi
+
+    locale-gen
+fi
