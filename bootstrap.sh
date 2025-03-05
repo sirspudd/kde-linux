@@ -8,19 +8,6 @@
 # Exit immediately if any command fails and print all commands before they are executed.
 set -ex
 
-cat <<- EOF >> /etc/pacman.conf
-[kde-linux]
-# Signature checking is not needed beacuse the packages are served over HTTPS and we have no mirrors
-SigLevel = Never
-Server = https://cdn.kde.org/kde-linux/packaging/packages/
-
-[kde-linux-debug]
-SigLevel = Never
-Server = https://cdn.kde.org/kde-linux/packaging/packages-debug/
-EOF
-
-cp /etc/pacman.conf mkosi.sandbox/etc
-
 # From https://hub.docker.com/_/archlinux/:
 #
 # "For Security Reasons, these images strip the pacman lsign key.
@@ -31,6 +18,24 @@ cp /etc/pacman.conf mkosi.sandbox/etc
 #
 pacman-key --init
 
+# Restore the pacman.conf file from the pacman package. The docker one is crippled with NoExtract options and the like :(
+mkdir /tmp/pacman
+pacman --sync --refresh --downloadonly --noconfirm pacman
+tar --extract --file "$(find /var/cache/pacman/pkg -name 'pacman-*.pkg.tar.zst')" --directory /tmp/pacman
+cp /tmp/pacman/etc/pacman.conf /etc/pacman.conf
+
+cat <<- EOF >> /etc/pacman.conf
+[kde-linux]
+# Signature checking is not needed because the packages are served over HTTPS and we have no mirrors
+SigLevel = Never
+Server = https://cdn.kde.org/kde-linux/packaging/packages/
+
+[kde-linux-debug]
+SigLevel = Never
+Server = https://cdn.kde.org/kde-linux/packaging/packages-debug/
+EOF
+
+cp /etc/pacman.conf mkosi.sandbox/etc
 
 if [ ! -f mkosi.sandbox/etc/pacman.d/mirrorlist ]; then
   # Insert a fallback for starters
