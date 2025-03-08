@@ -41,15 +41,34 @@ download_flatpaks() {
 
     # Only check out en. We don't really support other languages on the live image at this time.
     flatpak config --set languages en
+    
+    flatpak remote-add --if-not-exists kde-runtime-nightly https://cdn.kde.org/flatpak/kde-runtime-nightly/kde-runtime-nightly.flatpakrepo
 
-    flatpak install --noninteractive --assumeyes \
-        org.kde.ark \
-        org.kde.dolphin \
-        org.kde.elisa \
-        org.kde.gwenview \
-        org.kde.kate \
-        org.kde.haruna \
-        org.kde.konsole \
+    kde_nightly=(
+        ark
+        dolphin
+        elisa
+        gwenview
+        kate
+        haruna
+        konsole
+    )
+
+    # Add Nightly repos 
+    for app in "${kde_nightly[@]}"; do
+        flatpak remote-add --if-not-exists "${app}-nightly" \
+            "https://cdn.kde.org/flatpak/${app}-nightly/${app}-nightly.flatpakrepo"
+    done
+
+    # Flatpak ignores repo priorities, prompting for remote selection.  
+    # Looping avoids this and keeps automation working.  
+    # Issue: https://github.com/flatpak/flatpak/issues/5421
+    for app in "${kde_nightly[@]}"; do
+        flatpak install --or-update --noninteractive --assumeyes "${app}-nightly" "org.kde.${app}"
+    done
+
+    # Install KWrite and Okular from Flathub for now, until they have nightly repos.
+    flatpak install --or-update --noninteractive --assumeyes flathub \
         org.kde.kwrite \
         org.kde.okular \
         org.mozilla.firefox
@@ -57,8 +76,6 @@ download_flatpaks() {
     # And restore default
     flatpak config --unset languages
 }
-
-
 
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
 OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
