@@ -87,6 +87,7 @@ MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
 LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
 DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
 ROOTFS_TAR=${OUTPUT}_root-x86-64.tar # Output rootfs tarball path (.zst will be added)
+ROOTFS_EROFS=${OUTPUT}_root-x86-64.erofs # Output erofs image path
 IMG=${OUTPUT}.raw                    # Output raw image path
 
 EFI=kde-linux_${VERSION}+3.efi # Name of primary UKI in the image's ESP
@@ -238,6 +239,8 @@ cd ..
 rm -rf "$ROOTFS_TAR" ./*.tar
 tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
 zstd -T0 --rm "$ROOTFS_TAR"
+
+mkfs.erofs "$ROOTFS_EROFS" "$OUTPUT"
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
 touch "$IMG"
