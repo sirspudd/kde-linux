@@ -240,7 +240,7 @@ rm -rf "$ROOTFS_TAR" ./*.tar
 tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
 zstd -T0 --rm "$ROOTFS_TAR"
 
-mkfs.erofs "$ROOTFS_EROFS" "$OUTPUT"
+mkfs.erofs -d0 -zzstd "$ROOTFS_EROFS" "$OUTPUT"
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
 touch "$IMG"
