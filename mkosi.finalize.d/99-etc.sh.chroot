@@ -1,0 +1,15 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
+
+set -eux
+
+# Move pam files to non-legacy location.
+if [ -d /etc/pam.d ]; then
+    find /etc/pam.d -mindepth 1 -exec mv {} /usr/lib/pam.d \;
+    rmdir /etc/pam.d
+fi
+
+# Copy all of etc into factory dir for tmpfiles.d (see tmpfiles.d docs).
+[ -d /usr/share/factory ] || mkdir /usr/share/factory
+cp --archive --no-target-directory --update=none /etc /usr/share/factory/etc

@@ -1,0 +1,49 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
+
+set -eux
+
+if [ -b /dev/gpt-auto-root ]; then
+    echo "gpt-auto-root exists"
+else
+    echo "gpt-auto-root does not exist"
+    exit 1
+fi
+
+if [ -d /run/kde-linux-rootfs-transition ]; then
+    echo "/run/kde-linux-rootfs-transition exists"
+    exit 0
+fi
+
+mkdir /run/kde-linux-rootfs-transition
+mount -o rw,subvol=/ /dev/gpt-auto-root /run/kde-linux-rootfs-transition
+
+if [ -e /run/kde-linux-rootfs-transition/@system ]; then
+    echo "@system exists"
+    cd /
+    umount --recursive --lazy /run/kde-linux-rootfs-transition
+    exit 0
+fi
+
+cd /run/kde-linux-rootfs-transition
+btrfs --verbose subvolume create /run/kde-linux-rootfs-transition/@system
+
+# overlays
+cp --recursive --archive --reflink=always /run/kde-linux-rootfs-transition/@etc-overlay/upper @system/etc || true
+cp --recursive --archive --reflink=always /run/kde-linux-rootfs-transition/@var-overlay/upper @system/var || true
+
+# subvolumes. these are technically difficult because they may contain subvolumes. Not really a good way to deal with that
+# outside writing a custom tool, so we just pretend they don't contain subvolumes yet.
+cp --recursive --archive --reflink=always /run/kde-linux-rootfs-transition/@home @system/home || true
+cp --recursive --archive --reflink=always /run/kde-linux-rootfs-transition/@root @system/root || true
+cp --recursive --archive --reflink=always /run/kde-linux-rootfs-transition/@snap @system/snap || true
+
+## We do not transition @containers nor @docker because of the subvolume complexity. With how few users we have they can
+## just transition these manually if they need them.
+
+# TODO turn all our subvolumes into readonly snapshots for backup purposes
+# TODO inform user of the change somehow
+
+cd /
+umount --recursive --lazy /run/kde-linux-rootfs-transition
