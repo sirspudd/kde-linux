@@ -14,7 +14,7 @@ late_dir=$3
 
 if ! grep "kde-linux.live=1" /proc/cmdline; then
     echo "kde-linux.live=1 not in cmdline"
-    exit 1
+    exit 0
 fi
 
 if [ "$(readlink --canonicalize /dev/disk/by-label/KDELinuxLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
