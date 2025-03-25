@@ -41,7 +41,7 @@ download_flatpaks() {
 
     # Only check out en. We don't really support other languages on the live image at this time.
     flatpak config --set languages en
-    
+
     flatpak remote-add --if-not-exists kde-runtime-nightly https://cdn.kde.org/flatpak/kde-runtime-nightly/kde-runtime-nightly.flatpakrepo
 
     kde_nightly=(
@@ -54,14 +54,14 @@ download_flatpaks() {
         konsole
     )
 
-    # Add Nightly repos 
+    # Add Nightly repos
     for app in "${kde_nightly[@]}"; do
         flatpak remote-add --if-not-exists "${app}-nightly" \
             "https://cdn.kde.org/flatpak/${app}-nightly/${app}-nightly.flatpakrepo"
     done
 
-    # Flatpak ignores repo priorities, prompting for remote selection.  
-    # Looping avoids this and keeps automation working.  
+    # Flatpak ignores repo priorities, prompting for remote selection.
+    # Looping avoids this and keeps automation working.
     # Issue: https://github.com/flatpak/flatpak/issues/5421
     for app in "${kde_nightly[@]}"; do
         flatpak install --or-update --noninteractive --assumeyes "${app}-nightly" "org.kde.${app}"
