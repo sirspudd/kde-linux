@@ -21,6 +21,7 @@ fi
 # De-initialize pacman
 rm -rf \
     /etc/pacman.d/gnupg \
+    /.gnupg \
     /var/cache/pacman
 
 ## Pacman being present confuses users into thinking they can use it to install packages.
@@ -88,11 +89,13 @@ rm -rf \
 # shellcheck disable=SC2114
 rm -rf /boot/*
 
-## Not sure where this comes from, but it's not useful.
-rm -rf /.cache
-
 ## Don't expose any X11 sessions; we're all-in on Wayland.
 rm -rf /usr/share/xsessions/
 
 ## Replace Falkon with Firefox as the default browser, since that's what we pre-install.
 sed -i 's/org.kde.falkon.desktop/org.mozilla.firefox.desktop/' /usr/share/applications/kde-mimeapps.list
+
+# Clean up final remnants of the build process
+rm -rf \
+    /buildroot \
+    /.cache \
