@@ -10,6 +10,10 @@ if [ -d /etc/pam.d ]; then
     rmdir /etc/pam.d
 fi
 
+# Make double sure we don't seed random pam.d files from factory etc!
+# https://invent.kde.org/kde-linux/kde-linux/-/issues/165
+rm --recursive --force /usr/share/factory/etc/pam.d
+
 # Copy all of etc into factory dir for tmpfiles.d (see tmpfiles.d docs).
 [ -d /usr/share/factory ] || mkdir /usr/share/factory
 cp --archive --no-target-directory --update=none /etc /usr/share/factory/etc
