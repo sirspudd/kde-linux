@@ -24,8 +24,7 @@ rm -rf \
     /var/cache/pacman
 
 ## Pacman being present confuses users into thinking they can use it to install packages.
-## Rename it to kde-linux-readonly-pacman so they're less likely to find it.
-mv /usr/bin/{,_kde-linux-readonly-}pacman
+rm -f /usr/bin/pacman
 
 # Remove all excess things we don't want in the final image
 
