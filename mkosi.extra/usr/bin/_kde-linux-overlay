@@ -36,6 +36,10 @@ mount -v \
 [ -d "${sysroot}/system/@containers" ] || btrfs subvolume create "${sysroot}/system/@containers"
 [ -d "${sysroot}/system/@docker" ] || btrfs subvolume create "${sysroot}/system/@docker"
 
+# Clean up legacy volumes
+# @locale is no longer used because we now generate all locales into the image
+[ -d "${sysroot}/system/@locale" ] && btrfs subvolume delete "${sysroot}/system/@locale"
+
 mount -v \
     -o rw,subvol=@home \
     "$rootdisk" "${sysroot}/home"
@@ -45,9 +49,6 @@ mount -v \
 mount -v \
     -o rw,subvol=@snap \
     "$rootdisk" "${sysroot}/snap"
-mount -v \
-    -o rw,subvol=@locale \
-    "$rootdisk" "${sysroot}/usr/lib/locale"
 mount -v \
     -t overlay \
     -o "rw,lowerdir=${sysroot}/etc,upperdir=${sysroot}/system/@etc-overlay/upper,workdir=${sysroot}/system/@etc-overlay/work,index=off,metacopy=off" \
