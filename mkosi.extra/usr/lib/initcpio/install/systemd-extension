@@ -16,4 +16,9 @@ build() {
         systemd-volatile-root.service \
         kde-linux-overlay.service \
         systemd-bootchart.service
+
+    # Make double sure the dissection rule is present. Without it booting doesn't work because we can't find a root.
+    # Notably not getting added by the release initcpio combined with aur systemd-git at the time of writing.
+    map add_udev_rule \
+        90-image-dissect.rules
 }
