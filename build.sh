@@ -171,30 +171,9 @@ btrfs filesystem sync .
 btrfs balance start --full-balance --enqueue .
 btrfs filesystem sync .
 
-# How much we'll keep shrinking the filesystem by, in bytes.
-# Too large = too imprecise, too small = shrink is too slow.
-# One mebibyte seems good for now.
-SHRINK_AMOUNT=1048576
-
-# Repeatedly shrink the filesystem by $SHRINK_AMOUNT until we get an error.
-# Store the size it has been successfully shrunk by in $SHRINK_SIZE.
-SHRINK_SIZE=0
-while true; do
-  btrfs filesystem resize -$SHRINK_AMOUNT . || break
-  SHRINK_SIZE=$((SHRINK_SIZE + SHRINK_AMOUNT))
-  btrfs filesystem sync .
-done
-
-# Back out to kde-linux.cache, then unmount root.raw.mnt.
-cd ..
-umount root.raw.mnt
-
-# We shrunk the filesystem, but root.raw as a file itself is still 8G.
-# Let's safely truncate it by the previously stored $SHRINK_SIZE.
-truncate --size=-$SHRINK_SIZE root.raw
-
-# We're done, back out of kde-linux.cache into the root.
-cd ..
+cd .. # up to kde-linux.cache
+../btrfs-shrink-and-umount.py
+cd .. # and back to root
 
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
 rm -rf "$ROOTFS_TAR" ./*.tar
