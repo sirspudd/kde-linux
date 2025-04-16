@@ -45,6 +45,12 @@ IMG=${OUTPUT}.raw                    # Output raw image path
 
 EFI=kde-linux_${VERSION}+3.efi # Name of primary UKI in the image's ESP
 
+ZSTD_LEVEL=3 # Compression level for zstd (3 = default of erofs as well)
+if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+  # If we are on the default branch, use the highest compression level.
+  ZSTD_LEVEL=15
+fi
+
 # Clean up old build artifacts.
 rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
@@ -109,13 +115,13 @@ mkfs.btrfs -L KDELinuxLive root.raw
 
 # Mount it to root.raw.mnt.
 mkdir -p root.raw.mnt # The -p prevents failure if directory already exists
-mount -o compress-force=zstd:15 root.raw root.raw.mnt
+mount -o compress-force=zstd:${ZSTD_LEVEL} root.raw root.raw.mnt
 
 # Change to root.raw.mnt since we'll be working there.
 cd root.raw.mnt
 
 # Enable compression filesystem-wide.
-btrfs property set . compression zstd:15
+btrfs property set . compression zstd:${ZSTD_LEVEL}
 
 # Store both data and metadata only once for more compactness.
 btrfs balance start --force -mconvert=single -dconvert=single .
