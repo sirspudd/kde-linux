@@ -27,7 +27,7 @@ make_debug_archive () {
   # Finally compress /tmp/debugroot/usr into a zstd tarball at $DEBUG_TAR.
   # We actually only need usr because that's where all the relevant stuff lays anyways.
   tar --directory=/tmp/debugroot --create --file="$DEBUG_TAR" usr
-  zstd --threads=0 --rm -15 "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
+  zstd --threads=0 --rm "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
 
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
