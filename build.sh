@@ -30,53 +30,6 @@ make_debug_archive () {
   zstd --threads=0 --rm -15 "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
 
-download_flatpaks() {
-    [ -f /usr/lib/os-release ] || false
-    cat /usr/lib/os-release
-
-    mkdir flatpak
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    # Do this separately, when used as part of remote-add it complains about GPG for unknown reasons
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
-
-    # Only check out en. We don't really support other languages on the live image at this time.
-    flatpak config --set languages en
-
-    flatpak remote-add --if-not-exists kde-runtime-nightly https://cdn.kde.org/flatpak/kde-runtime-nightly/kde-runtime-nightly.flatpakrepo
-
-    kde_nightly=(
-        ark
-        dolphin
-        elisa
-        gwenview
-        kate
-        haruna
-        konsole
-    )
-
-    # Add Nightly repos
-    for app in "${kde_nightly[@]}"; do
-        flatpak remote-add --if-not-exists "${app}-nightly" \
-            "https://cdn.kde.org/flatpak/${app}-nightly/${app}-nightly.flatpakrepo"
-    done
-
-    # Flatpak ignores repo priorities, prompting for remote selection.
-    # Looping avoids this and keeps automation working.
-    # Issue: https://github.com/flatpak/flatpak/issues/5421
-    for app in "${kde_nightly[@]}"; do
-        flatpak install --or-update --noninteractive --assumeyes "${app}-nightly" "org.kde.${app}"
-    done
-
-    # Install KWrite and Okular from Flathub for now, until they have nightly repos.
-    flatpak install --or-update --noninteractive --assumeyes flathub \
-        org.kde.kwrite \
-        org.kde.okular \
-        org.mozilla.firefox
-
-    # And restore default
-    flatpak config --unset languages
-}
-
 VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
 OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
@@ -184,14 +137,22 @@ mkdir @etc-overlay/upper \
     @var-overlay/upper \
     @var-overlay/work
 
-download_flatpaks
+# For performance reasons we now transfer the entire subvolume into our mount point. This is a deep copy but by streaming
+# the entire subvolume is much faster than doing a file-by-file copy instead. Still. This is a major bottleneck.
+btrfs property set "${OUTPUT}" ro true
+btrfs send "${OUTPUT}" | btrfs receive .
+OUTPUT_NAME=$(basename "${OUTPUT}")
+# make writable
+mv "${OUTPUT_NAME}" "${OUTPUT_NAME}.ro"
+btrfs subvolume snapshot "${OUTPUT_NAME}.ro" "${OUTPUT_NAME}"
+btrfs subvolume delete "${OUTPUT_NAME}.ro"
 
-# Create read-only subvolumes from chroot's /live and /.
-# and from the container's /var/lib/flatpak.
-cp --archive --recursive "${OUTPUT}/live/." @live
-cp --archive --recursive "/var/lib/flatpak/." @flatpak
-rm --recursive "${OUTPUT}/live"
-cp --archive --recursive "${OUTPUT}/." "@kde-linux_$VERSION"
+# Create read-only subvolumes from chroot's /live, /var/lib/flatpak, and /.
+# mv what we can move to improve speed. when copying force reflinks, also for speed reasons.
+mv ${OUTPUT_NAME}/live/* @live/
+mv ${OUTPUT_NAME}/var/lib/flatpak/* @flatpak/
+cp --reflink=always --recursive --archive "${OUTPUT_NAME}/." "@kde-linux_$VERSION"
+btrfs subvolume delete "${OUTPUT_NAME}"
 btrfs property set @live ro true
 btrfs property set @flatpak ro true
 btrfs property set "@kde-linux_$VERSION" ro true
