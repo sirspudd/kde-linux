@@ -146,7 +146,7 @@ mkdir @etc-overlay/upper \
 # For performance reasons we now transfer the entire subvolume into our mount point. This is a deep copy but by streaming
 # the entire subvolume is much faster than doing a file-by-file copy instead. Still. This is a major bottleneck.
 btrfs property set "${OUTPUT}" ro true
-btrfs send "${OUTPUT}" | btrfs receive .
+time btrfs send "${OUTPUT}" | btrfs receive .
 OUTPUT_NAME=$(basename "${OUTPUT}")
 # make writable
 mv "${OUTPUT_NAME}" "${OUTPUT_NAME}.ro"
@@ -157,7 +157,7 @@ btrfs subvolume delete "${OUTPUT_NAME}.ro"
 # mv what we can move to improve speed. when copying force reflinks, also for speed reasons.
 mv ${OUTPUT_NAME}/live/* @live/
 mv ${OUTPUT_NAME}/var/lib/flatpak/* @flatpak/
-cp --reflink=always --recursive --archive "${OUTPUT_NAME}/." "@kde-linux_$VERSION"
+time cp --reflink=always --recursive --archive "${OUTPUT_NAME}/." "@kde-linux_$VERSION"
 btrfs subvolume delete "${OUTPUT_NAME}"
 btrfs property set @live ro true
 btrfs property set @flatpak ro true
@@ -178,15 +178,15 @@ btrfs balance start --full-balance --enqueue .
 btrfs filesystem sync .
 
 cd .. # up to kde-linux.cache
-../btrfs-shrink-and-umount.py
+time ../btrfs-shrink-and-umount.py
 cd .. # and back to root
 
 # Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
 rm -rf "$ROOTFS_TAR" ./*.tar
-tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
-zstd -T0 --rm "$ROOTFS_TAR"
+time tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
+time zstd -T0 --rm "$ROOTFS_TAR"
 
-mkfs.erofs -d0 -zzstd "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
+time mkfs.erofs -d0 -zzstd "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
 touch "$IMG"
