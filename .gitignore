@@ -11,6 +11,7 @@
 /.secure_files/
 /upload-vacuum/upload-vacuum
 /upload-vacuum/vendor/
+/btrfs-cleanup/target/
 
 mkosi.local.conf
 

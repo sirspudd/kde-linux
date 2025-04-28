@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: None
+
+[package]
+name = "btrfs-cleanup"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+libbtrfsutil = "0.7.1"

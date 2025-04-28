@@ -18,7 +18,9 @@ imaging:
   script:
     - ./in_docker.sh --force --debug
   after_script: &after_script
-    - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh"
+    - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
+    # Cleanup our btrfs subvolumes so docker doesn't stumble over them.
+    - cargo run --manifest-path btrfs-cleanup/Cargo.toml .
 
 imaging+publish:
   stage: start

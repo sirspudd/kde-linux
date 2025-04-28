@@ -73,6 +73,7 @@ pacman --sync --refresh --noconfirm --sysupgrade \
     rsync \
     ruby \
     ruby-nokogiri \
+    rust clang \
     squashfs-tools \
     transmission-cli \
     tree \
