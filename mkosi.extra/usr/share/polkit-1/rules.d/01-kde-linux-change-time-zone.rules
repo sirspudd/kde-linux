@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+// SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
+
+// Allow current user or their system services to change the system time zone
+// and time synchronization; asking for authentication is annoying and can be
+// unexpected.
+
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.timedate1.set-timezone" || action.id == "org.freedesktop.timedate1.set-ntp") && subject.active) {
+        return polkit.Result.YES;
+    }
+});
