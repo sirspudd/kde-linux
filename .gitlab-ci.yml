@@ -17,8 +17,9 @@ imaging:
     RUNNER_AFTER_SCRIPT_TIMEOUT: 1h
   script:
     - ./in_docker.sh --force --debug
-  after_script: &after_script
-    - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
+  after_script:
+    # Upload all images to Harald. You can grab them at http://images.kde-linux.haraldsitter.eu/
+    - ./upload-to-harald.sh || true
     # Cleanup our btrfs subvolumes so docker doesn't stumble over them.
     - cargo run --manifest-path btrfs-cleanup/Cargo.toml .
 
@@ -38,4 +39,8 @@ imaging+publish:
     - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
     - ./in_docker.sh --force --debug
     - ./upload.sh
-  after_script: *after_script
+  after_script:
+    # Upload broken images to Harald for inspection
+    - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
+    # Cleanup our btrfs subvolumes so docker doesn't stumble over them.
+    - cargo run --manifest-path btrfs-cleanup/Cargo.toml .
