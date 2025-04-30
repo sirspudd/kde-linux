@@ -30,7 +30,9 @@ make_debug_archive () {
   zstd --threads=0 --rm "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
 
-VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
+EPOCH=$(date --utc +%s) # The epoch (only used to then construct the various date strings)
+VERSION_DATE=$(date --utc --date="@$EPOCH" --rfc-3339=seconds)
+VERSION=$(date --utc --date="@$EPOCH" +%Y%m%d%H%M)
 OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
@@ -63,6 +65,7 @@ mkosi \
     --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
     --environment="CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}" \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
+    --environment="VERSION_DATE=${VERSION_DATE}" \
     --image-version="$VERSION" \
     --package-cache-dir=/var/cache/mkosi.pacman \
     --output-directory=. \
