@@ -30,7 +30,14 @@ if [ -d /efi ]; then
 fi
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-export TAR_OPTIONS="--zstd"
+
+SYSTEMD_VERSION=$(busctl --json=short get-property org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager Version)
+SYSTEMD_VERSION=$(echo "$SYSTEMD_VERSION" | jq '.["data"]')
+if systemd-analyze compare-versions "$SYSTEMD_VERSION" '<=' 257; then
+  # earlier versions of systemd-pull didn't support zstd natively so we hacked it in via TAR_OPTIONS
+  export TAR_OPTIONS="--zstd"
+fi
+
 # FIXME set up signing shebang so we can run with verify
 exec systemd-inhibit \
   --what=sleep:shutdown \
