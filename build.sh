@@ -30,7 +30,7 @@ make_debug_archive () {
   zstd --threads=0 --rm "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
 
-VERSION=$(date --utc +%Y-%m-%d-%H-%M) # Build version e.g. 2024-12-24-08-23 (YYYY-mm-dd-HH-MM)
+VERSION=$(date +%Y%m%d%H%M) # Build version, will just be YYYYmmddHHMM for now
 OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
