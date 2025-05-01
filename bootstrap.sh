@@ -59,6 +59,7 @@ pacman --sync --refresh --noconfirm --sysupgrade \
     arch-install-scripts \
     base-devel \
     btrfs-progs \
+    clang \
     compsize \
     cpio \
     dosfstools \
@@ -73,7 +74,7 @@ pacman --sync --refresh --noconfirm --sysupgrade \
     rsync \
     ruby \
     ruby-nokogiri \
-    rust clang \
+    rust \
     squashfs-tools \
     transmission-cli \
     tree \
