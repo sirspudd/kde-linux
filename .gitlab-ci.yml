@@ -7,7 +7,7 @@ stages:
 imaging:
   stage: start
   tags:
-    - x86_64-image
+    - kde-linux-image-x86_64
   rules:
     - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'kde-linux/kde-linux'
       when: always
@@ -26,7 +26,7 @@ imaging:
 imaging+publish:
   stage: start
   tags:
-    - x86_64-image+publish
+    - kde-linux-image+publish-x86_64
   rules:
     # NOTE: these are different from the regular imaging job!
     - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_DEFAULT_BRANCH == $CI_COMMIT_REF_NAME && $CI_PROJECT_PATH == 'kde-linux/kde-linux'
