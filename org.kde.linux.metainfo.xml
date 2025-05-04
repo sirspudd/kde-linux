@@ -1,31 +1,101 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 SPDX-FileCopyrightText: 2025 Lasath Fernando <devel@lasath.org>
 SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 -->
-
 <component type="operating-system">
   <id>org.kde.linux</id>
   <name>KDE Linux</name>
+  <name xml:lang="ca">KDE Linux</name>
+  <name xml:lang="he">לינוקס KDE</name>
+  <name xml:lang="nl">KDE Linux</name>
+  <name xml:lang="sl">KDE Linux</name>
+  <name xml:lang="tr">KDE Linux</name>
+  <name xml:lang="uk">KDE Linux</name>
+  <name xml:lang="x-test">xxKDE Linuxxx</name>
+  <name xml:lang="zh-TW">KDE Linux</name>
   <summary>A modern Linux distribution focused on the KDE Plasma desktop environment</summary>
+  <summary xml:lang="ca">Una distribució moderna de Linux centrada en l'entorn d'escriptori Plasma de KDE</summary>
+  <summary xml:lang="he">הפצת לינוקס מודרנית שמתמקדת על סביבת שולחן עבודה פלזמה מבית KDE</summary>
+  <summary xml:lang="nl">Een moderne Linux distributie gericht op de KDE Plasma bureaubladomgeving</summary>
+  <summary xml:lang="sl">Sodobna distribucija Linuxa, osredotočena na namizno okolje KDE Plasma</summary>
+  <summary xml:lang="tr">KDE Plasma masaüstü ortamına odaklanan, çağdaş bir Linux dağtımı</summary>
+  <summary xml:lang="uk">Сучасний дистрибутив Linux з акцентом на стільничному середовищі Плазми KDE</summary>
+  <summary xml:lang="x-test">xxA modern Linux distribution focused on the KDE Plasma desktop environmentxx</summary>
+  <summary xml:lang="zh-TW">一個注重於 KDE Plasma 桌面環境的現代 Linux 發行版</summary>
   <pkgname>host</pkgname>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <description>
     <p>KDE Linux is a user-friendly operating system built around the KDE Plasma desktop environment. It provides a complete computing experience with a focus on productivity, customization, and ease of use.</p>
+    <p xml:lang="ca">KDE Linux és un sistema operatiu fàcil d'utilitzar construït al voltant de l'entorn d'escriptori Plasma de KDE. Proporciona una experiència de computació completa amb un enfocament en la productivitat, la personalització i la facilitat d'ús.</p>
+    <p xml:lang="he">לינוקס KDE היא מערכת הפעלה ידידותית שנבנתה סביב שולחן העבודה פלזמה מבית KDE. היא מספקת חוויה מלאה של שימוש במחשב תוך מתן מענה ליעילות, התאמה אישית וקלות שימוש.</p>
+    <p xml:lang="nl">KDE Linux is een gebruikersvriendelijk besturingssysteem gebouwd rond de KDE Plasma bureaubladomgeving. Het levert een complete ervaring met computeren met een focus op productiviteit, aanpassing en gebruiksgemak.</p>
+    <p xml:lang="sl">KDE Linux je uporabniku prijazen operacijski sistem, zgrajen okoli namiznega okolja KDE Plasma. Zagotavlja popolno računalniško izkušnjo z a osredotočenjem na produktivnost, prilagajanje in enostavnost uporabe.</p>
+    <p xml:lang="tr">KDE Linux, KDE Plasma masaüstü ortamının etrafına yapılı, kullanıcı dostu bir işletim sistemidir. Üretkenlik, özelliştirilebilirlik ve kullanım kolaylığı odaklı tam bir bilişim deneyimi sunar.</p>
+    <p xml:lang="uk">KDE Linux — зручна у користуванні операційна система на основі стільничного середовища Плазми KDE. Ви зможете виконувати будь-які завдання, пов'язані із комп'ютером, із акцентом на продуктивності, гнучкості у налаштовування та простоті користування.</p>
+    <p xml:lang="x-test">xxKDE Linux is a user-friendly operating system built around the KDE Plasma desktop environment. It provides a complete computing experience with a focus on productivity, customization, and ease of use.xx</p>
+    <p xml:lang="zh-TW">KDE Linux 是一個對使用者友善的作業系統，以 KDE Plasma 桌面環境為主軸。它提供一個完整的電腦使用體驗，注重於生產力、可自訂功能與易於使用。</p>
     <ul>
       <li>Latest KDE Plasma desktop environment</li>
+      <li xml:lang="ca">Últim entorn d'escriptori Plasma de KDE</li>
+      <li xml:lang="he">סביבת שולחן העבודה פלזמה העדכנית ביותר מבית KDE</li>
+      <li xml:lang="nl">Laatste KDE Plasma bureaubladomgeving</li>
+      <li xml:lang="sl">Najnovejše namizno okolje KDE Plasma</li>
+      <li xml:lang="tr">Güncel KDE Plasma masaüstü ortamı</li>
+      <li xml:lang="uk">Найсвіжіше стільничне середовище Плазми KDE</li>
+      <li xml:lang="x-test">xxLatest KDE Plasma desktop environmentxx</li>
+      <li xml:lang="zh-TW">最新的 KDE Plasma 桌面環境</li>
       <li>Comprehensive suite of KDE applications</li>
+      <li xml:lang="ca">Conjunt integral d'aplicacions KDE</li>
+      <li xml:lang="he">חבילה מורחבת של יישומי KDE</li>
+      <li xml:lang="nl">Uitgebreide suite van KDE toepassingen</li>
+      <li xml:lang="sl">Obsežen nabor aplikacij KDE</li>
+      <li xml:lang="tr">KDE uygulamalarının tam bir paketi</li>
+      <li xml:lang="uk">Повний комплект програм KDE</li>
+      <li xml:lang="x-test">xxComprehensive suite of KDE applicationsxx</li>
+      <li xml:lang="zh-TW">完整 KDE 應用程式套組</li>
       <li>Rolling release model for up-to-date software</li>
+      <li xml:lang="ca">Model de llançament continu per a un programari actualitzat</li>
+      <li xml:lang="he">דגם הפצה מתגלגל לקבלת התוכנות העדכניות ביותר</li>
+      <li xml:lang="nl">Rollend uitgavemodel voor up-to-date software</li>
+      <li xml:lang="sl">Model sprotne tekoče izdaje za posodobljeno programsko opremo</li>
+      <li xml:lang="tr">Güncel yazılımlar için yuvarlanan yayım modeli</li>
+      <li xml:lang="uk">Модель неперервних випусків із актуальним програмним забезпеченням</li>
+      <li xml:lang="x-test">xxRolling release model for up-to-date softwarexx</li>
+      <li xml:lang="zh-TW">滾動更新模式，提供最新軟體</li>
       <li>Strong focus on system stability</li>
+      <li xml:lang="ca">Se centra especialment en l'estabilitat del sistema</li>
+      <li xml:lang="he">מיקוד מוגבר על יציבות המערכת</li>
+      <li xml:lang="nl">Sterke focus op systeemstabiliteit</li>
+      <li xml:lang="sl">Močan poudarek na stabilnosti sistema</li>
+      <li xml:lang="tr">Sistem kararlılığına güçlü odak</li>
+      <li xml:lang="uk">Зосередженість на стабільності системи</li>
+      <li xml:lang="x-test">xxStrong focus on system stabilityxx</li>
+      <li xml:lang="zh-TW">注重於系統穩定性</li>
       <li>User-friendly installation process</li>
+      <li xml:lang="ca">Procés d'instal·lació fàcil d'utilitzar</li>
+      <li xml:lang="he">תהליך התקנה ידידותי למשתמשים</li>
+      <li xml:lang="nl">Gebruikersvriendelijk installatieproces</li>
+      <li xml:lang="sl">Uporabniku prijazen postopek namestitve</li>
+      <li xml:lang="tr">Kullanıcı dostu kurulum süreci</li>
+      <li xml:lang="uk">Зручна для користувачів процедура встановлення</li>
+      <li xml:lang="x-test">xxUser-friendly installation processxx</li>
+      <li xml:lang="zh-TW">對於使用者友善的安裝流程</li>
     </ul>
   </description>
   <url type="homepage">https://kdelinux.org</url>
   <url type="bugtracker">https://bugs.kdelinux.org</url>
   <url type="help">https://docs.kdelinux.org</url>
   <developer_name>KDE Linux Team</developer_name>
+  <developer_name xml:lang="ca">Equip de KDE Linux</developer_name>
+  <developer_name xml:lang="he">צוות לינוקס KDE</developer_name>
+  <developer_name xml:lang="nl">KDE Linux-team</developer_name>
+  <developer_name xml:lang="sl">Ekipa KDE Linux</developer_name>
+  <developer_name xml:lang="tr">KDE Linux Takımı</developer_name>
+  <developer_name xml:lang="uk">Команда KDE Linux</developer_name>
+  <developer_name xml:lang="x-test">xxKDE Linux Teamxx</developer_name>
+  <developer_name xml:lang="zh-TW">KDE Linux 團隊</developer_name>
   <project_group>KDE</project_group>
   <provides>
     <modalias>linux</modalias>
@@ -33,21 +103,29 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <releases>
     <release version="1.0.0" date="2025-01-15" type="stable">
       <description>
-	<p>Initial release of KDE Linux featuring:</p>
-	<ul>
-	  <li>KDE Plasma 6.0</li>
-	  <li>Linux kernel 6.7</li>
-	  <li>Updated KDE Applications suite</li>
-	  <li>New system installer</li>
-	</ul>
+        <p>Initial release of KDE Linux featuring:</p>
+        <ul>
+          <li>KDE Plasma 6.0</li>
+          <li>Linux kernel 6.7</li>
+          <li>Updated KDE Applications suite</li>
+          <li>New system installer</li>
+        </ul>
       </description>
     </release>
   </releases>
   <screenshots>
     <screenshot type="default">
       <caption>KDE Linux desktop with Plasma 6.0</caption>
+      <caption xml:lang="ca">Escriptori de KDE Linux amb el Plasma 6.0</caption>
+      <caption xml:lang="he">שולחן עבודה לינוקס KDE עם פלזמה 6.0</caption>
+      <caption xml:lang="nl">KDE Linux bureaublad met Plasma 6.0</caption>
+      <caption xml:lang="sl">Namizje KDE Linux s Plasma 6.0</caption>
+      <caption xml:lang="tr">Plasma 6.0 ile KDE Linux masaüstü</caption>
+      <caption xml:lang="uk">Стільниця KDE Linux з Плазмою 6.0</caption>
+      <caption xml:lang="x-test">xxKDE Linux desktop with Plasma 6.0xx</caption>
+      <caption xml:lang="zh-TW">使用 Plasma 6.0 的 KDE Linux 桌面</caption>
       <image type="source" width="1920" height="1080">https://kdelinux.org/screenshots/desktop.png</image>
     </screenshot>
   </screenshots>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
 </component>
