@@ -19,8 +19,9 @@ set -ex
 pacman-key --init
 
 # Restore the pacman.conf file from the pacman package. The docker one is crippled with NoExtract options and the like :(
+#  --refresh twice to force a refresh
 mkdir /tmp/pacman
-pacman --sync --refresh --downloadonly --noconfirm pacman
+pacman --sync --refresh --refresh --downloadonly --noconfirm pacman
 tar --extract --file "$(find /var/cache/pacman/pkg -name 'pacman-*.pkg.tar.zst')" --directory /tmp/pacman
 cp /tmp/pacman/etc/pacman.conf /etc/pacman.conf
 
@@ -57,7 +58,8 @@ cp mkosi.sandbox/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
 # Update the system and install packages we'll need for building KDE Linux.
 # Even though we use mkosi from Git, we'll grab the package,
 # to make sure all the dependencies are properly pulled.
-pacman --sync --refresh --noconfirm --sysupgrade \
+#  --refresh twice to force a refresh
+pacman --sync --refresh --refresh --noconfirm --sysupgrade \
     mkosi \
     arch-install-scripts \
     base-devel \
