@@ -7,6 +7,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <id>org.kde.linux</id>
   <name>KDE Linux</name>
   <name xml:lang="ca">KDE Linux</name>
+  <name xml:lang="ca-valencia">KDE Linux</name>
   <name xml:lang="es">KDE Linux</name>
   <name xml:lang="fr">KDE Linux</name>
   <name xml:lang="he">לינוקס KDE</name>
@@ -19,6 +20,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <name xml:lang="zh-TW">KDE Linux</name>
   <summary>A modern Linux distribution focused on the KDE Plasma desktop environment</summary>
   <summary xml:lang="ca">Una distribució moderna de Linux centrada en l'entorn d'escriptori Plasma de KDE</summary>
+  <summary xml:lang="ca-valencia">Una distribució moderna de Linux centrada en l'entorn d'escriptori Plasma de KDE</summary>
   <summary xml:lang="es">Una distribución Linux moderna centrada en el entorno de escritorio KDE Plasma</summary>
   <summary xml:lang="fr">Une distribution Linux moderne reposant sur l'environnement de bureau KDE Plasma</summary>
   <summary xml:lang="he">הפצת לינוקס מודרנית שמתמקדת על סביבת שולחן עבודה פלזמה מבית KDE</summary>
@@ -35,6 +37,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <description>
     <p>KDE Linux is a user-friendly operating system built around the KDE Plasma desktop environment. It provides a complete computing experience with a focus on productivity, customization, and ease of use.</p>
     <p xml:lang="ca">KDE Linux és un sistema operatiu fàcil d'utilitzar construït al voltant de l'entorn d'escriptori Plasma de KDE. Proporciona una experiència de computació completa amb un enfocament en la productivitat, la personalització i la facilitat d'ús.</p>
+    <p xml:lang="ca-valencia">KDE Linux és un sistema operatiu fàcil d'utilitzar construït al voltant de l'entorn d'escriptori Plasma de KDE. Proporciona una experiència de computació completa amb un enfocament en la productivitat, la personalització i la facilitat d'ús.</p>
     <p xml:lang="es">KDE Linux es un sistema operativo amigable con el usuario y está construido alrededor del entorno de escritorio KDE Plasma. Proporciona una experiencia informática completa enfocada a la productividad, personalización y facilidad de uso.</p>
     <p xml:lang="fr">KDE Linux est un système d'exploitation convivial construit à partir de l'environnement de bureau KDE Plasma. Il offre une expérience informatique globale, en mettant l'accent sur la productivité, la personnalisation et l'ergonomie.</p>
     <p xml:lang="he">לינוקס KDE היא מערכת הפעלה ידידותית שנבנתה סביב שולחן העבודה פלזמה מבית KDE. היא מספקת חוויה מלאה של שימוש במחשב תוך מתן מענה ליעילות, התאמה אישית וקלות שימוש.</p>
@@ -48,6 +51,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <ul>
       <li>Latest KDE Plasma desktop environment</li>
       <li xml:lang="ca">Últim entorn d'escriptori Plasma de KDE</li>
+      <li xml:lang="ca-valencia">Últim entorn d'escriptori Plasma de KDE</li>
       <li xml:lang="es">El último entorno de escritorio KDE Plasma</li>
       <li xml:lang="fr">Dernier environnement de bureau de KDE Plasma</li>
       <li xml:lang="he">סביבת שולחן העבודה פלזמה העדכנית ביותר מבית KDE</li>
@@ -60,6 +64,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="zh-TW">最新的 KDE Plasma 桌面環境</li>
       <li>Comprehensive suite of KDE applications</li>
       <li xml:lang="ca">Conjunt integral d'aplicacions KDE</li>
+      <li xml:lang="ca-valencia">Conjunt integral d'aplicacions KDE</li>
       <li xml:lang="es">Un completo paquete de aplicaciones de KDE</li>
       <li xml:lang="fr">Suite complète d'applications pour KDE</li>
       <li xml:lang="he">חבילה מורחבת של יישומי KDE</li>
@@ -72,6 +77,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="zh-TW">完整 KDE 應用程式套組</li>
       <li>Rolling release model for up-to-date software</li>
       <li xml:lang="ca">Model de llançament continu per a un programari actualitzat</li>
+      <li xml:lang="ca-valencia">Model de llançament continu per a un programari actualitzat</li>
       <li xml:lang="es">Modelo de actualización continua para un software a la última</li>
       <li xml:lang="fr">Modèle de publication continue pour des logiciels toujours à jour</li>
       <li xml:lang="he">דגם הפצה מתגלגל לקבלת התוכנות העדכניות ביותר</li>
@@ -84,6 +90,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="zh-TW">滾動更新模式，提供最新軟體</li>
       <li>Strong focus on system stability</li>
       <li xml:lang="ca">Se centra especialment en l'estabilitat del sistema</li>
+      <li xml:lang="ca-valencia">Se centra especialment en l'estabilitat del sistema</li>
       <li xml:lang="es">Fuertemente centrado en la estabilidad del sistema</li>
       <li xml:lang="fr">Principal objectif sur la stabilité du système</li>
       <li xml:lang="he">מיקוד מוגבר על יציבות המערכת</li>
@@ -96,6 +103,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="zh-TW">注重於系統穩定性</li>
       <li>User-friendly installation process</li>
       <li xml:lang="ca">Procés d'instal·lació fàcil d'utilitzar</li>
+      <li xml:lang="ca-valencia">Procés d'instal·lació fàcil d'utilitzar</li>
       <li xml:lang="es">Proceso de instalación amigable con el usuario</li>
       <li xml:lang="fr">Processus d'installation convivial</li>
       <li xml:lang="he">תהליך התקנה ידידותי למשתמשים</li>
@@ -113,6 +121,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <url type="help">https://docs.kdelinux.org</url>
   <developer_name>KDE Linux Team</developer_name>
   <developer_name xml:lang="ca">Equip de KDE Linux</developer_name>
+  <developer_name xml:lang="ca-valencia">Equip de KDE Linux</developer_name>
   <developer_name xml:lang="es">Equipo de KDE Linux</developer_name>
   <developer_name xml:lang="fr">Équipe de KDE Linux</developer_name>
   <developer_name xml:lang="he">צוות לינוקס KDE</developer_name>
@@ -144,6 +153,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <screenshot type="default">
       <caption>KDE Linux desktop with Plasma 6.0</caption>
       <caption xml:lang="ca">Escriptori de KDE Linux amb el Plasma 6.0</caption>
+      <caption xml:lang="ca-valencia">Escriptori de KDE Linux amb Plasma 6.0</caption>
       <caption xml:lang="es">Escritorio KDE Linux con Plasma 6.0</caption>
       <caption xml:lang="fr">Ordinateur de bureau sous KDE Linux avec Plasma 6.0</caption>
       <caption xml:lang="he">שולחן עבודה לינוקס KDE עם פלזמה 6.0</caption>
