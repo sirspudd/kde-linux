@@ -12,6 +12,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <name xml:lang="fr">KDE Linux</name>
   <name xml:lang="he">לינוקס KDE</name>
   <name xml:lang="ka">KDE Linux</name>
+  <name xml:lang="lv">KDE Linux</name>
   <name xml:lang="nl">KDE Linux</name>
   <name xml:lang="sl">KDE Linux</name>
   <name xml:lang="tr">KDE Linux</name>
@@ -25,6 +26,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <summary xml:lang="fr">Une distribution Linux moderne reposant sur l'environnement de bureau KDE Plasma</summary>
   <summary xml:lang="he">הפצת לינוקס מודרנית שמתמקדת על סביבת שולחן עבודה פלזמה מבית KDE</summary>
   <summary xml:lang="ka">თანამედროვე Linux-ის დისტრიბუტივი, სამუშაო გარემო KDE Plasma-ზე ფოკუსით</summary>
+  <summary xml:lang="lv">Moderns „Linux“ distributīvs, kura centrā ir KDE „Plasma“ darbvirsmas vide.</summary>
   <summary xml:lang="nl">Een moderne Linux distributie gericht op de KDE Plasma bureaubladomgeving</summary>
   <summary xml:lang="sl">Sodobna distribucija Linuxa, osredotočena na namizno okolje KDE Plasma</summary>
   <summary xml:lang="tr">KDE Plasma masaüstü ortamına odaklanan, çağdaş bir Linux dağtımı</summary>
@@ -42,6 +44,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <p xml:lang="fr">KDE Linux est un système d'exploitation convivial construit à partir de l'environnement de bureau KDE Plasma. Il offre une expérience informatique globale, en mettant l'accent sur la productivité, la personnalisation et l'ergonomie.</p>
     <p xml:lang="he">לינוקס KDE היא מערכת הפעלה ידידותית שנבנתה סביב שולחן העבודה פלזמה מבית KDE. היא מספקת חוויה מלאה של שימוש במחשב תוך מתן מענה ליעילות, התאמה אישית וקלות שימוש.</p>
     <p xml:lang="ka">KDE Linux მოსახერხებელი ოპერაციული სისტემაა, რომელიც KDE Plasma-ის გარშემოა აგებული. ის მოგაწვდით სრულ გამოთვლის გარემოს ფოკუსით პროდუქტიულობაზე, მორგებადობაზე და გამოყენების სიადვილეზე.</p>
+    <p xml:lang="lv">„KDE Linux“ ir lietotājiem draudzīga operētājsistēma, kas veidota ap KDE „Plasma“ darbvirsmas vidi. Tā ļauj datoru izmantot vispusīgi, bet lielāku uzsvaru liek uz produktivitāti, pielāgojamību un lietošanas ērtību.</p>
     <p xml:lang="nl">KDE Linux is een gebruikersvriendelijk besturingssysteem gebouwd rond de KDE Plasma bureaubladomgeving. Het levert een complete ervaring met computeren met een focus op productiviteit, aanpassing en gebruiksgemak.</p>
     <p xml:lang="sl">KDE Linux je uporabniku prijazen operacijski sistem, zgrajen okoli namiznega okolja KDE Plasma. Zagotavlja popolno računalniško izkušnjo z a osredotočenjem na produktivnost, prilagajanje in enostavnost uporabe.</p>
     <p xml:lang="tr">KDE Linux, KDE Plasma masaüstü ortamının etrafına yapılı, kullanıcı dostu bir işletim sistemidir. Üretkenlik, özelliştirilebilirlik ve kullanım kolaylığı odaklı tam bir bilişim deneyimi sunar.</p>
@@ -56,6 +59,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="fr">Dernier environnement de bureau de KDE Plasma</li>
       <li xml:lang="he">סביבת שולחן העבודה פלזמה העדכנית ביותר מבית KDE</li>
       <li xml:lang="ka">სამუშაო მაგიდა KDE Plasma-ის უახლესი ვერსია</li>
+      <li xml:lang="lv">Jaunākā KDE „Plasma“ darbvirsmas vide</li>
       <li xml:lang="nl">Laatste KDE Plasma bureaubladomgeving</li>
       <li xml:lang="sl">Najnovejše namizno okolje KDE Plasma</li>
       <li xml:lang="tr">Güncel KDE Plasma masaüstü ortamı</li>
@@ -69,6 +73,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="fr">Suite complète d'applications pour KDE</li>
       <li xml:lang="he">חבילה מורחבת של יישומי KDE</li>
       <li xml:lang="ka">KDE-ის აპლიკაციების ყოვლისმომცველი ნაკრები</li>
+      <li xml:lang="lv">Visaptveroša KDE programmu svīta</li>
       <li xml:lang="nl">Uitgebreide suite van KDE toepassingen</li>
       <li xml:lang="sl">Obsežen nabor aplikacij KDE</li>
       <li xml:lang="tr">KDE uygulamalarının tam bir paketi</li>
@@ -82,6 +87,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="fr">Modèle de publication continue pour des logiciels toujours à jour</li>
       <li xml:lang="he">דגם הפצה מתגלגל לקבלת התוכנות העדכניות ביותר</li>
       <li xml:lang="ka">უწყვეტი გამოცემა განახლებული პროგრამებით</li>
+      <li xml:lang="lv">Pastāvīgi atjaunināma sistēma ar vienmēr aktuālu programmatūru</li>
       <li xml:lang="nl">Rollend uitgavemodel voor up-to-date software</li>
       <li xml:lang="sl">Model sprotne tekoče izdaje za posodobljeno programsko opremo</li>
       <li xml:lang="tr">Güncel yazılımlar için yuvarlanan yayım modeli</li>
@@ -95,6 +101,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="fr">Principal objectif sur la stabilité du système</li>
       <li xml:lang="he">מיקוד מוגבר על יציבות המערכת</li>
       <li xml:lang="ka">ძლიერი ყურადღება სისტემის სტაბილურობაზე</li>
+      <li xml:lang="lv">Liels uzsvars uz sistēmas stabilitāti</li>
       <li xml:lang="nl">Sterke focus op systeemstabiliteit</li>
       <li xml:lang="sl">Močan poudarek na stabilnosti sistema</li>
       <li xml:lang="tr">Sistem kararlılığına güçlü odak</li>
@@ -108,6 +115,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="fr">Processus d'installation convivial</li>
       <li xml:lang="he">תהליך התקנה ידידותי למשתמשים</li>
       <li xml:lang="ka">მოსახერხებელი დაყენების პროცესი</li>
+      <li xml:lang="lv">Lietotājiem draudzīga instalēšana</li>
       <li xml:lang="nl">Gebruikersvriendelijk installatieproces</li>
       <li xml:lang="sl">Uporabniku prijazen postopek namestitve</li>
       <li xml:lang="tr">Kullanıcı dostu kurulum süreci</li>
@@ -126,6 +134,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <developer_name xml:lang="fr">Équipe de KDE Linux</developer_name>
   <developer_name xml:lang="he">צוות לינוקס KDE</developer_name>
   <developer_name xml:lang="ka">KDE Linux-ის გუნდი</developer_name>
+  <developer_name xml:lang="lv">„KDE Linux“ komanda</developer_name>
   <developer_name xml:lang="nl">KDE Linux-team</developer_name>
   <developer_name xml:lang="sl">Ekipa KDE Linux</developer_name>
   <developer_name xml:lang="tr">KDE Linux Takımı</developer_name>
@@ -158,6 +167,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <caption xml:lang="fr">Ordinateur de bureau sous KDE Linux avec Plasma 6.0</caption>
       <caption xml:lang="he">שולחן עבודה לינוקס KDE עם פלזמה 6.0</caption>
       <caption xml:lang="ka">KDE Linux-ის სამუშაო გარემო Plasma 6.0-სთან ერთად</caption>
+      <caption xml:lang="lv">„KDE Linux“ darbvirsma ar „Plasma“ 6.0 versiju</caption>
       <caption xml:lang="nl">KDE Linux bureaublad met Plasma 6.0</caption>
       <caption xml:lang="sl">Namizje KDE Linux s Plasma 6.0</caption>
       <caption xml:lang="tr">Plasma 6.0 ile KDE Linux masaüstü</caption>
