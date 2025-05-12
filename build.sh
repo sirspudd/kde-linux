@@ -74,6 +74,9 @@ echo "Server = https://archive.archlinux.org/repos/${BUILD_DATE}/\$repo/os/\$arc
 # Make sure permissions are sound
 ./permission-fix.sh
 
+cargo build --release --manifest-path btrfs-migrator/Cargo.toml
+cp -v btrfs-migrator/target/release/_kde-linux-btrfs-migrator mkosi.extra/usr/bin/
+
 mkosi \
     --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
     --environment="CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}" \
