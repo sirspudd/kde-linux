@@ -70,3 +70,6 @@ mount "$espdev" "$ROOT/boot"
 # TODO: doing it this way means we can't factory reset flatpaks. Figure out what to do about that.
 rm -rf "$ROOT/var/lib/flatpak"
 cp -ra /system/@flatpak "$ROOT/var/lib/flatpak"
+# Make sure presets are applied
+systemctl --root="$ROOT" preset-all
+systemctl --root="$ROOT" preset-all --global
