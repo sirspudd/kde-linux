@@ -17,10 +17,8 @@ if [ -f "$SRCDIR/.secure_files/gpg.public.key" ]; then # only useful and availab
     rm -f "$KEYRING"
     gpg --no-options --no-default-keyring --keyring="$KEYRING" --homedir="$GNUPGHOME" --import "$SRCDIR/.secure_files/gpg.public.key"
 
-    # Make sure the keyring is actually used. This notably broke in the past because of an upstream change.
-    # Obviously this will fail on clean remotes (i.e. before first publishing), that's a problem we'll deal with when needed.
+    # TODO: Make sure the keyring is actually used. This notably broke in the past because of an upstream change.
     # https://invent.kde.org/kde-linux/kde-linux/-/issues/199
-    /usr/lib/systemd/systemd-sysupdate list
 fi
 
 # De-initialize pacman
