@@ -68,7 +68,6 @@ mkosi \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
     --environment="VERSION_DATE=${VERSION_DATE}" \
     --image-version="$VERSION" \
-    --package-cache-dir=/var/cache/mkosi.pacman \
     --output-directory=. \
     "$@"
 
