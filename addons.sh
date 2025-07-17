@@ -15,7 +15,7 @@ fi
 ukify build \
   --cmdline 'console=ttyS0 console=tty0
     rd.systemd.debug_shell=on systemd.debug_shell=on SYSTEMD_SULOGIN_FORCE=1
-    systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on' \
+    systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M printk.devkmsg=on systemd.show_status=auto rd.udev.log_level=3' \
   --output debug.addon.efi
 
 ukify build \
