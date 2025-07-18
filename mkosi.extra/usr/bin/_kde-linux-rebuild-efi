@@ -23,7 +23,7 @@ EOF
 echo "rw rootflags=subvol=@kde-linux_$IMAGE_VERSION,compress=zstd:1 \
   systemd.volatile=overlay systemd.firstboot=false systemd.hostname=kde-linux kde-linux.live=1 plasma.live.user=live \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
-  vt.global_cursor_default=0 quiet splash loglevel=3 plymouth.use-simpledrm" > cmdline
+  vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
@@ -34,7 +34,7 @@ ukify build \
 # lsm= defaulting to apparmor from https://wiki.archlinux.org/title/AppArmor
 echo "rw rootflags=subvol=@kde-linux_$IMAGE_VERSION,compress=zstd:1 \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
-  vt.global_cursor_default=0 quiet splash loglevel=3 plymouth.use-simpledrm" > cmdline
+  vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
   --linux /boot/vmlinuz-linux \
