@@ -17,6 +17,8 @@ set -ex
 # but be careful to not redistribute that key."
 #
 pacman-key --init
+# On VM images make sure we have the keyring populated.
+pacman-key --populate
 
 # Restore the pacman.conf file from the pacman package. The docker one is crippled with NoExtract options and the like :(
 #  --refresh twice to force a refresh
