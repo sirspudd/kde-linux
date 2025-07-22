@@ -5,6 +5,9 @@
 
 # Bootstraps an Arch Linux Docker container to be ready for building KDE Linux.
 
+# WARNING: DO NOT CALL INTO OTHER SCRIPTS HERE.
+# This file needs to be self-contained because it gets run by the CI VM provisioning in isolation.
+
 # Exit immediately if any command fails and print all commands before they are executed.
 set -ex
 
@@ -38,7 +41,15 @@ SigLevel = Never
 Server = https://cdn.kde.org/kde-linux/packaging/packages-debug/
 EOF
 
-./bootstrap_getbuild_date.sh
+# Ensure the packages repo and the base image do not go out of sync
+# by using the same snapshot date from build_date.txt for both
+# WARNING: code copy in build.sh
+BUILD_DATE=$(curl --fail --silent https://cdn.kde.org/kde-linux/packaging/build_date.txt)
+if [ -z "$BUILD_DATE" ]; then
+  echo "ERROR: Could not fetch build_date.txt — refusing to build out-of-sync image." >&2
+  exit 1
+fi
+echo "Server = https://archive.archlinux.org/repos/${BUILD_DATE}/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 # ParallelDownloads is enabled by default since pacman 7.0.0.r6.gc685ae6-2,
 # so no need to uncomment or manually set it unless we want to change the value.

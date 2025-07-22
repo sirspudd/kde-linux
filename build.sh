@@ -61,7 +61,15 @@ export SYSTEMD_LOG_LEVEL=debug
 
 cp /etc/pacman.conf mkosi.sandbox/etc
 mkdir --parents mkosi.sandbox/etc/pacman.d
-SYSROOT=mkosi.sandbox ./bootstrap_getbuild_date.sh
+# Ensure the packages repo and the base image do not go out of sync
+# by using the same snapshot date from build_date.txt for both
+# WARNING: code copy in bootstrap.sh
+BUILD_DATE=$(curl --fail --silent https://cdn.kde.org/kde-linux/packaging/build_date.txt)
+if [ -z "$BUILD_DATE" ]; then
+  echo "ERROR: Could not fetch build_date.txt — refusing to build out-of-sync image." >&2
+  exit 1
+fi
+echo "Server = https://archive.archlinux.org/repos/${BUILD_DATE}/\$repo/os/\$arch" > mkosi.sandbox/etc/pacman.d/mirrorlist
 
 # Make sure permissions are sound
 ./permission-fix.sh
