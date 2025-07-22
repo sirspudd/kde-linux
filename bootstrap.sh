@@ -89,5 +89,5 @@ pacman --sync --refresh --refresh --noconfirm --sysupgrade \
 
 # Use mkosi from Git so we don't have to wait for releases when things break.
 # OTOH, things may break in Git. Therefore, which version is used may change over time.
-git clone https://github.com/systemd/mkosi.git /tmp/mkosi
-ln --symbolic /tmp/mkosi/bin/mkosi /usr/local/bin/mkosi
+git clone https://github.com/systemd/mkosi.git /opt/mkosi
+ln --symbolic /opt/mkosi/bin/mkosi /usr/local/bin/mkosi
