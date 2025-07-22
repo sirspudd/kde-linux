@@ -59,6 +59,10 @@ rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
 export SYSTEMD_LOG_LEVEL=debug
 
+cp /etc/pacman.conf mkosi.sandbox/etc
+mkdir --parents mkosi.sandbox/etc/pacman.d
+SYSROOT=mkosi.sandbox ./bootstrap_getbuild_date.sh
+
 # Make sure permissions are sound
 ./permission-fix.sh
 
