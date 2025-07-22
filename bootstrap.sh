@@ -30,6 +30,7 @@ pacman --sync --refresh --refresh --downloadonly --noconfirm pacman
 tar --extract --file "$(find /var/cache/pacman/pkg -name 'pacman-*.pkg.tar.zst')" --directory /tmp/pacman
 cp /tmp/pacman/etc/pacman.conf /etc/pacman.conf
 
+cp /etc/pacman.conf /etc/pacman.conf.nolinux # store a backup for use in the packages pipeline
 cat <<- EOF >> /etc/pacman.conf
 [kde-linux]
 # Signature checking is not needed because the packages are served over HTTPS and we have no mirrors
