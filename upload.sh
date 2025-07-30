@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2024 Harald Sitter <sitter@kde.org>
 
-set -eu
+set -eux
 
 # For the vacuum helper and this script
 export SSH_IDENTITY="$PWD/.secure_files/ssh.key"
@@ -19,7 +19,7 @@ go -C ./upload-vacuum/ build -o upload-vacuum .
 # The following variables are for this script only. Not shared with the vacuum helper.
 sudo chown -Rvf "$(id -u):$(id -g)" "$PWD/.secure_files" # Make sure we have access
 export GNUPGHOME="$PWD/.secure_files/gpg"
-gpg --no-options --homedir="$GNUPGHOME" --import "$PWD/.secure_files/gpg.private.key"
+gpg --verbose --no-options --homedir="$GNUPGHOME" --import "$PWD/.secure_files/gpg.private.key"
 REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
 # You can use `ssh-keyscan origin.files.kde.org` to get the host key
 echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6" >> ~/.ssh/known_hosts
