@@ -16,7 +16,8 @@ chmod 600 "$SSH_IDENTITY"
 go -C ./upload-vacuum/ build -o upload-vacuum .
 ./upload-vacuum/upload-vacuum
 
-# For this script only
+# The following variables are for this script only. Not shared with the vacuum helper.
+chown -Rvf "$(id -u):$(id -g)" "$PWD/.secure_files" # Make sure we have access
 export GNUPGHOME="$PWD/.secure_files/gpg"
 gpg --no-options --homedir="$GNUPGHOME" --import "$PWD/.secure_files/gpg.private.key"
 REMOTE=$SSH_USER@$SSH_HOST:$SSH_PATH
