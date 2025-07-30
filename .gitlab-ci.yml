@@ -48,6 +48,8 @@ imaging+publish:
     - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
     - sudo ./build.sh --force --debug # bootstap.sh happens as part of CI image build
     - ./upload.sh
+    - ps aux
+    - echo "All done!"
   after_script:
     # Upload broken images to Harald for inspection
     - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
