@@ -50,6 +50,12 @@ imaging+publish:
     - ./upload.sh
     - ps aux
     - echo "All done!"
+    # There are perplexing issues with the session not terminating properly. Let's give it a nudge.
+    - exit
+    - killall -9 sshd || true
+    - sudo killall -9 sshd || true
+    - killall -9 bash || true
+    - sudo killall -9 bash || true
   after_script:
     # Upload broken images to Harald for inspection
     - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
