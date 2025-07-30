@@ -45,7 +45,7 @@ imaging+publish:
   variables: *variables
   script:
     - sudo pacman --sync --refresh --noconfirm curl which git
-    - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | sudo -E bash
+    - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer | bash
     - sudo ./build.sh --force --debug # bootstap.sh happens as part of CI image build
     - ./upload.sh
   after_script:
