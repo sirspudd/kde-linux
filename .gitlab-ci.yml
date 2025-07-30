@@ -51,5 +51,3 @@ imaging+publish:
   after_script:
     # Upload broken images to Harald for inspection
     - "[ $CI_JOB_STATUS == 'success' ] || ./upload-to-harald.sh || true"
-    # Cleanup our btrfs subvolumes so docker doesn't stumble over them.
-    - cargo run --manifest-path btrfs-cleanup/Cargo.toml .
