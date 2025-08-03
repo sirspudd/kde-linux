@@ -73,12 +73,10 @@ download_flatpaks() {
 
     kde_nightly=(
         ark
-        dolphin
         elisa
         gwenview
         kate
         haruna
-        konsole
     )
 
     # Add Nightly repos
