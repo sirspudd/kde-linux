@@ -11,6 +11,7 @@ enable NetworkManager.service
 enable snapd.socket
 enable snapd.apparmor.service
 enable apparmor.service
+enable systemd-zram-setup@zram0.service
 enable systemd-oomd.service
 enable bluetooth.service
 enable cups.service
