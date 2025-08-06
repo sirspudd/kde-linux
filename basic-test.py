@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
 
+import atexit
 import http.server
 import sys
 import subprocess
@@ -53,6 +54,8 @@ qemu = subprocess.Popen([
     "-bios",
     "/usr/share/OVMF/x64/OVMF.4m.fd",
 ])
+atexit.register(lambda: (qemu.kill()))
+
 server.timeout = 5 * 60 # 5 minutes
 server.handle_timeout = lambda: (qemu.kill(), sys.exit(1))
 while True: # kinda garbage but there seems to be no nice (non-private) poll-or-timeout api
