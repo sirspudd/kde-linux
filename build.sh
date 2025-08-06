@@ -57,8 +57,6 @@ fi
 # Clean up old build artifacts.
 rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
-export SYSTEMD_LOG_LEVEL=debug
-
 cp /etc/pacman.conf mkosi.sandbox/etc
 mkdir --parents mkosi.sandbox/etc/pacman.d
 # Ensure the packages repo and the base image do not go out of sync
