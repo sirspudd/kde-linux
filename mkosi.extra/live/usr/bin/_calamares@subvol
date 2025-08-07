@@ -82,13 +82,6 @@ blockdev=/dev/$(basename "$(readlink --canonicalize "/sys/class/block/$realdevic
 espdev=$(_kde-linux-find-esp "$blockdev")
 mount "$espdev" "$ROOT/boot"
 
-# Once everything is in place we'll shove some extra data into the overlays.
-# We notably don't want to carry flatpaks in the rootfs but for purposes of the image file they must be shipped somehow.
-# In the live session they are mounted in place, for the installed system we actually seed /var/lib/flatpak with data.
-# TODO: doing it this way means we can't factory reset flatpaks. Figure out what to do about that.
-rm -rf "$ROOT/var/lib/flatpak"
-cp -ra /system/@flatpak "$ROOT/var/lib/flatpak"
-
 # TODO: fix in calamares (doesn't mkdir properly)
 mkdir --parents "$ROOT/etc/sudoers.d/"
 
