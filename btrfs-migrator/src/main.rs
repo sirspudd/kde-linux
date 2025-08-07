@@ -142,15 +142,6 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
     println!("Renaming {import_path:?} to {system_path:?}");
     fs::rename(import_path, system_path)?; // fatal problem
 
-    // TODO: how do we prevent the user from getting confused by the
-    // divergent content of home?
-    // for subvol in subvolumes_to_backup {
-    //     let from = root.join(&subvol);
-    //     let to = root.join(subvol + ".backup");
-    //     println!("Archiving {from:?} to {to:?}");
-    //     let _ = fs::rename(from, to); // not a fatal problem
-    // }
-
     return Ok(());
 }
 
