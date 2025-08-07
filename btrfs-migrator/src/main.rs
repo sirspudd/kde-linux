@@ -10,6 +10,11 @@ use dialoguer::{self, Confirm};
 fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
     env::set_current_dir(root)?;
 
+    let _ = Command::new("plymouth")
+        .arg("display-message")
+        .arg("--text=Migrating to v2 rootfs. Can take a while.")
+        .status();
+
     let system_path = root.join("@system");
     if system_path.exists() {
         println!("@system exists already. Skipping migration.");
