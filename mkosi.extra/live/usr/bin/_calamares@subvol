@@ -83,6 +83,7 @@ espdev=$(_kde-linux-find-esp "$blockdev")
 mount "$espdev" "$ROOT/boot"
 
 # Bit of a crutch to get systemd's base_filesystem_create() to run so the / gets populated with symlinks.
+# Exit code is not indicative of to the function having run - ignore it.
 systemd-nspawn -D "$ROOT" "true" || true
 
 # Initialize systemd stuff
