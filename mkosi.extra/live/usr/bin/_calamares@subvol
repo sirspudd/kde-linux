@@ -82,9 +82,6 @@ blockdev=/dev/$(basename "$(readlink --canonicalize "/sys/class/block/$realdevic
 espdev=$(_kde-linux-find-esp "$blockdev")
 mount "$espdev" "$ROOT/boot"
 
-# TODO: fix in calamares (doesn't mkdir properly)
-mkdir --parents "$ROOT/etc/sudoers.d/"
-
 # Bit of a crutch to get systemd's base_filesystem_create() to run so the / gets populated with symlinks.
 systemd-nspawn -D "$ROOT" "true" || true
 
