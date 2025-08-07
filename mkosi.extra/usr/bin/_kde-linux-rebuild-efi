@@ -41,3 +41,7 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output kde-linux.efi
+
+ukify build \
+  --cmdline "rootflags=subvol=@system,compress=zstd:1 kde-linux.erofs=1" \
+  --output erofs.addon.efi

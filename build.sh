@@ -40,6 +40,7 @@ OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
 
 MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
 LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
+EROFS_UKI=${OUTPUT}_erofs.addon.efi          # Output live UKI path
 DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
 ROOTFS_TAR=${OUTPUT}_root-x86-64.tar # Output rootfs tarball path (.zst will be added)
 ROOTFS_EROFS=${OUTPUT}_root-x86-64.erofs # Output erofs image path
@@ -93,6 +94,7 @@ rm -rfv "${OUTPUT}/efi"
 cp -v "${OUTPUT}"/kde-linux.efi "$MAIN_UKI"
 mv -v "${OUTPUT}"/kde-linux.efi "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "$LIVE_UKI"
+mv -v "${OUTPUT}"/erofs.addon.efi "$EROFS_UKI"
 
 make_debug_archive
 
