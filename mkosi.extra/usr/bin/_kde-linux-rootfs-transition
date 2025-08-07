@@ -33,6 +33,12 @@ if [ -e /run/kde-linux-rootfs-transition/@system ]; then
     exit 0
 fi
 
+if [ ! -e "/run/kde-linux-rootfs-transition/kde-linux_$IMAGE_VERSION.erofs" ]; then
+    echo "kde-linux_$IMAGE_VERSION.erofs does not exist on root partition. Aborting transition."
+    systemctl reboot
+    exit 1
+fi
+
 # We need access to our usr so we can import the /usr/share/factory/var.
 # Previously this was an overlay so we don't really know which files were used from the lower dir.
 mkdir /run/kde-linux-rootfs-transition-usr
