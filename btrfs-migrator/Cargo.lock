@@ -53,6 +53,7 @@ dependencies = [
  "fstab",
  "libbtrfsutil",
  "qr2term",
+ "scopeguard",
 ]
 
 [[package]]

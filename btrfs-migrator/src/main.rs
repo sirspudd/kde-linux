@@ -1,13 +1,69 @@
 // SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
 
-use std::{env, error::Error, fs::{self}, io::{self, Write}, path::Path, process::Command, vec};
-
-use libbtrfsutil::{CreateSnapshotOptions, CreateSubvolumeOptions, DeleteSubvolumeOptions};
-use fstab::FsTab;
+use std::{
+    env,
+    error::Error,
+    fs::{self},
+    io::{self, Write},
+    path::{Path, PathBuf},
+    process::Command,
+};
+#[macro_use(defer)]
+extern crate scopeguard;
 use dialoguer::{self, Confirm};
+use fstab::FsTab;
+use libbtrfsutil::{CreateSnapshotOptions, CreateSubvolumeOptions, DeleteSubvolumeOptions};
 
-fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
+fn find_rootfs_v1(root: &Path) -> Option<PathBuf> {
+    let subvols = fs::read_dir(root).ok()?;
+
+    struct Candidate {
+        path: PathBuf,
+        version: u64,
+    }
+
+    let mut candidate: Option<Candidate> = None;
+
+    for entry in subvols {
+        let entry = entry.ok()?;
+        let path = entry.path();
+        let file_name = entry.file_name();
+        let name = file_name.to_string_lossy().to_string();
+        if !name.starts_with("@kde-linux_") {
+            continue;
+        }
+        let mut parts = name.splitn(2, '_');
+        let _prefix = parts.next().unwrap();
+        let version = parts.next().unwrap();
+        match version.parse::<u64>() {
+            Ok(version) => {
+                if candidate.is_none() || candidate.as_ref().unwrap().version < version {
+                    candidate = Some(Candidate { path, version });
+                }
+            }
+            Err(_) => {
+                println!("Invalid version number in subvolume name: {name} -- {version}");
+            }
+        }
+    }
+
+    match candidate {
+        Some(c) => {
+            println!(
+                "Found legacy rootfs v1 at {:?} with version {}",
+                c.path, c.version
+            );
+            Some(c.path)
+        }
+        None => {
+            println!("No legacy rootfs v1 found.");
+            None
+        }
+    }
+}
+
+fn run(root: &Path) -> Result<(), Box<dyn Error>> {
     env::set_current_dir(root)?;
 
     let _ = Command::new("plymouth")
@@ -24,9 +80,12 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
     let import_path = root.join("@system.import");
     if import_path.exists() {
         println!("@system.import exists. Deleting it.");
-        match DeleteSubvolumeOptions::new().recursive(true).delete(&import_path) {
+        match DeleteSubvolumeOptions::new()
+            .recursive(true)
+            .delete(&import_path)
+        {
             Ok(_) => println!("Deleted subvolume: {import_path:?}"),
-            Err(error) => println!("Problem deleting subvolume {import_path:?}: {error:?}")
+            Err(error) => println!("Problem deleting subvolume {import_path:?}: {error:?}"),
         }
     }
     CreateSubvolumeOptions::new()
@@ -45,14 +104,14 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
         }
     }
     if concerning_fstab_entries > 0 {
-        let _ = Command::new("plymouth")
-            .arg("hide-splash")
-            .status();
+        let _ = Command::new("plymouth").arg("hide-splash").status();
 
         let _ = qr2term::print_qr("https://community.kde.org/KDE_Linux/RootFSv2");
 
-        println!("Found {concerning_fstab_entries} concerning fstab entries. This suggests you have a more complicated fstab setup that we cannot auto-migrate. \
-            If nothing critically important is managed by fstab you can let the auto-migration run. If you have entries that are required for the system to boot you should manually migrate to @system.");
+        println!(
+            "Found {concerning_fstab_entries} concerning fstab entries. This suggests you have a more complicated fstab setup that we cannot auto-migrate. \
+            If nothing critically important is managed by fstab you can let the auto-migration run. If you have entries that are required for the system to boot you should manually migrate to @system."
+        );
         io::stdout().flush().unwrap();
 
         let migrate = Confirm::new()
@@ -69,44 +128,68 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let mut subvolumes_to_backup = vec![];
+    let rootfs_v1 = match find_rootfs_v1(root) {
+        Some(path) => path,
+        None => return Err("No legacy rootfs v1 found. Migration impossible.".into()),
+    };
 
     for dir in ["etc", "var"] {
-        let lower_path = usr.join("share/factory").join(dir);
-        println!("Copying {lower_path:?} to {}", import_path.join(dir).display());
-        let lower_result = Command::new("cp")
+        let compose_dir = rootfs_v1.join(dir);
+
+        let mount_result = Command::new("mount")
+            .arg("--verbose")
+            .arg("--types")
+            .arg("overlay")
+            .arg("--options")
+            .arg(format!(
+                "ro,lowerdir={},upperdir={},workdir={},index=off,metacopy=off",
+                compose_dir.to_string_lossy(),
+                root.join(format!("@{dir}-overlay/upper")).to_string_lossy(),
+                root.join(format!("@{dir}-overlay/work")).to_string_lossy()
+            ))
+            .arg("overlay")
+            .arg(&compose_dir)
+            .status()
+            .expect("Failed to mount overlay for etc/var");
+        if !mount_result.success() {
+            println!("Failed to mount {}", compose_dir.display());
+            return Err("Failed to mount compose dir".into());
+        }
+        defer! {
+            println!("Unmounting overlay for {}", dir);
+            Command::new("umount")
+                .arg(&compose_dir)
+                .status()
+                .expect("Failed to unmount overlay for etc/var");
+        }
+
+        println!(
+            "Copying {} to {}",
+            compose_dir.display(),
+            import_path.join(dir).display()
+        );
+        let cp_result = Command::new("cp")
             .arg("--recursive")
             .arg("--archive")
             .arg("--reflink=auto")
             .arg("--no-target-directory")
-            .arg(&lower_path)
+            .arg(&compose_dir)
             .arg(dir)
             .status()
-            .expect("failed to execute cp for lower dir");
-        if !lower_result.success() {
-            println!("Failed to copy lower dir {lower_path:?} to {dir:?}");
-            return Err("Failed to copy lower dir".into());
-        }
-
-        let dir_path = root.join(format!("@{dir}-overlay/upper"));
-        println!("Copying {dir_path:?} to {}", import_path.join(dir).display());
-        let upper_result = Command::new("cp")
-            .arg("--recursive")
-            .arg("--archive")
-            .arg("--reflink=auto")
-            .arg("--no-target-directory")
-            .arg(&dir_path)
-            .arg(dir)
-            .status().expect("Failed to copy upper dir");
-        if !upper_result.success() {
-            println!("Failed to copy upper dir {dir_path:?} to {dir:?}");
+            .expect("Failed to copy upper dir");
+        if !cp_result.success() {
+            println!("Failed to copy upper dir {compose_dir:?} to {dir:?}");
             return Err("Failed to copy upper dir".into());
         }
-
-        subvolumes_to_backup.push(format!("@{dir}-overlay"));
     }
 
-    let subvol_targets = [("@home", "home"), ("@root", "root"), ("@snap", "snap"), ("@containers", "var/lib/containers"), ("@docker", "var/lib/docker")];
+    let subvol_targets = [
+        ("@home", "home"),
+        ("@root", "root"),
+        ("@snap", "snap"),
+        ("@containers", "var/lib/containers"),
+        ("@docker", "var/lib/docker"),
+    ];
 
     for (subvol, target) in subvol_targets {
         println!("Snapshotting {} to {}", root.join(subvol).display(), target);
@@ -121,21 +204,20 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
 
         match target_path.parent() {
             Some(dir) => {
-                if dir != Path::new("") && !dir.exists() { // bit crap but parent of a relative path is the empty path.
+                if dir != Path::new("") && !dir.exists() {
+                    // bit crap but parent of a relative path is the empty path.
                     println!("create_dir {dir:?}");
                     fs::create_dir(dir)?;
                 }
-            },
+            }
             None => {
                 println!("No parent directory for {target_path:?}");
-            },
+            }
         }
 
         CreateSnapshotOptions::new()
             .recursive(true)
             .create(root.join(subvol), Path::new(target))?;
-
-        subvolumes_to_backup.push(subvol.to_string());
     }
 
     println!("Renaming {import_path:?} to {system_path:?}");
@@ -146,8 +228,8 @@ fn run(root: &Path, usr: &Path) -> Result<(), Box<dyn Error>> {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
-    if args.len() < 3 {
-        println!("Usage: {} system_mount usr_mount", args[0]);
+    if args.len() < 2 {
+        println!("Usage: {} system_mount", args[0]);
         println!("Migrates a legacy subvol (pre-May-2025) to v2 rootfs");
         return Err("Not enough arguments".into());
     }
@@ -155,9 +237,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("Migrating to v2 rootfs. This will take a while.");
 
     let root = Path::new(&args[1]);
-    let usr = Path::new(&args[2]);
 
-    match run(root, usr) {
+    match run(root) {
         Ok(_) => {
             // Reactivate in case we deactivated it earlier
             let _ = Command::new("plymouth").arg("show-splash").status();
