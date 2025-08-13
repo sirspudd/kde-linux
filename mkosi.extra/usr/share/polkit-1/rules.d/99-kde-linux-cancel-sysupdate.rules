@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+// SPDX-FileCopyrightText: 2025 Nate Graham <nate@kde.org>
+
+// Allow canceling sysupdate without authenticating. Workaround for upstream bug
+// https://github.com/systemd/systemd/issues/38568
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.sysupdate1.update-to-version" && subject.local && subject.active) {
+        return polkit.Result.YES;
+    }
+});
