@@ -144,6 +144,7 @@ touch "$IMG"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=kde-linux.cache --definitions=mkosi.repart "$IMG"
 
 ./basic-test.py "$IMG" "$EFI_BASE.efi" || exit 1
+rm ./*.test.raw
 
 # Create a torrent for the image
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
