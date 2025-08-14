@@ -33,8 +33,9 @@ sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
 sha256sum -- *.torrent >> SHA256SUMS
 sha256sum -- *.erofs >> SHA256SUMS
+sha256sum -- *.caibx >> SHA256SUMS
 
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 
-scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst ./*.torrent ./*.erofs "$REMOTE"
+scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst ./*.torrent ./*.erofs ./*.caibx "$REMOTE"
 scp -i "$SSH_IDENTITY" SHA256SUMS SHA256SUMS.gpg "$REMOTE" # upload as last artifact to finalize the upload

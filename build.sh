@@ -148,6 +148,9 @@ systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=kde-linu
 # Create a torrent for the image
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
 
+go install -v github.com/folbricht/desync/cmd/desync@latest
+~/go/bin/desync make "$ROOTFS_EROFS.caibx" "$ROOTFS_EROFS"
+
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 
 # efi images and torrents are 700, make them readable so the server can serve them
