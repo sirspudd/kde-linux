@@ -83,6 +83,7 @@ rm -rf \
     /usr/share/applications/stoken-gui-small.desktop \
     /usr/share/applications/stoken-gui.desktop \
     /usr/share/applications/cmake-gui.desktop \
+    /usr/share/applications/tuned-gui.desktop \
 
 ## Remove documentation cruft. Offline documentation while neat is really not that useful in this day and age.
 ## Do not be verbose here, we'd blow right through the log limit.
