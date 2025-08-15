@@ -69,6 +69,14 @@ rm -rf \
     /usr/share/applications/hplip.desktop \
     /usr/bin/hp-toolbox
 
+## FFADO Mixer app that came along for the ride with FireWire audio support
+rm -rf \
+    /usr/bin/ffado-mixer \
+    /usr/lib/python3.13/site-packages/ffado/mixer \
+    /usr/share/applications/org.ffado.FfadoMixer.desktop \
+    /usr/share/icons/hicolor/64x64/apps/hi64-apps-ffado.png \
+    /usr/share/metainfo/org.ffado.FfadoMixer.metainfo.xml \
+
 ## Miscellaneous application entries that have zero value because we either have better stuff or they're for terminal applications
 rm -rf \
     /usr/share/applications/avahi-discover.desktop \
