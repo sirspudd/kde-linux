@@ -93,7 +93,9 @@ type release struct {
 func readSHA256s(toKeep []string, releases map[string]release) []string {
 	sha256s := []string{}
 	for _, key := range toKeep {
-		for _, artifact := range releases[key].artifacts {
+		artifacts := releases[key].artifacts
+		sort.Strings(artifacts) // Sort artifacts to ensure consistent order
+		for _, artifact := range artifacts {
 			sha256 := readSHA256(artifact + ".sha256")
 			if sha256 == "" {
 				log.Println("Failed to read SHA256 for", artifact)
