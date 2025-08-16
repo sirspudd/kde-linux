@@ -96,6 +96,12 @@ func readSHA256s(toKeep []string, releases map[string]release) []string {
 		artifacts := releases[key].artifacts
 		sort.Strings(artifacts) // Sort artifacts to ensure consistent order
 		for _, artifact := range artifacts {
+			if strings.HasSuffix(artifact, ".caibx") {
+				// Keep caibx out of the sha256sum file. They mess with match patterns.
+				// https://github.com/systemd/systemd/issues/38605
+				continue
+			}
+
 			sha256 := readSHA256(artifact + ".sha256")
 			if sha256 == "" {
 				log.Println("Failed to read SHA256 for", artifact)

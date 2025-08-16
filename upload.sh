@@ -34,6 +34,7 @@ sha256sum -- *.tar.zst >> SHA256SUMS
 sha256sum -- *.torrent >> SHA256SUMS
 sha256sum -- *.erofs >> SHA256SUMS
 # Don't put caibx into the SHA256SUMS, it will break file matching.
+# https://github.com/systemd/systemd/issues/38605
 
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 
