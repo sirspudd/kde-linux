@@ -136,7 +136,7 @@ time zstd -T0 --rm "$ROOTFS_TAR"
 # Drop flatpak data from erofs. They are in the usr/share/factory and deployed from there.
 rm -rf "$OUTPUT/var/lib/flatpak"
 mkdir "$OUTPUT/var/lib/flatpak" # but keep a mountpoint around for the live session
-time mkfs.erofs -d0 -zzstd "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
+time mkfs.erofs -d0 -zzstd -Efragments,ztailpacking "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
 cp --reflink=auto "$ROOTFS_EROFS" kde-linux.cache/root.raw
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
