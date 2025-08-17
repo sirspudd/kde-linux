@@ -86,6 +86,8 @@ rm -rf \
     /usr/share/applications/bssh.desktop \
     /usr/share/applications/bvnc.desktop \
     /usr/share/applications/cups.desktop \
+    /etc/xdg/autostart/print-applet.desktop \
+    /usr/bin/system-config-printer-applet \
     /usr/share/applications/system-config-printer.desktop \
     /usr/share/applications/nvtop.desktop \
     /usr/share/applications/stoken-gui-small.desktop \
