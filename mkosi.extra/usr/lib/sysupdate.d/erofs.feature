@@ -2,5 +2,5 @@
 # SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
 
 [Feature]
-Description=EROFS Support
+Description=EROFS-based RootFS
 Enabled=false
