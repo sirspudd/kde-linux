@@ -119,6 +119,11 @@ mount esp.raw esp.raw.mnt
 
 # Copy everything from /usr/share/factory/boot into esp.raw.mnt.
 cp --archive --recursive "${OUTPUT}/usr/share/factory/boot/." esp.raw.mnt
+# FIXME a hack to remove the rootflags= from the live boot because they are not applicable
+# Can be dropped once erofs is default and we don't need the addon anymore.
+ukify build \
+  --cmdline "kde-linux.erofs=1" \
+  --output esp.raw.mnt/EFI/Linux/$EFI_BASE.efi.extra.d/erofs.addon.efi
 
 # We're done, unmount esp.raw.mnt.
 umount esp.raw.mnt
