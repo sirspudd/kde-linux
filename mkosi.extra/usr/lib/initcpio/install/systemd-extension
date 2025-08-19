@@ -14,7 +14,6 @@ build() {
 
     map add_systemd_unit \
         systemd-volatile-root.service \
-        kde-linux-overlay.service \
         systemd-bootchart.service
 
     # Make double sure the dissection rule is present. Without it booting doesn't work because we can't find a root.
