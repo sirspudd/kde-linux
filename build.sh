@@ -48,12 +48,6 @@ IMG=${OUTPUT}.raw                    # Output raw image path
 EFI_BASE=kde-linux_${VERSION} # Base name of the UKI in the image's ESP (exported so it can be used in basic-test-efi-addon.sh)
 EFI=${EFI_BASE}+3.efi # Name of primary UKI in the image's ESP
 
-ZSTD_LEVEL=3 # Compression level for zstd (3 = default of erofs as well)
-if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
-  # If we are on the default branch, use the highest compression level.
-  ZSTD_LEVEL=15
-fi
-
 # Clean up old build artifacts.
 rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
@@ -134,7 +128,7 @@ cd .. # and back to root
 # Drop flatpak data from erofs. They are in the usr/share/factory and deployed from there.
 rm -rf "$OUTPUT/var/lib/flatpak"
 mkdir "$OUTPUT/var/lib/flatpak" # but keep a mountpoint around for the live session
-time mkfs.erofs -d0 -zzstd,$ZSTD_LEVEL -Efragments,ztailpacking "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
+time mkfs.erofs -d0 -zzstd -Efragments,ztailpacking "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
 cp --reflink=auto "$ROOTFS_EROFS" kde-linux.cache/root.raw
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.
