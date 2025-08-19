@@ -66,16 +66,24 @@ fn find_rootfs_v1(root: &Path) -> Option<PathBuf> {
 fn run(root: &Path) -> Result<(), Box<dyn Error>> {
     env::set_current_dir(root)?;
 
-    let _ = Command::new("plymouth")
-        .arg("display-message")
-        .arg("--text=Migrating to v2 rootfs. Can take a while.")
-        .status();
-
     let system_path = root.join("@system");
     if system_path.exists() {
         println!("@system exists already. Skipping migration.");
         return Ok(());
     }
+
+    // Wait for devices to settle down a bit, otherwise we risk breaking plymouth and printing into the void, leaving
+    // the user without any indication what is going on.
+    // We do this relatively late in the transition progress so it doesn't unnecessarily delay regular boots.
+    let _ = Command::new("udevadm")
+        .arg("settle")
+        .arg("--timeout=8")
+        .status();
+
+    let _ = Command::new("plymouth")
+        .arg("display-message")
+        .arg("--text=Migrating to v2 rootfs. Can take a while.")
+        .status();
 
     let import_path = root.join("@system.import");
     if import_path.exists() {
