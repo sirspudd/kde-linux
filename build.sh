@@ -26,6 +26,7 @@ make_debug_archive () {
 
   # Finally compress /tmp/debugroot/usr into a zstd tarball at $DEBUG_TAR.
   # We actually only need usr because that's where all the relevant stuff lays anyways.
+  # TODO: needs really moving to erofs instead of tar
   tar --directory=/tmp/debugroot --create --file="$DEBUG_TAR" usr
   zstd --threads=0 --rm "$DEBUG_TAR" # --threads=0 automatically uses the optimal number
 }
@@ -42,7 +43,6 @@ MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
 LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
 EROFS_UKI=${OUTPUT}_erofs.addon.efi          # Output live UKI path
 DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
-ROOTFS_TAR=${OUTPUT}_root-x86-64.tar # Output rootfs tarball path (.zst will be added)
 ROOTFS_EROFS=${OUTPUT}_root-x86-64.erofs # Output erofs image path
 IMG=${OUTPUT}.raw                    # Output raw image path
 
@@ -119,11 +119,6 @@ mount esp.raw esp.raw.mnt
 
 # Copy everything from /usr/share/factory/boot into esp.raw.mnt.
 cp --archive --recursive "${OUTPUT}/usr/share/factory/boot/." esp.raw.mnt
-# FIXME a hack to remove the rootflags= from the live boot because they are not applicable
-# Can be dropped once erofs is default and we don't need the addon anymore.
-ukify build \
-  --cmdline "kde-linux.erofs=1" \
-  --output esp.raw.mnt/EFI/Linux/$EFI_BASE.efi.extra.d/erofs.addon.efi
 
 # We're done, unmount esp.raw.mnt.
 umount esp.raw.mnt
@@ -135,15 +130,10 @@ cp "$MAIN_UKI" "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
 
 cd .. # and back to root
 
-# Create rootfs tarball for consumption by systemd-sysext (doesn't currently support consuming raw images :()
-rm -rf "$ROOTFS_TAR" ./*.tar
-time tar -C "${OUTPUT}"/ --xattrs --xattrs-include=*.* -cf "$ROOTFS_TAR" .
-time zstd -T0 --rm "$ROOTFS_TAR"
-
 # Drop flatpak data from erofs. They are in the usr/share/factory and deployed from there.
 rm -rf "$OUTPUT/var/lib/flatpak"
 mkdir "$OUTPUT/var/lib/flatpak" # but keep a mountpoint around for the live session
-time mkfs.erofs -d0 -zzstd -Efragments,ztailpacking "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
+time mkfs.erofs -d0 -zzstd:$ZSTD_LEVEL -Efragments,ztailpacking "$ROOTFS_EROFS" "$OUTPUT" > /dev/null 2>&1
 cp --reflink=auto "$ROOTFS_EROFS" kde-linux.cache/root.raw
 
 # Now assemble the two generated images using systemd-repart and the definitions in mkosi.repart into $IMG.

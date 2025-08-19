@@ -3,4 +3,5 @@
 
 [Feature]
 Description=Tar-based RootFS
+# This continues to be enabled so the artifacts get vacuumed.
 Enabled=true

@@ -32,7 +32,7 @@ ukify build \
   --output live.efi
 
 # lsm= defaulting to apparmor from https://wiki.archlinux.org/title/AppArmor
-echo "rw rootflags=subvol=@kde-linux_$IMAGE_VERSION,compress=zstd:1 \
+echo "rw rootflags=subvol=@system,compress=zstd:1 \
   lsm=landlock,lockdown,yama,integrity,apparmor,bpf \
   vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
@@ -41,7 +41,3 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output kde-linux.efi
-
-ukify build \
-  --cmdline "rootflags=subvol=@system,compress=zstd:1 kde-linux.erofs=1" \
-  --output erofs.addon.efi

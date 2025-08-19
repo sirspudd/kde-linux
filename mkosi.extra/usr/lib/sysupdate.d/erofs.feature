@@ -3,4 +3,4 @@
 
 [Feature]
 Description=EROFS-based RootFS
-Enabled=false
+Enabled=true
