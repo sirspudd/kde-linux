@@ -44,5 +44,5 @@ ukify build \
 
 # Mock artifact for upgrades, see build.sh
 ukify build \
-  --cmdline "" \
+  --cmdline "kde-linux.erofs.silence" \
   --output erofs.addon.efi
