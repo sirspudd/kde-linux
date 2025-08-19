@@ -41,3 +41,8 @@ ukify build \
   --initrd initrd \
   --cmdline @cmdline \
   --output kde-linux.efi
+
+# Mock artifact for upgrades, see build.sh
+ukify build \
+  --cmdline "" \
+  --output erofs.addon.efi

@@ -92,6 +92,7 @@ rm -rfv "${OUTPUT}/efi"
 cp -v "${OUTPUT}"/kde-linux.efi "$MAIN_UKI"
 mv -v "${OUTPUT}"/kde-linux.efi "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "$LIVE_UKI"
+mv -v "${OUTPUT}"/erofs.addon.efi "${OUTPUT}_erofs.addon.efi"
 
 make_debug_archive
 
@@ -148,7 +149,6 @@ go install -v github.com/folbricht/desync/cmd/desync@latest
 # Can be removed once we have started having revisions in our update trees.
 tar -cf ${OUTPUT}_root-x86-64.tar -T /dev/null
 zstd --threads=0 --rm ${OUTPUT}_root-x86-64.tar
-touch ${OUTPUT}_erofs.addon.efi
 
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 
