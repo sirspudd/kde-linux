@@ -33,6 +33,10 @@ fn find_rootfs_v1(root: &Path) -> Option<PathBuf> {
         if !name.starts_with("@kde-linux_") {
             continue;
         }
+        if !path.join("etc").exists() {
+            // This is not a useful/valid rootfs v1 subvolume.
+            continue;
+        }
         let mut parts = name.splitn(2, '_');
         let _prefix = parts.next().unwrap();
         let version = parts.next().unwrap();
