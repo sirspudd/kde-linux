@@ -41,7 +41,6 @@ OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
 
 MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
 LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
-EROFS_UKI=${OUTPUT}_erofs.addon.efi          # Output live UKI path
 DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
 ROOTFS_EROFS=${OUTPUT}_root-x86-64.erofs # Output erofs image path
 IMG=${OUTPUT}.raw                    # Output raw image path
@@ -96,11 +95,9 @@ rm -rfv "${OUTPUT}/efi"
 [ -d "${OUTPUT}/usr/share/factory/boot/EFI" ] || mkdir --mode 0700 "${OUTPUT}/usr/share/factory/boot/EFI"
 [ -d "${OUTPUT}/usr/share/factory/boot/EFI/Linux" ] || mkdir --mode 0700 "${OUTPUT}/usr/share/factory/boot/EFI/Linux"
 [ -d "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI_BASE.efi.extra.d" ] || mkdir --mode 0700 "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI_BASE.efi.extra.d"
-cp -v "${OUTPUT}"/erofs.addon.efi "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI_BASE.efi.extra.d/"
 cp -v "${OUTPUT}"/kde-linux.efi "$MAIN_UKI"
 mv -v "${OUTPUT}"/kde-linux.efi "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
 mv -v "${OUTPUT}"/live.efi "$LIVE_UKI"
-mv -v "${OUTPUT}"/erofs.addon.efi "$EROFS_UKI"
 
 make_debug_archive
 
