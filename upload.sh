@@ -43,5 +43,5 @@ sha256sum -- ${sysupdate_dir}/*.erofs >> SHA256SUMS
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 
 scp -i "$SSH_IDENTITY" ./*.raw ./*.torrent "$REMOTE"
-scp -ir "$SSH_IDENTITY" "sysupdate/" "$REMOTE"
+scp -r -i "$SSH_IDENTITY" "sysupdate/" "$REMOTE"
 scp -i "$SSH_IDENTITY" SHA256SUMS SHA256SUMS.gpg "$REMOTE" # upload as last artifact to finalize the upload
