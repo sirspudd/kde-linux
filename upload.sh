@@ -26,17 +26,22 @@ echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUk
 
 # The initial SHA256SUMS file is created by the vacuum script based on what is left on the server. We append to it.
 
+sysupdate_dir=sysupdate/v2
+mkdir -p "$sysupdate_dir"
+mv ./*.efi ./*.tar.zst ./*.erofs ./*.caibx "$sysupdate_dir"
+
 # More readable this way, ignore shellcheck
 # shellcheck disable=SC2129
-sha256sum -- *.efi >> SHA256SUMS
-sha256sum -- *.raw >> SHA256SUMS
-sha256sum -- *.tar.zst >> SHA256SUMS
-sha256sum -- *.torrent >> SHA256SUMS
-sha256sum -- *.erofs >> SHA256SUMS
+sha256sum -- "*.raw" >> SHA256SUMS
+sha256sum -- "*.torrent" >> SHA256SUMS
+sha256sum -- "${sysupdate_dir}/*.efi" >> SHA256SUMS
+sha256sum -- "${sysupdate_dir}/*.tar.zst" >> SHA256SUMS
+sha256sum -- "${sysupdate_dir}/*.erofs" >> SHA256SUMS
 # Don't put caibx into the SHA256SUMS, it will break file matching.
 # https://github.com/systemd/systemd/issues/38605
 
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 
-scp -i "$SSH_IDENTITY" ./*.efi ./*.raw ./*.tar.zst ./*.torrent ./*.erofs ./*.caibx "$REMOTE"
+scp -i "$SSH_IDENTITY" ./*.raw ./*.torrent "$REMOTE"
+scp -ir "$SSH_IDENTITY" "sysupdate/" "$REMOTE"
 scp -i "$SSH_IDENTITY" SHA256SUMS SHA256SUMS.gpg "$REMOTE" # upload as last artifact to finalize the upload
