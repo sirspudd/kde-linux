@@ -100,7 +100,7 @@ make_debug_archive
 # We use kde-linux.cache instead of /tmp as usual because we'll probably run out of space there.
 
 # Since we're building a live image, replace the main UKI with the live one.
-cp "$LIVE_UKI" "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
+mv "$LIVE_UKI" "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI"
 
 # Change to kde-linux.cache since we'll be working there.
 cd kde-linux.cache
