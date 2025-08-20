@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"io"
 	"log"
@@ -59,7 +60,7 @@ func connectToHost(user, host, identity string) (*ssh.Client, *ssh.Session, erro
 }
 
 func readSHA256(url string) string {
-	url = strings.Replace(url, os.Getenv("SSH_PATH"), "https://files.kde.org/kde-linux/", 1)
+	url = strings.Replace(url, os.Getenv("SSH_ROOT_PATH"), "https://files.kde.org/kde-linux/", 1)
 
 	log.Println("Reading SHA256 from", url)
 	var err error
@@ -91,7 +92,33 @@ type release struct {
 	artifacts []string
 }
 
-func readSHA256s(toKeep []string, releases map[string]release) []string {
+func readSHA256SUMS(client *sftp.Client, path string) map[string]string {
+	sha256s := map[string]string{}
+	file, err := client.Open(path)
+	if err != nil {
+		return sha256s // generate a new one if we failed to open the existing one. chances are it's missing
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if err := scanner.Err(); err != nil {
+			log.Fatal("Error encountered:", err)
+		}
+		if line == "" {
+			continue
+		}
+		split := strings.SplitN(line, " ", 2)
+		if len(split) != 2 {
+			log.Fatal("Invalid SHA256SUMS line:", line)
+		}
+		sha256s[split[1]] = split[0]
+	}
+	return sha256s
+}
+
+func readSHA256s(toKeep []string, releases map[string]release, existingSums map[string]string) []string {
 	sha256s := []string{}
 	for _, key := range toKeep {
 		artifacts := releases[key].artifacts
@@ -104,6 +131,13 @@ func readSHA256s(toKeep []string, releases map[string]release) []string {
 			}
 			if strings.HasPrefix(artifact, "/home/kdeos/kde-linux/kdeos_") {
 				// HACK 2025-08-20 sha256s of the files are broken, only drop this if when they are fixed (possibly just a matter of time)
+				continue
+			}
+
+			if sha256, ok := existingSums[artifact]; ok {
+				// If we already have a SHA256 for this artifact, use it
+				log.Println("Using existing SHA256 for", artifact)
+				sha256s = append(sha256s, sha256)
 				continue
 			}
 
@@ -202,6 +236,7 @@ func main() {
 	host := os.Getenv("SSH_HOST")
 	user := os.Getenv("SSH_USER")
 	path := os.Getenv("SSH_PATH")
+	root_path := os.Getenv("SSH_ROOT_PATH")
 
 	var errs []error
 	if identity == "" {
@@ -215,6 +250,9 @@ func main() {
 	}
 	if path == "" {
 		errs = append(errs, errors.New("SSH_PATH not set"))
+	}
+	if root_path == "" {
+		errs = append(errs, errors.New("SSH_ROOT_PATH not set"))
 	}
 	for _, err := range errs {
 		log.Println(err)
@@ -236,7 +274,7 @@ func main() {
 	}
 	defer client.Close()
 
-	config, err := readConfig(client, path+"/vacuum.yaml")
+	config, err := readConfig(client, root_path+"/vacuum.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -296,6 +334,8 @@ func main() {
 		log.Println("Keeping", key)
 	}
 
+	existingSums := readSHA256SUMS(client, path+"/SHA256SUMS")
+
 	// Start the SHA256SUMS file. It will be completed by the upload script.
-	writeSHA256s(readSHA256s(toKeep, releases))
+	writeSHA256s(readSHA256s(toKeep, releases, existingSums))
 }
