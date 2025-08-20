@@ -30,7 +30,7 @@ sysupdate_dir=sysupdate/v2
 mkdir -p "$sysupdate_dir"
 mv ./*.efi ./*.tar.zst ./*.erofs ./*.caibx "$sysupdate_dir"
 
-# More readable this way, ignore shellcheck
+# We need shell globs here! More readable this way. Ignore shellcheck.
 # shellcheck disable=SC2129
 sha256sum -- *.raw >> SHA256SUMS
 sha256sum -- *.torrent >> SHA256SUMS
