@@ -162,6 +162,11 @@ func loadReleases(client *sftp.Client, path string, config *config) (map[string]
 			return releases, errors.New("Failed to walk path: " + w.Err().Error())
 		}
 
+		if w.Stat().IsDir() {
+			// Skip directories
+			continue
+		}
+
 		name := w.Stat().Name()
 		// NOTE: we want to keep the legacy kdeos_ prefix for as long as we have relevant tombstones around. Which is possibly forever.
 		if !strings.HasPrefix(name, "kdeos_") && !strings.HasPrefix(name, "kde-linux_") {
