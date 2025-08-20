@@ -156,7 +156,7 @@ func readConfig(client *sftp.Client, path string) (*config, error) {
 func loadReleases(client *sftp.Client, path string, config *config) (map[string]release, error) {
 	releases := map[string]release{}
 
-	w := client.Walk(path + "/") // The terminal / is important otherwise we'll walk the symlink
+	w := client.Walk(path + "/") // The terminal / is important otherwise we'll walk the symlink (kde-linux on-disk is a symlink to the real location)
 	for w.Step() {
 		if w.Err() != nil {
 			return releases, errors.New("Failed to walk path: " + w.Err().Error())
