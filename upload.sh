@@ -32,11 +32,11 @@ mv ./*.efi ./*.tar.zst ./*.erofs ./*.caibx "$sysupdate_dir"
 
 # More readable this way, ignore shellcheck
 # shellcheck disable=SC2129
-sha256sum -- "*.raw" >> SHA256SUMS
-sha256sum -- "*.torrent" >> SHA256SUMS
-sha256sum -- "${sysupdate_dir}/*.efi" >> SHA256SUMS
-sha256sum -- "${sysupdate_dir}/*.tar.zst" >> SHA256SUMS
-sha256sum -- "${sysupdate_dir}/*.erofs" >> SHA256SUMS
+sha256sum -- *.raw >> SHA256SUMS
+sha256sum -- *.torrent >> SHA256SUMS
+sha256sum -- ${sysupdate_dir}/*.efi >> SHA256SUMS
+sha256sum -- ${sysupdate_dir}/*.tar.zst >> SHA256SUMS
+sha256sum -- ${sysupdate_dir}/*.erofs >> SHA256SUMS
 # Don't put caibx into the SHA256SUMS, it will break file matching.
 # https://github.com/systemd/systemd/issues/38605
 
