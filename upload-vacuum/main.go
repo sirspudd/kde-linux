@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -263,11 +264,14 @@ func main() {
 
 	var toDelete []string
 	for len(toKeep) > 4 {
-		log.Println("Marking for deletion (unless protected)", toKeep[len(toKeep)-1])
-		toDelete = append(toDelete, toKeep[len(toKeep)-1])
+		release := toKeep[len(toKeep)-1]
+		if !slices.Contains(toProtect, release) {
+			log.Println("Marking for deletion (unless protected)", release)
+			toDelete = append(toDelete, release)
+		}
 		toKeep = toKeep[:len(toKeep)-1]
 	}
-	toKeep = append(toKeep, toProtect...) // always keep protected versions
+	toKeep = append(toKeep, toProtect...) // always keep protected version
 
 	for _, key := range toDelete {
 		log.Println("Deleting", key)
