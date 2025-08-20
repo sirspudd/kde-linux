@@ -246,14 +246,12 @@ func main() {
 		return
 	}
 
-	for _, tombstone := range config.TombstoneImages {
-		log.Println("Ignoring (keeping) tombstone image", tombstone)
-		delete(releases, tombstone)
+	var toProtect []string
+	for _, release := range config.TombstoneImages {
+		toProtect = append(toProtect, release)
 	}
-
-	for _, gold := range config.GoldImages {
-		log.Println("Ignoring (keeping) golden image", gold)
-		delete(releases, gold)
+	for _, release := range config.GoldImages {
+		toProtect = append(toProtect, release)
 	}
 
 	// Sort releases by key
@@ -265,10 +263,11 @@ func main() {
 
 	var toDelete []string
 	for len(toKeep) > 4 {
-		log.Println("Marking for deletion", toKeep[len(toKeep)-1])
+		log.Println("Marking for deletion (unless protected)", toKeep[len(toKeep)-1])
 		toDelete = append(toDelete, toKeep[len(toKeep)-1])
 		toKeep = toKeep[:len(toKeep)-1]
 	}
+	toKeep = append(toKeep, toProtect...) // always keep protected versions
 
 	for _, key := range toDelete {
 		log.Println("Deleting", key)
