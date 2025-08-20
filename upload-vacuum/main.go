@@ -102,7 +102,7 @@ func readSHA256s(toKeep []string, releases map[string]release) []string {
 				// https://github.com/systemd/systemd/issues/38605
 				continue
 			}
-			if strings.HasPrefix(artifact, "kdeos_") {
+			if strings.HasPrefix(artifact, "/home/kdeos/kde-linux/kdeos_") {
 				// HACK 2025-08-20 sha256s of the files are broken, only drop this if when they are fixed (possibly just a matter of time)
 				continue
 			}
