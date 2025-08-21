@@ -5,6 +5,7 @@ include:
   - project: sysadmin/ci-utilities
     file:
       - /gitlab-templates/reuse-lint.yml
+      - /gitlab-templates/blocks/workflow.yml
 
 
 stages:
@@ -17,6 +18,7 @@ imaging:
     - VM
     - amd64
   rules:
+    - !reference [.default_rules, rules]
     - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'kde-linux/kde-linux'
       when: always
   allow_failure: false
