@@ -267,7 +267,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <description>
         <p>Initial release of KDE Linux featuring:</p>
         <ul>
-          <li>KDE Plasma 6.0</li>
+          <li>KDE Plasma</li>
           <li>Linux kernel 6.7</li>
           <li>Updated KDE Applications suite</li>
           <li>New system installer</li>
@@ -277,7 +277,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   </releases>
   <screenshots>
     <screenshot type="default">
-      <caption>KDE Linux desktop with Plasma 6.0</caption>
+      <caption>KDE Linux desktop with Plasma</caption>
       <caption xml:lang="ar">سطح مكتب كيدي لينكس مع بلازما 6.0</caption>
       <caption xml:lang="ca">Escriptori de KDE Linux amb el Plasma 6.0</caption>
       <caption xml:lang="ca-valencia">Escriptori de KDE Linux amb Plasma 6.0</caption>
