@@ -18,8 +18,13 @@ imaging:
     - VM
     - amd64
   rules:
+    - if: $CI_MERGE_REQUEST_DRAFT == "true"
+      when: manual
+    - if: $CI_COMMIT_BRANCH =~ /^work\//
+      when: manual
     - if: $CI_COMMIT_REF_PROTECTED != 'true' || $CI_DEFAULT_BRANCH != $CI_COMMIT_REF_NAME || $CI_PROJECT_PATH != 'kde-linux/kde-linux'
       when: always
+
   allow_failure: false
   image: storage.kde.org/vm-images/kde-linux-builder
   variables: &variables
