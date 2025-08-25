@@ -25,7 +25,9 @@ fi
 rm -rf \
     /etc/pacman.d/gnupg \
     /.gnupg \
-    /var/cache/pacman
+    /var/cache/pacman \
+    /var/lib/pacman \
+    /var/log/pacman.log
 
 ## Pacman being present confuses users into thinking they can use it to install packages.
 rm -f /usr/bin/pacman
