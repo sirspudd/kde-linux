@@ -82,6 +82,18 @@ mkosi \
     --output-directory=. \
     "$@"
 
+# Adjust mtime to reduce unnecessary churn between images caused by us rebuilding repos that have possible not changed in source or binary interfaces.
+if [ -f "$PWD/.secure_files/ssh.key" ]; then
+  # You can use `ssh-keyscan origin.files.kde.org` to get the host key
+  echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUkOZK+owIiByjNQPzGi7GQ5HOWjO6" >> ~/.ssh/known_hosts
+
+  chmod 600 "$PWD/.secure_files/ssh.key"
+
+  scp -i "$PWD/.secure_files/ssh.key" kdeos@origin.files.kde.org:/home/kdeos/mtimer.json mtimer.json
+  go -C ./mtimer/ run . -root "$OUTPUT" -json "mtimer.json"
+  scp -i "$PWD/.secure_files/ssh.key" mtimer.json kdeos@origin.files.kde.org:/home/kdeos/mtimer.json
+fi
+
 # NOTE: /efi must be empty so auto mounting can happen. As such we put our templates in a different directory
 rm -rfv "${OUTPUT}/efi"
 [ -d "${OUTPUT}/efi" ] || mkdir --mode 0700 "${OUTPUT}/efi"
