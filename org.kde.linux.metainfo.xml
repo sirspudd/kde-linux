@@ -278,32 +278,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <screenshots>
     <screenshot type="default">
       <caption>KDE Linux desktop with Plasma</caption>
-      <caption xml:lang="ar">سطح مكتب كيدي لينكس مع بلازما 6.0</caption>
-      <caption xml:lang="ca">Escriptori de KDE Linux amb el Plasma 6.0</caption>
-      <caption xml:lang="ca-valencia">Escriptori de KDE Linux amb Plasma 6.0</caption>
-      <caption xml:lang="de">KDE-Plasma-Arbeitsfläche mit Plasma 6.0</caption>
-      <caption xml:lang="es">Escritorio KDE Linux con Plasma 6.0</caption>
-      <caption xml:lang="eu">KDE Linux mahaigaina Plasma 6.0rekin</caption>
-      <caption xml:lang="fi">KDE Linux -työpöytä Plasma 6.0:lla</caption>
-      <caption xml:lang="fr">Ordinateur de bureau sous KDE Linux avec Plasma 6.0</caption>
-      <caption xml:lang="gl">Escritorio de KDE Linux con Plasma 6.0.</caption>
-      <caption xml:lang="he">שולחן עבודה לינוקס KDE עם פלזמה 6.0</caption>
-      <caption xml:lang="ia">Scriptorio de KDE Linux con Plasma 6.0</caption>
-      <caption xml:lang="it">Il desktop di KDE Linux con Plasma 6.0</caption>
-      <caption xml:lang="ka">KDE Linux-ის სამუშაო გარემო Plasma 6.0-სთან ერთად</caption>
-      <caption xml:lang="ko">Plasma 6.0을 구동 중인 KDE 리눅스 데스크톱</caption>
-      <caption xml:lang="lv">„KDE Linux“ darbvirsma ar „Plasma“ 6.0 versiju</caption>
-      <caption xml:lang="nl">KDE Linux bureaublad met Plasma 6.0</caption>
-      <caption xml:lang="pl">Pulpit KDE Linux z Plazmą 6.0</caption>
-      <caption xml:lang="pt-BR">Desktop KDE Linux com Plasma 6.0</caption>
-      <caption xml:lang="ru">Рабочий стол KDE Linux с Plasma 6.0</caption>
-      <caption xml:lang="sl">Namizje KDE Linux s Plasma 6.0</caption>
-      <caption xml:lang="sv">KDE Linux skrivbord med Plasma 6.0</caption>
-      <caption xml:lang="tr">Plasma 6.0 ile KDE Linux masaüstü</caption>
-      <caption xml:lang="uk">Стільниця KDE Linux з Плазмою 6.0</caption>
-      <caption xml:lang="x-test">xxKDE Linux desktop with Plasma 6.0xx</caption>
-      <caption xml:lang="zh-CN">KDE Linux 桌面，基于Plasma 6.0</caption>
-      <caption xml:lang="zh-TW">使用 Plasma 6.0 的 KDE Linux 桌面</caption>
       <image type="source" width="1920" height="1080">https://kdelinux.org/screenshots/desktop.png</image>
     </screenshot>
   </screenshots>
