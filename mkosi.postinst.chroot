@@ -120,7 +120,19 @@ EOF
 # Set default shell as zsh for new users
 sed -i 's%^SHELL=/usr/bin/bash%SHELL=/usr/bin/zsh%' /etc/default/useradd
 
-plymouth-set-default-theme breeze-bgrt
+# Our Plymouth Theme
+KEEP_THEME="breeze-bgrt"
+
+# Set default Plymouth Theme
+plymouth-set-default-theme "$KEEP_THEME"
+
+# Remove all other themes
+for theme in $(plymouth-set-default-theme -l); do
+    if [[ "$theme" != "$KEEP_THEME" ]]; then
+        theme_dir="/usr/share/plymouth/themes/$theme"
+        [[ -d "$theme_dir" ]] && rm -rf -- "$theme_dir"
+    fi
+done
 
 cd /tmp
 /usr/bin/_kde-linux-rebuild-efi
