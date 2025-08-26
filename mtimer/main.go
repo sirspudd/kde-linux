@@ -102,11 +102,6 @@ func updateDir(dir DirInfo) {
 		log.Fatal(err)
 	}
 
-	dir.info, err = os.Stat(dir.absPath) // Refresh in case it changed
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	latest := time.Unix(0, 0)
 	for _, entry := range entries {
 		if entry.Type()&os.ModeSymlink != 0 {
@@ -121,11 +116,8 @@ func updateDir(dir DirInfo) {
 		}
 	}
 
-	if latest.After(dir.info.ModTime()) {
-		log.Println("Restoring mtime for directory", dir.absPath)
-		if err := os.Chtimes(dir.absPath, latest, latest); err != nil {
-			log.Fatal(err)
-		}
+	if err := os.Chtimes(dir.absPath, latest, latest); err != nil {
+		log.Fatal(err)
 	}
 }
 
