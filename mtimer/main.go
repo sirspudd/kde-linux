@@ -150,9 +150,6 @@ func main() {
 		if err != nil {
 			return err
 		}
-		if info.Mode()&os.ModeSymlink != 0 {
-			return nil
-		}
 		if info.IsDir() {
 			dirs = append(dirs, DirInfo{absPath: path, info: info})
 			return nil
