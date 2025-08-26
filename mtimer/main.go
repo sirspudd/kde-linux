@@ -31,12 +31,24 @@ type FileInfo struct {
 	MTime  int64  `json:"mtime"`
 }
 
-type SHA256Sums struct {
-	Files map[string]FileInfo `json:"files"`
+type LinkInfo struct {
+	Target string `json:"target"`
+	MTime  int64  `json:"mtime"`
 }
 
-type Analysis struct {
+type SHA256Sums struct {
+	Files    map[string]FileInfo `json:"files"`
+	Symlinks map[string]LinkInfo `json:"symlinks"`
+}
+
+type FileAnalysis struct {
 	info    FileInfo
+	absPath string
+	relPath string
+}
+
+type LinkAnalysis struct {
+	info    LinkInfo
 	absPath string
 	relPath string
 }
@@ -76,11 +88,23 @@ func recordNewFile(blob *SHA256Sums, absPath string, relPath string, info os.Fil
 	}
 }
 
-func analyze(input Analysis) Analysis {
+func recordNewSymlink(blob *SHA256Sums, absPath string, relPath string, info os.FileInfo) {
+	target, err := os.Readlink(absPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	blob.Symlinks[relPath] = LinkInfo{
+		Target: target,
+		MTime:  info.ModTime().Unix(),
+	}
+}
+
+func analyzeFile(input FileAnalysis) FileAnalysis {
 	newSum := sha256SumFile(input.absPath)
 	if input.info.SHA256 != newSum {
 		// File is really different
-		return Analysis{
+		return FileAnalysis{
 			info: FileInfo{
 				SHA256: newSum,
 				MTime:  input.info.MTime,
@@ -91,7 +115,31 @@ func analyze(input Analysis) Analysis {
 	}
 
 	// The file has not actually changed. Apply the original mtime.
-	log.Println("Restoring mtime for", input.relPath)
+	log.Println("Restoring mtime for file", input.relPath)
+	os.Chtimes(input.absPath, time.Unix(input.info.MTime, 0), time.Unix(input.info.MTime, 0))
+	return input
+}
+
+func analyzeLink(input LinkAnalysis) LinkAnalysis {
+	newTarget, err := os.Readlink(input.absPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if input.info.Target != newTarget {
+		// Link actually changed
+		return LinkAnalysis{
+			info: LinkInfo{
+				Target: newTarget,
+				MTime:  input.info.MTime,
+			},
+			absPath: input.absPath,
+			relPath: input.relPath,
+		}
+	}
+
+	// The link has not actually changed. Apply the original mtime.
+	log.Println("Restoring mtime for symlink", input.relPath)
 	os.Chtimes(input.absPath, time.Unix(input.info.MTime, 0), time.Unix(input.info.MTime, 0))
 	return input
 }
@@ -139,18 +187,21 @@ func main() {
 	}
 
 	newBlob := &SHA256Sums{
-		Files: map[string]FileInfo{},
+		Files:    map[string]FileInfo{},
+		Symlinks: map[string]LinkInfo{},
 	}
 
 	// We also collect all directories so we might chmod them later.
 	dirs := []DirInfo{}
 
-	toAnalyze := []Analysis{}
+	toAnalyze := []FileAnalysis{}
+	linksToAnalyze := []LinkAnalysis{}
 	err = filepath.Walk(*root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if info.IsDir() {
+			// We analyze dirs in a special pass later.
 			dirs = append(dirs, DirInfo{absPath: path, info: info})
 			return nil
 		}
@@ -158,6 +209,29 @@ func main() {
 		relPath, err := filepath.Rel(*root, path)
 		if err != nil {
 			return err
+		}
+
+		if info.Mode()&os.ModeSymlink != 0 {
+			blobInfo, ok := blob.Symlinks[relPath]
+			if !ok {
+				// New symlink, create new entry
+				recordNewSymlink(newBlob, path, relPath, info)
+				return nil
+			}
+
+			if blobInfo.MTime != info.ModTime().Unix() { // We only care about seconds precision, there is more than that between two builds anyway
+				// Changed file, queue for analysis
+				linksToAnalyze = append(linksToAnalyze, LinkAnalysis{
+					info:    blobInfo,
+					absPath: path,
+					relPath: relPath,
+				})
+				return nil
+			}
+
+			// Unchanged, carry over old entry
+			newBlob.Symlinks[relPath] = blobInfo
+			return nil
 		}
 
 		blobInfo, ok := blob.Files[relPath]
@@ -169,7 +243,7 @@ func main() {
 
 		if blobInfo.MTime != info.ModTime().Unix() { // We only care about seconds precision, there is more than that between two builds anyway
 			// Changed file, queue for analysis
-			toAnalyze = append(toAnalyze, Analysis{
+			toAnalyze = append(toAnalyze, FileAnalysis{
 				info:    blobInfo,
 				absPath: path,
 				relPath: relPath,
@@ -189,27 +263,43 @@ func main() {
 	g, ctx := errgroup.WithContext(ctx)
 	g.SetLimit(runtime.NumCPU())
 
-	results := make([]Analysis, len(toAnalyze))
+	fileResults := make([]FileAnalysis, len(toAnalyze))
 	for i, input := range toAnalyze {
 		i, input := i, input // https://golang.org/doc/faq#closures_and_goroutines
 		g.Go(func() error {
-			info := analyze(input)
-			results[i] = info
+			info := analyzeFile(input)
+			fileResults[i] = info
 			return nil
 		})
 	}
+
+	linkResults := make([]LinkAnalysis, len(linksToAnalyze))
+	for i, input := range linksToAnalyze {
+		i, input := i, input // https://golang.org/doc/faq#closures_and_goroutines
+		g.Go(func() error {
+			info := analyzeLink(input)
+			linkResults[i] = info
+			return nil
+		})
+	}
+
 	g.Go(func() error {
 		// Sort directories by depth, deepest first.
 		// Be mindful that we change dirs in-place. This is not thread safe and relies on our errgroup waiting!
 		sort.Slice(dirs, func(i, j int) bool { return strings.Count(dirs[i].absPath, "/") > strings.Count(dirs[j].absPath, "/") })
 		return nil
 	})
+
 	if err := g.Wait(); err != nil {
 		log.Fatal(err)
 	}
 
-	for _, result := range results {
+	for _, result := range fileResults {
 		newBlob.Files[result.relPath] = result.info
+	}
+
+	for _, result := range linkResults {
+		newBlob.Symlinks[result.relPath] = result.info
 	}
 
 	// Now let's chtimes the directories to the latest mtime of their contents.
