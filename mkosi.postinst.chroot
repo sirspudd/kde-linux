@@ -126,9 +126,9 @@ KEEP_THEME="breeze-bgrt"
 # Set default Plymouth Theme
 plymouth-set-default-theme "$KEEP_THEME"
 
-# Remove all other themes
+# Remove all other themes except KEEP_THEME, text, and details
 for theme in $(plymouth-set-default-theme -l); do
-    if [[ "$theme" != "$KEEP_THEME" ]]; then
+    if [[ "$theme" != "$KEEP_THEME" && "$theme" != "text" && "$theme" != "details" ]]; then
         theme_dir="/usr/share/plymouth/themes/$theme"
         [[ -d "$theme_dir" ]] && rm -rf -- "$theme_dir"
     fi
