@@ -107,7 +107,7 @@ func updateDir(dir DirInfo) {
 		log.Fatal(err)
 	}
 
-	latest := dir.info.ModTime()
+	latest := time.Unix(0, 0)
 	for _, entry := range entries {
 		if entry.Type()&os.ModeSymlink != 0 {
 			continue
