@@ -14,10 +14,17 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
+	"strings"
 	"time"
 
 	"golang.org/x/sync/errgroup"
 )
+
+type DirInfo struct {
+	absPath string
+	info    os.FileInfo
+}
 
 type FileInfo struct {
 	SHA256 string `json:"sha256"`
@@ -89,6 +96,39 @@ func analyze(input Analysis) Analysis {
 	return input
 }
 
+func updateDir(dir DirInfo) {
+	entries, err := os.ReadDir(dir.absPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dir.info, err = os.Stat(dir.absPath) // Refresh in case it changed
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	latest := dir.info.ModTime()
+	for _, entry := range entries {
+		if entry.Type()&os.ModeSymlink != 0 {
+			continue
+		}
+		entryInfo, err := entry.Info()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if entryInfo.ModTime().After(latest) {
+			latest = entryInfo.ModTime()
+		}
+	}
+
+	if latest.After(dir.info.ModTime()) {
+		log.Println("Restoring mtime for directory", dir.absPath)
+		if err := os.Chtimes(dir.absPath, latest, latest); err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
 func main() {
 	root := flag.String("root", "", "rootfs to operate on")
 	jsonPath := flag.String("json", "", "json file to read and write")
@@ -110,12 +150,19 @@ func main() {
 		Files: map[string]FileInfo{},
 	}
 
+	// We also collect all directories so we might chmod them later.
+	dirs := []DirInfo{}
+
 	toAnalyze := []Analysis{}
 	err = filepath.Walk(*root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+		if info.Mode()&os.ModeSymlink != 0 {
+			return nil
+		}
+		if info.IsDir() {
+			dirs = append(dirs, DirInfo{absPath: path, info: info})
 			return nil
 		}
 
@@ -162,12 +209,26 @@ func main() {
 			return nil
 		})
 	}
+	g.Go(func() error {
+		// Sort directories by depth, deepest first.
+		// Be mindful that we change dirs in-place. This is not thread safe and relies on our errgroup waiting!
+		sort.Slice(dirs, func(i, j int) bool { return strings.Count(dirs[i].absPath, "/") > strings.Count(dirs[j].absPath, "/") })
+		return nil
+	})
 	if err := g.Wait(); err != nil {
 		log.Fatal(err)
 	}
 
 	for _, result := range results {
 		newBlob.Files[result.relPath] = result.info
+	}
+
+	// Now let's chtimes the directories to the latest mtime of their contents.
+	// This could be more efficient but makes for somewhat complicated code.
+	// Instead we run the directories in a single thread.
+	// Unfortunate but it is what it is.
+	for _, dir := range dirs {
+		updateDir(dir)
 	}
 
 	data, err := json.Marshal(newBlob)
