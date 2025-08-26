@@ -170,7 +170,7 @@ func main() {
 		newBlob.Files[result.relPath] = result.info
 	}
 
-	data, err := json.MarshalIndent(newBlob, "", "  ")
+	data, err := json.Marshal(newBlob)
 	if err != nil {
 		log.Fatal(err)
 	}
