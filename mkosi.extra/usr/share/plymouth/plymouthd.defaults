@@ -1,7 +1,5 @@
-# SPDX-FileCopyrightText: none
-# SPDX-License-Identifier: CC0-1.0
-
-# Distribution defaults.
+# Distribution defaults. Changes to this file will get overwritten during
+# upgrades.
 [Daemon]
 Theme=breeze-bgrt
 ShowDelay=0
