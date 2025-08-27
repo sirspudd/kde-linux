@@ -42,15 +42,17 @@ type SHA256Sums struct {
 }
 
 type FileAnalysis struct {
-	info    FileInfo
-	absPath string
-	relPath string
+	statInfo os.FileInfo
+	blobInfo FileInfo
+	absPath  string
+	relPath  string
 }
 
 type LinkAnalysis struct {
-	info    LinkInfo
-	absPath string
-	relPath string
+	statInfo os.FileInfo
+	blobInfo LinkInfo
+	absPath  string
+	relPath  string
 }
 
 func loadBlob(jsonPath string) (*SHA256Sums, error) {
@@ -102,12 +104,12 @@ func recordNewSymlink(blob *SHA256Sums, absPath string, relPath string, info os.
 
 func analyzeFile(input FileAnalysis) FileAnalysis {
 	newSum := sha256SumFile(input.absPath)
-	if input.info.SHA256 != newSum {
+	if input.blobInfo.SHA256 != newSum {
 		// File is really different
 		return FileAnalysis{
-			info: FileInfo{
+			blobInfo: FileInfo{
 				SHA256: newSum,
-				MTime:  input.info.MTime,
+				MTime:  input.statInfo.ModTime().Unix(),
 			},
 			absPath: input.absPath,
 			relPath: input.relPath,
@@ -116,7 +118,7 @@ func analyzeFile(input FileAnalysis) FileAnalysis {
 
 	// The file has not actually changed. Apply the original mtime.
 	log.Println("Restoring mtime for file", input.relPath)
-	os.Chtimes(input.absPath, time.Unix(input.info.MTime, 0), time.Unix(input.info.MTime, 0))
+	os.Chtimes(input.absPath, time.Unix(input.blobInfo.MTime, 0), time.Unix(input.blobInfo.MTime, 0))
 	return input
 }
 
@@ -126,12 +128,12 @@ func analyzeLink(input LinkAnalysis) LinkAnalysis {
 		log.Fatal(err)
 	}
 
-	if input.info.Target != newTarget {
+	if input.blobInfo.Target != newTarget {
 		// Link actually changed
 		return LinkAnalysis{
-			info: LinkInfo{
+			blobInfo: LinkInfo{
 				Target: newTarget,
-				MTime:  input.info.MTime,
+				MTime:  input.statInfo.ModTime().Unix(),
 			},
 			absPath: input.absPath,
 			relPath: input.relPath,
@@ -140,7 +142,7 @@ func analyzeLink(input LinkAnalysis) LinkAnalysis {
 
 	// The link has not actually changed. Apply the original mtime.
 	log.Println("Restoring mtime for symlink", input.relPath)
-	os.Chtimes(input.absPath, time.Unix(input.info.MTime, 0), time.Unix(input.info.MTime, 0))
+	os.Chtimes(input.absPath, time.Unix(input.blobInfo.MTime, 0), time.Unix(input.blobInfo.MTime, 0))
 	return input
 }
 
@@ -222,9 +224,10 @@ func main() {
 			if blobInfo.MTime != info.ModTime().Unix() { // We only care about seconds precision, there is more than that between two builds anyway
 				// Changed file, queue for analysis
 				linksToAnalyze = append(linksToAnalyze, LinkAnalysis{
-					info:    blobInfo,
-					absPath: path,
-					relPath: relPath,
+					statInfo: info,
+					blobInfo: blobInfo,
+					absPath:  path,
+					relPath:  relPath,
 				})
 				return nil
 			}
@@ -244,9 +247,10 @@ func main() {
 		if blobInfo.MTime != info.ModTime().Unix() { // We only care about seconds precision, there is more than that between two builds anyway
 			// Changed file, queue for analysis
 			toAnalyze = append(toAnalyze, FileAnalysis{
-				info:    blobInfo,
-				absPath: path,
-				relPath: relPath,
+				statInfo: info,
+				blobInfo: blobInfo,
+				absPath:  path,
+				relPath:  relPath,
 			})
 			return nil
 		}
@@ -295,11 +299,11 @@ func main() {
 	}
 
 	for _, result := range fileResults {
-		newBlob.Files[result.relPath] = result.info
+		newBlob.Files[result.relPath] = result.blobInfo
 	}
 
 	for _, result := range linkResults {
-		newBlob.Symlinks[result.relPath] = result.info
+		newBlob.Symlinks[result.relPath] = result.blobInfo
 	}
 
 	// Now let's chtimes the directories to the latest mtime of their contents.
