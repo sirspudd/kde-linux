@@ -278,6 +278,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <screenshots>
     <screenshot type="default">
       <caption>KDE Linux desktop with Plasma</caption>
+      <caption xml:lang="x-test">xxKDE Linux desktop with Plasmaxx</caption>
       <image type="source" width="1920" height="1080">https://kdelinux.org/screenshots/desktop.png</image>
     </screenshot>
   </screenshots>
