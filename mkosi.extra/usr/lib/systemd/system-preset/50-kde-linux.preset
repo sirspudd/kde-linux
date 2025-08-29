@@ -7,7 +7,6 @@ enable avahi-daemon.socket
 # fail to do so if the daemon is not up (avahi-browse for example just errors out instead of dbus-activating)
 enable avahi-daemon.service
 enable accounts-daemon.service
-enable kde-initial-system-setup.service
 enable NetworkManager.service
 enable snapd.socket
 enable snapd.apparmor.service
