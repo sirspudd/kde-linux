@@ -73,6 +73,10 @@ rm --recursive --force kde-linux-sysupdated
 git clone https://invent.kde.org/kde-linux/kde-linux-sysupdated
 DESTDIR=$PWD/mkosi.extra make --directory=kde-linux-sysupdated install
 
+rm --recursive --force etc-factory
+git clone https://invent.kde.org/kde-linux/etc-factory
+DESTDIR=$PWD/mkosi.extra make --directory=etc-factory install
+
 mkosi \
     --environment="CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA:-unknownSHA}" \
     --environment="CI_COMMIT_SHA=${CI_COMMIT_SHA:-unknownSHA}" \
