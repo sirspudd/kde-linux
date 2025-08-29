@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
 
-import os
 import subprocess
 import time
 from pathlib import Path
+import json
 
 callback = None
 with open('/proc/cmdline') as cmdline:
@@ -22,8 +22,18 @@ if callback is None:
     print('No callback specified. set kde-linux.basic-test-callback=')
     exit(1)
 
+bad_callback = callback.replace('/good', '/bad')
+
 while True:
     # 1000 is the uid of the live user. always.
     if Path('/run/user/1000/kde-linux-bless-session').is_file():
-        subprocess.check_call(['curl', callback])
+        failed = json.loads(subprocess.check_output(["systemctl", "--failed", "--output=json"]))
+        if len(failed) > 0:
+            subprocess.check_call(['curl',
+                                   '--request', 'GET',
+                                   '--header', 'Content-type: application/json',
+                                   '--data', json.dumps(failed),
+                                   bad_callback])
+        else:
+            subprocess.check_call(['curl', callback])
     time.sleep(30)

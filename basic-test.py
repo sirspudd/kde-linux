@@ -16,6 +16,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if self.path == '/good':
             sys.exit(0)
         if self.path == '/bad':
+            print("==Received /bad callback==")
+            content_len = int(self.headers.get('Content-Length'))
+            body = self.rfile.read(content_len)
+            print(body.decode('utf-8'))
             sys.exit(1)
         self.send_response(200)
         self.end_headers()
