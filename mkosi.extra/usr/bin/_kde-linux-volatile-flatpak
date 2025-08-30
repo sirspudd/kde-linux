@@ -9,7 +9,7 @@ if ! grep "kde-linux.live=1" /proc/cmdline; then
     exit 1
 fi
 
-if [ "$(readlink --canonicalize /dev/disk/by-label/KDELinuxLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
+if [ "$(readlink --canonicalize /dev/disk/by-partlabel/KDELinuxLive)" != "$(readlink --canonicalize /dev/gpt-auto-root)" ]; then
     echo "gpt-auto-root is not KDELinuxLive"
     exit 1
 fi
