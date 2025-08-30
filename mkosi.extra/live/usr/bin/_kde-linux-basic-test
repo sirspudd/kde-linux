@@ -29,10 +29,19 @@ while True:
     if Path('/run/user/1000/kde-linux-bless-session').is_file():
         failed = json.loads(subprocess.check_output(["systemctl", "--failed", "--output=json"]))
         if len(failed) > 0:
+            with open('data.file', 'w') as f:
+                for unit in failed:
+                    f.write("\n")
+                    f.write(json.dumps(unit))
+                    f.write("\n")
+                    try:
+                        f.write(subprocess.check_output(['journalctl', '--no-pager', f'_SYSTEMD_UNIT={unit['unit']}']).decode('utf-8'))
+                    except Exception as e:
+                        f.write(f"Failed to get journal for {unit['unit']}: {e}\n")
+                f.write("\n") # make sure we have a final newline
             subprocess.check_call(['curl',
                                    '--request', 'GET',
-                                   '--header', 'Content-type: application/json',
-                                   '--data', json.dumps(failed),
+                                   '--data-binary', '@data.file', # use binary as otherwise curl will eat the newlines
                                    bad_callback])
         else:
             subprocess.check_call(['curl', callback])
