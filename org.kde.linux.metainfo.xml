@@ -285,6 +285,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <caption xml:lang="eu">KDE Linux mahaigaina Plasmarekin</caption>
       <caption xml:lang="fr">Ordinateur de bureau sous KDE Linux avec Plasma</caption>
       <caption xml:lang="he">שולחן עבודה לינוקס KDE עם פלזמה</caption>
+      <caption xml:lang="it">Il desktop di KDE Linux con Plasma</caption>
       <caption xml:lang="ka">KDE Linux-ის სამუშაო გარემო Plasma-სთან ერთად</caption>
       <caption xml:lang="nl">KDE Linux bureaublad met Plasma</caption>
       <caption xml:lang="pt-BR">Desktop KDE Linux com Plasma</caption>
@@ -294,6 +295,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <caption xml:lang="uk">Стільниця KDE Linux з Плазмою</caption>
       <caption xml:lang="x-test">xxKDE Linux desktop with Plasmaxx</caption>
       <caption xml:lang="zh-CN">KDE Linux 桌面，预装 Plasma 桌面环境</caption>
+      <caption xml:lang="zh-TW">使用 Plasma 的 KDE Linux 桌面</caption>
       <image type="source" width="1920" height="1080">https://kdelinux.org/screenshots/desktop.png</image>
     </screenshot>
   </screenshots>
