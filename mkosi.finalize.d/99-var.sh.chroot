@@ -6,7 +6,7 @@ set -eux
 
 # Copy /var/lib/flatpak into factory dir for tmpfiles.d (see tmpfiles.d docs).
 [ -d /usr/share/factory/var/lib ] || mkdir --parents /usr/share/factory/var/lib
-cp --archive --no-target-directory --update=none /var/lib/flatpak /usr/share/factory/var/lib/flatpak
+cp --archive --no-target-directory --update=all /var/lib/flatpak /usr/share/factory/var/lib/flatpak
 
 # Same for spool (cups)
 # factory/var already exists, no need to mkdir it.
