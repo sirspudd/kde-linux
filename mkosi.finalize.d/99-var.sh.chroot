@@ -10,4 +10,4 @@ cp --archive --no-target-directory --update=all /var/lib/flatpak /usr/share/fact
 
 # Same for spool (cups)
 # factory/var already exists, no need to mkdir it.
-cp --archive --no-target-directory --update=all /var/lib/spool /usr/share/factory/var/spool
+cp --archive --no-target-directory --update=all /var/spool /usr/share/factory/var/spool
