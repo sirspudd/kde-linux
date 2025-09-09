@@ -29,7 +29,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <name xml:lang="sv">KDE Linux</name>
   <name xml:lang="tr">KDE Linux</name>
   <name xml:lang="uk">KDE Linux</name>
-  <name xml:lang="x-test">xxKDE Linuxxx</name>
   <name xml:lang="zh-CN">KDE Linux</name>
   <name xml:lang="zh-TW">KDE Linux</name>
   <summary>A modern Linux distribution focused on the KDE Plasma desktop environment</summary>
@@ -56,7 +55,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <summary xml:lang="sv">En modern Linux-distribution fokuserad på skrivbordsmiljön KDE Plasma</summary>
   <summary xml:lang="tr">KDE Plasma masaüstü ortamına odaklanan, çağdaş bir Linux dağtımı</summary>
   <summary xml:lang="uk">Сучасний дистрибутив Linux з акцентом на стільничному середовищі Плазми KDE</summary>
-  <summary xml:lang="x-test">xxA modern Linux distribution focused on the KDE Plasma desktop environmentxx</summary>
   <summary xml:lang="zh-CN">一款专注于 KDE Plasma 桌面环境的现代 Linux 发行版</summary>
   <summary xml:lang="zh-TW">一個注重於 KDE Plasma 桌面環境的現代 Linux 發行版</summary>
   <pkgname>host</pkgname>
@@ -87,7 +85,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <p xml:lang="sv">KDE Linux är ett användarvänligt operativsystem byggt kring skrivbordsmiljön KDE Plasma. Det ger en komplett datorupplevelse med fokus på produktivitet, anpassning och användarvänlighet.</p>
     <p xml:lang="tr">KDE Linux, KDE Plasma masaüstü ortamının etrafına yapılı, kullanıcı dostu bir işletim sistemidir. Üretkenlik, özelliştirilebilirlik ve kullanım kolaylığı odaklı tam bir bilişim deneyimi sunar.</p>
     <p xml:lang="uk">KDE Linux — зручна у користуванні операційна система на основі стільничного середовища Плазми KDE. Ви зможете виконувати будь-які завдання, пов'язані із комп'ютером, із акцентом на продуктивності, гнучкості у налаштовування та простоті користування.</p>
-    <p xml:lang="x-test">xxKDE Linux is a user-friendly operating system built around the KDE Plasma desktop environment. It provides a complete computing experience with a focus on productivity, customization, and ease of use.xx</p>
     <p xml:lang="zh-CN">KDE Linux 是一款围绕 KDE Plasma 桌面环境构建的用户友好型操作系统。它提供了一套完整的计算机使用体验，注重生产力、可定制性和易用性。</p>
     <p xml:lang="zh-TW">KDE Linux 是一個對使用者友善的作業系統，以 KDE Plasma 桌面環境為主軸。它提供一個完整的電腦使用體驗，注重於生產力、可自訂功能與易於使用。</p>
     <ul>
@@ -115,7 +112,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="sv">Senaste KDE Plasma skrivbordsmiljö</li>
       <li xml:lang="tr">Güncel KDE Plasma masaüstü ortamı</li>
       <li xml:lang="uk">Найсвіжіше стільничне середовище Плазми KDE</li>
-      <li xml:lang="x-test">xxLatest KDE Plasma desktop environmentxx</li>
       <li xml:lang="zh-CN">最新的 KDE Plasma 桌面环境</li>
       <li xml:lang="zh-TW">最新的 KDE Plasma 桌面環境</li>
       <li>Comprehensive suite of KDE applications</li>
@@ -142,7 +138,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="sv">Omfattande svit av KDE-program</li>
       <li xml:lang="tr">KDE uygulamalarının tam bir paketi</li>
       <li xml:lang="uk">Повний комплект програм KDE</li>
-      <li xml:lang="x-test">xxComprehensive suite of KDE applicationsxx</li>
       <li xml:lang="zh-CN">完整的 KDE 应用程序套件</li>
       <li xml:lang="zh-TW">完整 KDE 應用程式套組</li>
       <li>Rolling release model for up-to-date software</li>
@@ -169,7 +164,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="sv">Rullande utgivningsmodell för uppdaterad programvara</li>
       <li xml:lang="tr">Güncel yazılımlar için yuvarlanan yayım modeli</li>
       <li xml:lang="uk">Модель неперервних випусків із актуальним програмним забезпеченням</li>
-      <li xml:lang="x-test">xxRolling release model for up-to-date softwarexx</li>
       <li xml:lang="zh-CN">持续更新的软件滚动发布模式</li>
       <li xml:lang="zh-TW">滾動更新模式，提供最新軟體</li>
       <li>Strong focus on system stability</li>
@@ -196,7 +190,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="sv">Starkt fokus på systemstabilitet</li>
       <li xml:lang="tr">Sistem kararlılığına güçlü odak</li>
       <li xml:lang="uk">Зосередженість на стабільності системи</li>
-      <li xml:lang="x-test">xxStrong focus on system stabilityxx</li>
       <li xml:lang="zh-CN">高度重视系统稳定性</li>
       <li xml:lang="zh-TW">注重於系統穩定性</li>
       <li>User-friendly installation process</li>
@@ -223,7 +216,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <li xml:lang="sv">Användarvänlig installationsprocess</li>
       <li xml:lang="tr">Kullanıcı dostu kurulum süreci</li>
       <li xml:lang="uk">Зручна для користувачів процедура встановлення</li>
-      <li xml:lang="x-test">xxUser-friendly installation processxx</li>
       <li xml:lang="zh-CN">用户友好的安装流程</li>
       <li xml:lang="zh-TW">對於使用者友善的安裝流程</li>
     </ul>
@@ -255,7 +247,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
   <developer_name xml:lang="sv">KDE Linux-gruppen</developer_name>
   <developer_name xml:lang="tr">KDE Linux Takımı</developer_name>
   <developer_name xml:lang="uk">Команда KDE Linux</developer_name>
-  <developer_name xml:lang="x-test">xxKDE Linux Teamxx</developer_name>
   <developer_name xml:lang="zh-CN">KDE Linux 团队</developer_name>
   <developer_name xml:lang="zh-TW">KDE Linux 團隊</developer_name>
   <project_group>KDE</project_group>
@@ -293,7 +284,6 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
       <caption xml:lang="sv">KDE Linux skrivbord med Plasma</caption>
       <caption xml:lang="tr">Plasma ile KDE Linux masaüstü</caption>
       <caption xml:lang="uk">Стільниця KDE Linux з Плазмою</caption>
-      <caption xml:lang="x-test">xxKDE Linux desktop with Plasmaxx</caption>
       <caption xml:lang="zh-CN">KDE Linux 桌面，预装 Plasma 桌面环境</caption>
       <caption xml:lang="zh-TW">使用 Plasma 的 KDE Linux 桌面</caption>
       <image type="source" width="1920" height="1080">https://kdelinux.org/screenshots/desktop.png</image>
