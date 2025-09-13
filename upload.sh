@@ -33,8 +33,9 @@ echo "origin.files.kde.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILUjdH4S7otYIdLUk
 sha256sum -- *.efi >> SHA256SUMS
 sha256sum -- *.tar.zst >> SHA256SUMS
 sha256sum -- *.erofs >> SHA256SUMS
-# Don't put caibx into the SHA256SUMS, it will break file matching.
+# Don't put .erofs.caibx into the SHA256SUMS, it will break file matching.
 # https://github.com/systemd/systemd/issues/38605
+sha256sum -- *-x86-64.caibx >> SHA256SUMS
 
 gpg --homedir="$GNUPGHOME" --output SHA256SUMS.gpg --detach-sign SHA256SUMS
 

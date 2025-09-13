@@ -124,8 +124,8 @@ func readSHA256s(toKeep []string, releases map[string]release, existingSums map[
 		artifacts := releases[key].artifacts
 		sort.Strings(artifacts) // Sort artifacts to ensure consistent order
 		for _, artifact := range artifacts {
-			if strings.HasSuffix(artifact, ".caibx") {
-				// Keep caibx out of the sha256sum file. They mess with match patterns.
+			if strings.HasSuffix(artifact, ".erofs.caibx") {
+				// Keep .erofs.caibx out of the sha256sum file. They mess with match patterns.
 				// https://github.com/systemd/systemd/issues/38605
 				continue
 			}

@@ -42,6 +42,10 @@ OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
 MAIN_UKI=${OUTPUT}.efi               # Output main UKI path
 LIVE_UKI=${OUTPUT}_live.efi          # Output live UKI path
 DEBUG_TAR=${OUTPUT}_debug-x86-64.tar # Output debug archive path (.zst will be added)
+# SUPER WARNING: Do not use the more common foo.erofs.caibx suffix. It breaks stuff!
+# https://github.com/systemd/systemd/issues/38605
+# We'll rename things accordingly via sysupdate.d files.
+ROOTFS_CAIBX=${OUTPUT}_root-x86-64.caibx
 ROOTFS_EROFS=${OUTPUT}_root-x86-64.erofs # Output erofs image path
 IMG=${OUTPUT}.raw                    # Output raw image path
 
@@ -160,7 +164,10 @@ rm ./*.test.raw
 ./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
 
 go install -v github.com/folbricht/desync/cmd/desync@latest
-~/go/bin/desync make -m 32:64:128 "$ROOTFS_EROFS.caibx" "$ROOTFS_EROFS"
+~/go/bin/desync make -m 32:64:128 "$ROOTFS_CAIBX" "$ROOTFS_EROFS"
+# Be very careful with this file. It is here for backwards compat. It must not appear in SHA256SUMS.
+# https://github.com/systemd/systemd/issues/38605
+cp "$ROOTFS_CAIBX" "$ROOTFS_EROFS.caibx"
 
 # Fake artifacts to keep older systems happy to upgrade to newer versions.
 # Can be removed once we have started having revisions in our update trees.
