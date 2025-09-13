@@ -1,16 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-# SPDX-FileCopyrightText: 2023-2024 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2023-2025 Harald Sitter <sitter@kde.org>
 
 set -ex
 
 . /etc/os-release
 
-kernel_version=""
-for f in /usr/lib/modules/*/vmlinuz
-do
-  kernel_version="$(basename "$(dirname "$f")")"
-done
+kernel_version="$1"
+if [ -z "$kernel_version" ]; then
+  versions=(/usr/lib/modules/*)
+  version="${versions[-1]}"
+  kernel_version="$(basename "$version")"
+fi
+
+if [ -z "$kernel_version" ]; then
+  echo "No kernel version specified/found"
+  exit 1
+fi
 
 # NOTE: plymouth MUST be after systemd as per the wiki!
 cat <<- EOF > mkinitcpio.conf
@@ -27,7 +33,7 @@ echo "rw \
   vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
-  --linux /boot/vmlinuz-linux \
+  --linux /usr/lib/modules/$kernel_version/vmlinuz \
   --initrd initrd \
   --cmdline @cmdline \
   --output live.efi
@@ -39,7 +45,7 @@ echo "rw rootflags=subvol=@system,compress=zstd:1 \
   vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
-  --linux /boot/vmlinuz-linux \
+  --linux /usr/lib/modules/$kernel_version/vmlinuz \
   --initrd initrd \
   --cmdline @cmdline \
   --output kde-linux.efi
