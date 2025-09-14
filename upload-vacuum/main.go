@@ -168,7 +168,7 @@ func writeSHA256s(sha256s []string) {
 
 type config struct {
 	TombstoneImages []string `yaml:"tombstone_images"`
-	GoldImages      []string `yaml:"gold_images"`
+	GoldenImages    []string `yaml:"golden_images"`
 }
 
 func readConfig(client *sftp.Client, path string) (*config, error) {
@@ -184,7 +184,7 @@ func readConfig(client *sftp.Client, path string) (*config, error) {
 	}
 
 	var config config
-	err = yaml.Unmarshal(data, &config)
+	err = yaml.UnmarshalStrict(data, &config)
 	if err != nil {
 		return nil, err
 	}
@@ -293,7 +293,7 @@ func main() {
 	for _, release := range config.TombstoneImages {
 		toProtect = append(toProtect, release)
 	}
-	for _, release := range config.GoldImages {
+	for _, release := range config.GoldenImages {
 		toProtect = append(toProtect, release)
 	}
 
