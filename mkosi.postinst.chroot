@@ -73,7 +73,6 @@ download_flatpaks() {
 
     kde_nightly=(
         ark
-        elisa
         gwenview
         kate
         haruna
