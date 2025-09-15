@@ -65,7 +65,7 @@ mount "$espdev" "$ROOT/boot"
 systemd-nspawn -D "$ROOT" "true" || true
 
 # Apply the factory
-/usr/lib/etc-factory --sysroot "$ROOT/" --replace
+/usr/lib/etc-factory --sysroot "$ROOT/" --replace --migrate
 
 # Initialize systemd stuff
 systemd-sysusers --root="$ROOT"
