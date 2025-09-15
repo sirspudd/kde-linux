@@ -32,6 +32,7 @@ btrfs subvolume sync . || true
 
 btrfs quota enable --simple .
 btrfs subvolume create @system
+btrfs subvolume create @system/etc
 mkdir @system/boot @system/proc @system/sys @system/dev @system/run @system/usr
 cp /dev/gpt-auto-root kde-linux_$IMAGE_VERSION.erofs
 
@@ -62,6 +63,9 @@ mount "$espdev" "$ROOT/boot"
 # Bit of a crutch to get systemd's base_filesystem_create() to run so the / gets populated with symlinks.
 # Exit code is not indicative of to the function having run - ignore it.
 systemd-nspawn -D "$ROOT" "true" || true
+
+# Apply the factory
+/usr/lib/etc-factory --sysroot "$ROOT" --replace
 
 # Initialize systemd stuff
 systemd-sysusers --root="$ROOT"
