@@ -64,6 +64,15 @@ rm -rf \
     /usr/bin/qvidcap \
     /usr/share/applications/qvidcap.desktop \
 
+# Parts of plasma-sdk that are on Flathub now, so you can just get them from there
+# (once everything is on Flathub, we can stop building plasma-sdk, and remove these lines)
+rm -rf \
+    /usr/bin/iconexplorer \
+    /usr/lib/qt6/plugins/kf6/ktexteditor/iconexplorerplugin.so \
+    /usr/share/applications/org.kde.iconexplorer.desktop \
+    /usr/share/locale/*/LC_MESSAGES/iconexplorer.mo \
+    /usr/share/icons/hicolor/scalable/apps/org.kde.iconexplorer.svg
+
 ## HP device management apps that are useless even for 99% of HP device owners, and we have our own better stuff
 rm -rf \
     /usr/share/applications/hp-uiscan.desktop \
