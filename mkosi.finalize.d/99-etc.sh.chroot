@@ -40,11 +40,14 @@ rm --force \
     group- \
     localtime \
     machine-id \
-    subuid \
-    subgid- \
-    subgid \
-    subgid- \
     crypttab \
     vconsole.conf \
     hostname \
     locale.conf
+
+    # These are actually needed and must be copied from the factory onto the host. If they are missing useradd will
+    # not configure subuids, breaking podman for instance.
+    # subuid \
+    # subgid- \
+    # subgid \
+    # subgid- \
