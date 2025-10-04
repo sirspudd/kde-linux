@@ -70,8 +70,6 @@ download_flatpaks() {
     # Only check out en. We don't really support other languages on the live image at this time.
     flatpak config --set languages en
 
-    flatpak remote-add --if-not-exists kde-runtime-nightly https://cdn.kde.org/flatpak/kde-runtime-nightly/kde-runtime-nightly.flatpakrepo
-
     kde_nightly=(
         ark
         gwenview
