@@ -59,8 +59,18 @@ qemu = subprocess.Popen([
 ])
 atexit.register(lambda: (qemu.kill()))
 
+def on_timeout():
+    print("\n\n\n== Test timed out ==")
+    print("Download the image for inspection from http://images.kde-linux.haraldsitter.eu/")
+    print("(location may have changed to something like https://qoomon.github.io/aws-s3-bucket-browser/index.html?bucket=https://storage.kde.org/ci-artifacts/#).")
+    print("Once downloaded run:\n")
+    print(f"./basic-test.py {img} {efi_base}\n\n\n")
+
+    qemu.kill()
+    sys.exit(2)
+
 server.timeout = 5 * 60 # 5 minutes
-server.handle_timeout = lambda: (qemu.kill(), sys.exit(1))
+server.handle_timeout = on_timeout
 while True: # kinda garbage but there seems to be no nice (non-private) poll-or-timeout api
     server.handle_request()
     time.sleep(8)
