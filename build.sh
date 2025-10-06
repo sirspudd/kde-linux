@@ -66,6 +66,8 @@ if [ -z "$BUILD_DATE" ]; then
   exit 1
 fi
 echo "Server = https://archive.archlinux.org/repos/${BUILD_DATE}/\$repo/os/\$arch" > mkosi.sandbox/etc/pacman.d/mirrorlist
+# ... and make sure our cache is up to date. Second --refresh forces a refresh.
+pacman --sync --refresh --refresh --noconfirm
 
 # Make sure permissions are sound
 ./permission-fix.sh
