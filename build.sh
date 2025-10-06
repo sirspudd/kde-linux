@@ -55,7 +55,18 @@ EFI=${EFI_BASE}+3.efi # Name of primary UKI in the image's ESP
 # Clean up old build artifacts.
 rm --recursive --force kde-linux.cache/*.raw kde-linux.cache/*.mnt
 
-cp /etc/pacman.conf mkosi.sandbox/etc
+# FIXME: temporary hack to work around repo priorities being off in the CI image
+cat <<- EOF > mkosi.sandbox/etc/pacman.conf
+[kde-linux]
+# Signature checking is not needed because the packages are served over HTTPS and we have no mirrors
+SigLevel = Never
+Server = https://cdn.kde.org/kde-linux/packaging/packages/
+
+[kde-linux-debug]
+SigLevel = Never
+Server = https://cdn.kde.org/kde-linux/packaging/packages-debug/
+EOF
+cat /etc/pacman.conf.nolinux >> mkosi.sandbox/etc/pacman.conf
 mkdir --parents mkosi.sandbox/etc/pacman.d
 # Ensure the packages repo and the base image do not go out of sync
 # by using the same snapshot date from build_date.txt for both
