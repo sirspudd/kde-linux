@@ -31,7 +31,8 @@ tar --extract --file "$(find /var/cache/pacman/pkg -name 'pacman-*.pkg.tar.zst')
 cp /tmp/pacman/etc/pacman.conf /etc/pacman.conf
 
 cp /etc/pacman.conf /etc/pacman.conf.nolinux # store a backup for use in the packages pipeline
-cat <<- EOF >> /etc/pacman.conf
+# **prepend** our repos so they take precedence
+cat <<- EOF > /etc/pacman.conf
 [kde-linux]
 # Signature checking is not needed because the packages are served over HTTPS and we have no mirrors
 SigLevel = Never
@@ -41,6 +42,7 @@ Server = https://cdn.kde.org/kde-linux/packaging/packages/
 SigLevel = Never
 Server = https://cdn.kde.org/kde-linux/packaging/packages-debug/
 EOF
+cat /etc/pacman.conf.nolinux >> /etc/pacman.conf
 
 # Ensure the packages repo and the base image do not go out of sync
 # by using the same snapshot date from build_date.txt for both
