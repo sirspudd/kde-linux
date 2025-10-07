@@ -1,0 +1,39 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+# SPDX-FileCopyrightText: 2025 Nate Graham <nate@kde.org>
+
+# Set up a systemd extension allowing you to create or override files in /usr/
+
+set -e
+
+SYSEXT_BASE_LOCATION="${HOME}/kde/usr/"
+SYSEXT_LOCATION="${SYSEXT_BASE_LOCATION}/lib/extension-release.d/"
+SYSEXT_ROOT_LOCATION=/var/lib/extensions/
+
+echo
+if [ -f "${SYSEXT_LOCATION}/extension-release.kde" ]; then
+    echo '== Systemd system extension: already set up, skipping =='
+else
+    echo '== Systemd system extension: needs setup =='
+    echo "Setting up extension at ${SYSEXT_BASE_LOCATION}..."
+
+    # Create directory to hold this system extension
+    mkdir -p ${SYSEXT_LOCATION}
+    sudo mkdir -p ${SYSEXT_ROOT_LOCATION}
+    sudo ln -fs "${HOME}/kde" ${SYSEXT_ROOT_LOCATION}
+
+    # Copy the system os-release file to be an extension-release file that identifies this extension
+    sudo cp /usr/lib/os-release "${SYSEXT_LOCATION}/extension-release.kde"
+
+    # Set its ID to "_any" so system updates don't break the extension
+    # Skip this step if you want the extension to only work for the current system build
+    sed -i "s/^ID=.*/ID=_any/g" "${SYSEXT_LOCATION}/extension-release.kde"
+
+    # Make the release file owned by root so it can't be accidentally removed
+    sudo chown root:root "${SYSEXT_LOCATION}/extension-release.kde"
+
+    # Turn it on!
+    sudo systemd-sysext merge
+
+    echo "Finished setting up extension! When you put files in ${SYSEXT_BASE_LOCATION} and run 'sudo systemd-sysext refresh', they will appear in /usr/. See https://community.kde.org/KDE_Linux/Add_or_override_content_in_/usr for more information."
+fi
