@@ -34,8 +34,6 @@ imaging:
   after_script:
     # Upload all images to Harald. You can grab them at http://images.kde-linux.haraldsitter.eu/
     - ./upload-to-harald.sh || true
-    # Cleanup our btrfs subvolumes so docker doesn't stumble over them.
-    - cargo run --manifest-path btrfs-cleanup/Cargo.toml .
 
 imaging+publish:
   stage: start
