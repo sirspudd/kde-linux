@@ -2,19 +2,16 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2025 Harald Sitter <sitter@kde.org>
 
-set -eux
+set -eu
 
 . /etc/os-release
 
-if [ -b /dev/gpt-auto-root ]; then
-    echo "gpt-auto-root exists"
-else
+if [ ! -b /dev/gpt-auto-root ]; then
     echo "gpt-auto-root does not exist"
     exit 1
 fi
 
 if [ -d /run/kde-linux-rootfs-transition ]; then
-    echo "/run/kde-linux-rootfs-transition exists"
     exit 0
 fi
 
@@ -27,7 +24,6 @@ mount -o rw,subvol=/ /dev/gpt-auto-root /run/kde-linux-rootfs-transition
 # In a way we could think about moving the mounts into a generator TBH. Then we can do proper condition management on
 # the systemd side. Question is if they get correctly unmounted automatically.
 if [ -e /run/kde-linux-rootfs-transition/@system ]; then
-    echo "@system exists"
     cd /
     umount --recursive --lazy /run/kde-linux-rootfs-transition
     exit 0
