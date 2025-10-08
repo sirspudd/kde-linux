@@ -88,6 +88,13 @@ rm -rf \
     /usr/share/icons/hicolor/64x64/apps/hi64-apps-ffado.png \
     /usr/share/metainfo/org.ffado.FfadoMixer.metainfo.xml \
 
+# LSHW GUI app that came along for the ride with the CLi tool
+rm -rf \
+    /usr/share/applications/gtk-lshw.desktop \
+    /usr/bin/gtk-lshw \
+    /usr/share/lshw/artwork \
+    /usr/share/lshw/ui
+
 ## Miscellaneous application entries that have zero value because we either have better stuff or they're for terminal applications
 rm -rf \
     /usr/share/applications/avahi-discover.desktop \
