@@ -121,6 +121,7 @@ $CONTAINER_RUNTIME run \
   --volume="${SCRIPT_DIR}/kde-linux.cache/pacman:/var/cache/pacman/pkg" \
   --volume="${SCRIPT_DIR}/kde-linux.cache/mkosi.pacman:/var/cache/mkosi.pacman" \
   --volume="${SCRIPT_DIR}/kde-linux.cache/flatpak:/var/lib/flatpak" \
+  --volume="/opt/cache/pacman/custom:/opt/cache/pacman/custom" \
   --volume="/dev:/dev" \
   --workdir="/workspace" \
   --rm \
