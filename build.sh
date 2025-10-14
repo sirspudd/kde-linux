@@ -128,7 +128,7 @@ mv -v "${OUTPUT}"/kde-linux.efi "${OUTPUT}/usr/share/factory/boot/EFI/Linux/$EFI
 mv -v "${OUTPUT}"/live.efi "$LIVE_UKI"
 mv -v "${OUTPUT}"/erofs.addon.efi "${OUTPUT}_erofs.addon.efi"
 
-make_debug_archive
+#make_debug_archive
 
 # Now let's actually build a live raw image. First, the ESP.
 # We use kde-linux.cache instead of /tmp as usual because we'll probably run out of space there.
