@@ -34,7 +34,7 @@ make_debug_archive () {
 EPOCH=$(date --utc +%s) # The epoch (only used to then construct the various date strings)
 VERSION_DATE=$(date --utc --date="@$EPOCH" --rfc-3339=seconds)
 VERSION=$(date --utc --date="@$EPOCH" +%Y%m%d%H%M)
-OUTPUT=kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
+OUTPUT=/vortex/mkosi/kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
 OUTPUT="$(readlink --canonicalize-missing "$OUTPUT")"
@@ -100,7 +100,6 @@ mkosi \
     --environment="CI_PIPELINE_URL=${CI_PIPELINE_URL:-https://invent.kde.org}" \
     --environment="VERSION_DATE=${VERSION_DATE}" \
     --image-version="$VERSION" \
-    --output-directory=. \
     "$@"
 
 # Adjust mtime to reduce unnecessary churn between images caused by us rebuilding repos that have possible not changed in source or binary interfaces.
