@@ -41,9 +41,9 @@ EOF
 
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
 cat <<- EOF > /usr/lib/os-release
-NAME="KDE Linux"
-PRETTY_NAME="KDE Linux"
-ID=kde-linux
+NAME="Bananos"
+PRETTY_NAME="Bananos"
+ID=bananos
 VERSION_ID="$VERSION_DATE"
 BUILD_ID=$CI_COMMIT_SHORT_SHA
 ANSI_COLOR="38;2;61;174;233"
