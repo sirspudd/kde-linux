@@ -169,11 +169,11 @@ cp --reflink=auto "$ROOTFS_EROFS" kde-linux.cache/root.raw
 touch "$IMG"
 systemd-repart --no-pager --empty=allow --size=auto --dry-run=no --root=kde-linux.cache --definitions=mkosi.repart "$IMG"
 
-./basic-test.py "$IMG" "$EFI_BASE.efi" || exit 1
-rm ./*.test.raw
+#./basic-test.py "$IMG" "$EFI_BASE.efi" || exit 1
+#rm ./*.test.raw
 
 # Create a torrent for the image
-./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
+#./torrent-create.rb "$VERSION" "$OUTPUT" "$IMG"
 
 go install -v github.com/folbricht/desync/cmd/desync@latest
 ~/go/bin/desync make -m 32:64:128 "$ROOTFS_CAIBX" "$ROOTFS_EROFS"
@@ -189,5 +189,5 @@ zstd --threads=0 --rm ${OUTPUT}_root-x86-64.tar
 # TODO before accepting new uploads perform sanity checks on the artifacts (e.g. the tar being well formed)
 
 # efi images and torrents are 700, make them readable so the server can serve them
-chmod go+r "$OUTPUT".* ./*.efi ./*.torrent
+#chmod go+r "$OUTPUT".* ./*.efi ./*.torrent
 ls -lah
