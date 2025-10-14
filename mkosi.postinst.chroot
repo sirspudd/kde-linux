@@ -102,7 +102,7 @@ download_flatpaks() {
     # And restore default
     flatpak config --unset languages
 }
-download_flatpaks
+#download_flatpaks
 
 # Fetch latest distrobox config from the kde-linux-containers repo
 mkdir -p /usr/share/distrobox
