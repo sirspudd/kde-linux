@@ -61,6 +61,7 @@ echo "rw rootflags=subvol=@system,compress=zstd:1 \
   preempt=full threadirqs \
   nohz=on nohz_full=all \
   rcu_nocbs=all rcutree.enable_rcu_lazy=1 \
+  default_hugepagesz=2M hugepagesz=2M transparent_hugepage=madvise kernelcore=25% mitigations=off \
   vt.global_cursor_default=0 quiet splash loglevel=3" > cmdline
 mkinitcpio --config mkinitcpio.conf --generate initrd --kernel "$kernel_version"
 ukify build \
