@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 # SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
+enable sshd.service
 enable sddm.service
 enable avahi-daemon.socket
 # Note that both avahi socket and service are needed. Client software on the system may only talk to the daemon but
@@ -8,9 +9,9 @@ enable avahi-daemon.socket
 enable avahi-daemon.service
 enable accounts-daemon.service
 enable NetworkManager.service
-enable snapd.socket
-enable snapd.apparmor.service
-enable apparmor.service
+#enable snapd.socket
+#enable snapd.apparmor.service
+#enable apparmor.service
 enable systemd-zram-setup@zram0.service
 enable systemd-oomd.service
 enable bluetooth.service
@@ -22,9 +23,9 @@ enable thermald.service
 enable pcscd.socket
 
 # nvidia specific services (shouldn't affect non-nvidia hardware)
-enable nvidia-suspend.service
-enable nvidia-hibernate.service
-enable nvidia-resume.service
+#enable nvidia-suspend.service
+#enable nvidia-hibernate.service
+#enable nvidia-resume.service
 
 enable kde-linux-btrfs.service
 enable kde-linux-live-setup.service
