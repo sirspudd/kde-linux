@@ -33,7 +33,7 @@ make_debug_archive () {
 
 EPOCH=$(date --utc +%s) # The epoch (only used to then construct the various date strings)
 VERSION_DATE=$(date --utc --date="@$EPOCH" --rfc-3339=seconds)
-VERSION=$(date --utc --date="@$EPOCH" +%Y%m%d%H%M)
+VERSION=$(date --utc --date="@$EPOCH" +%Y%m%d)
 OUTPUT=/vortex/mkosi/kde-linux_$VERSION   # Built rootfs path (mkosi uses this directory by default)
 
 # Canonicalize the path in $OUTPUT to avoid any possible path issues.
