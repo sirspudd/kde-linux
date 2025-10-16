@@ -46,6 +46,25 @@ cat <<- EOF > /usr/share/icons/default/index.theme
 Inherits=breeze_cursors
 EOF
 
+cat <<- EOF > /etc/scx_loader.toml
+# https://wiki.cachyos.org/configuration/sched-ext/#how-to-launch-and-manage-the-scheduler
+# This field specifies the scheduler that will be started automatically when scx_loader starts (e.g., on boot).
+default_sched = "scx_cosmos"
+#default_sched = "scx_bpfland"
+
+# This field specifies the mode which will be used when scx_loader starts (e.g., on boot).
+default_mode = "Auto"
+# default_mode = "Gaming"
+
+# This "structure" allows configuring flags for each scheduler mode of particular scx scheduler
+#[scheds.'scheduler']
+#auto_mode = []
+#gaming_mode = []
+#lowlatency_mode = []
+#powersave_mode = []
+#server_mode = []
+EOF
+
 # WARNING: only set up os-release after the build otherwise kde-build doesn't know how to handle the system currently
 cat <<- EOF > /usr/lib/os-release
 NAME="Bananos"
