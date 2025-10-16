@@ -13,6 +13,13 @@ mkdir /media # for snap, wants this to exist or fails when trying to create it
 export SYSTEMD_ESP_PATH="$BOOT_MNT"
 mkdir --mode 0700 "$SYSTEMD_ESP_PATH"
 bootctl install
+
+mkdir -p $SYSTEMD_ESP_PATH/loader/entries
+cat <<- EOF > "$SYSTEMD_ESP_PATH/loader/entries/mem-test.conf"
+title memtest
+linux memtest.efi
+EOF
+
 echo 'timeout 5' >> "$SYSTEMD_ESP_PATH/loader/loader.conf"
 cp /usr/share/edk2-shell/x64/Shell.efi "$SYSTEMD_ESP_PATH/shellx64.efi"
 cp /boot/memtest86+/memtest.efi "$SYSTEMD_ESP_PATH/memtest.efi"
