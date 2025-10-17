@@ -65,6 +65,12 @@ Server = https://storage.kde.org/kde-linux-packages/testing/repo/packages/
 [kde-linux-debug]
 SigLevel = Never
 Server = https://storage.kde.org/kde-linux-packages/testing/repo/packages-debug/
+
+[core-testing]
+Include = /etc/pacman.d/mirrorlist
+
+[extra-testing]
+Include = /etc/pacman.d/mirrorlist
 EOF
 cat /etc/pacman.conf.nolinux >> mkosi.sandbox/etc/pacman.conf
 mkdir --parents mkosi.sandbox/etc/pacman.d
