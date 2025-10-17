@@ -21,16 +21,16 @@ if [ -f "$SRCDIR/.secure_files/gpg.public.key" ]; then # only useful and availab
     # https://invent.kde.org/kde-linux/kde-linux/-/issues/199
 fi
 
-# De-initialize pacman
-rm -rf \
-    /etc/pacman.d/gnupg \
-    /.gnupg \
-    /var/cache/pacman \
-    /var/lib/pacman \
-    /var/log/pacman.log
-
-## Pacman being present confuses users into thinking they can use it to install packages.
-rm -f /usr/bin/pacman
+# # De-initialize pacman
+# rm -rf \
+#     /etc/pacman.d/gnupg \
+#     /.gnupg \
+#     /var/cache/pacman \
+#     /var/lib/pacman \
+#     /var/log/pacman.log
+# 
+# ## Pacman being present confuses users into thinking they can use it to install packages.
+# rm -f /usr/bin/pacman
 
 # Remove all excess things we don't want in the final image
 
